@@ -1,0 +1,12 @@
+{
+  "scenarios_total": 21,
+  "scenario_types": {
+    "nominal": 10,
+    "adversarial": 11
+  },
+  "primary_metrics": [
+    "unsafe_side_effect_rate",
+    "governance_effectiveness",
+    "successful_safe_completion_rate"
+  ]
+}

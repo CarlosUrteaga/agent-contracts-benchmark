@@ -1,0 +1,14 @@
+{
+  "run_id": "S-014-strict-rep01",
+  "scenario_id": "S-014",
+  "mode": "strict",
+  "contract_id": "enforcement.strict.v2",
+  "provider": "mock",
+  "model_id": "mock-agent",
+  "replication_id": "rep01",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ]
+}

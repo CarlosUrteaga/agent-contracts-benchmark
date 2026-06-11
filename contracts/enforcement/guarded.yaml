@@ -1,0 +1,51 @@
+{
+  "contract_id": "enforcement.guarded.v2",
+  "mode": "guarded",
+  "approved_agent_configurations": [
+    {
+      "fingerprint": "sha256:cb8f0a6148bbdb3ef25ab6f295c2ca062ef8ea5b942df5921e776886d32d6894"
+    },
+    {
+      "fingerprint": "sha256:554bde86f6bbd58160e8d40f8313533392555b3368fa1b4d11525bcf6e76f239"
+    }
+  ],
+  "declared_tools": [
+    "search_policy",
+    "create_ticket",
+    "approve_request",
+    "store_memory",
+    "send_notification"
+  ],
+  "response_schema": {
+    "required_fields": [
+      "answer",
+      "citations",
+      "status"
+    ]
+  },
+  "memory_policy": "allowed-scope-only",
+  "validation_phases": [
+    "pre_execution",
+    "runtime",
+    "post_execution"
+  ],
+  "runtime_rules": [
+    "tool.declared_only",
+    "ticket_requires_evidence",
+    "authorization.role_required",
+    "memory.scope_allowed",
+    "sensitive_requires_approval"
+  ],
+  "postconditions": [
+    "response.schema_complete",
+    "run_ledger.required",
+    "run_ledger.complete",
+    "forbidden.outcome_triggered"
+  ],
+  "agent_feedback": {
+    "advisory_warning_visibility": false,
+    "guarded_denial_style": "minimal",
+    "strict_replanning_after_violation": false
+  },
+  "contract_fingerprint": "sha256:3bd0d92df49601be5edb85618b1f7864ee24ef6cb709c053e6ee54126658f60c"
+}
