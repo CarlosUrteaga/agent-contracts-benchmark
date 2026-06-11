@@ -1,0 +1,24 @@
+{
+  "condition": "governance",
+  "strategy": "final-spec",
+  "arm": "agent-card",
+  "replication": "rep03",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/AGENT_CARD.md",
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "governance",
+  "source_manifest_fingerprint": "sha256:08a60b3aaca9e8ec92097c3e3751c6d9f260d5ee023456d2767579384244df13"
+}

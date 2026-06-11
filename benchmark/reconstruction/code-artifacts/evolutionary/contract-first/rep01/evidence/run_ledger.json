@@ -1,0 +1,8 @@
+{
+  "run_id": "evolutionary-contract-first-rep01-C6",
+  "arm": "contract-first",
+  "strategy": "evolutionary",
+  "replication": "rep01",
+  "step": "C6",
+  "status": "completed"
+}

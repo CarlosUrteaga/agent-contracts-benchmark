@@ -1,0 +1,595 @@
+{
+  "trajectories": [
+    {
+      "trajectory_key": "evolutionary/agent-card/rep01",
+      "strategy": "evolutionary",
+      "arm": "agent-card",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "AGENT_CARD.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/agent-card/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/agent-card/rep02",
+      "strategy": "evolutionary",
+      "arm": "agent-card",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "AGENT_CARD.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/agent-card/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/agent-card/rep03",
+      "strategy": "evolutionary",
+      "arm": "agent-card",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "AGENT_CARD.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/agent-card/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/base/rep01",
+      "strategy": "evolutionary",
+      "arm": "base",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [],
+      "source_manifest": "benchmark/manifests/evolutionary/base/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/base/rep02",
+      "strategy": "evolutionary",
+      "arm": "base",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [],
+      "source_manifest": "benchmark/manifests/evolutionary/base/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/base/rep03",
+      "strategy": "evolutionary",
+      "arm": "base",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [],
+      "source_manifest": "benchmark/manifests/evolutionary/base/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/contract-first/rep01",
+      "strategy": "evolutionary",
+      "arm": "contract-first",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/contract-first/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/contract-first/rep02",
+      "strategy": "evolutionary",
+      "arm": "contract-first",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/contract-first/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/contract-first/rep03",
+      "strategy": "evolutionary",
+      "arm": "contract-first",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/contract-first/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/contract-flow/rep01",
+      "strategy": "evolutionary",
+      "arm": "contract-flow",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md",
+        "WORKFLOW.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/contract-flow/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/contract-flow/rep02",
+      "strategy": "evolutionary",
+      "arm": "contract-flow",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md",
+        "WORKFLOW.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/contract-flow/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "evolutionary/contract-flow/rep03",
+      "strategy": "evolutionary",
+      "arm": "contract-flow",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md",
+        "WORKFLOW.md"
+      ],
+      "source_manifest": "benchmark/manifests/evolutionary/contract-flow/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/agent-card/rep01",
+      "strategy": "final-spec",
+      "arm": "agent-card",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "AGENT_CARD.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/agent-card/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/agent-card/rep02",
+      "strategy": "final-spec",
+      "arm": "agent-card",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "AGENT_CARD.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/agent-card/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/agent-card/rep03",
+      "strategy": "final-spec",
+      "arm": "agent-card",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "AGENT_CARD.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/agent-card/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/base/rep01",
+      "strategy": "final-spec",
+      "arm": "base",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [],
+      "source_manifest": "benchmark/manifests/final-spec/base/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/base/rep02",
+      "strategy": "final-spec",
+      "arm": "base",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [],
+      "source_manifest": "benchmark/manifests/final-spec/base/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/base/rep03",
+      "strategy": "final-spec",
+      "arm": "base",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [],
+      "source_manifest": "benchmark/manifests/final-spec/base/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/contract-first/rep01",
+      "strategy": "final-spec",
+      "arm": "contract-first",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/contract-first/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/contract-first/rep02",
+      "strategy": "final-spec",
+      "arm": "contract-first",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/contract-first/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/contract-first/rep03",
+      "strategy": "final-spec",
+      "arm": "contract-first",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/contract-first/rep03/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/contract-flow/rep01",
+      "strategy": "final-spec",
+      "arm": "contract-flow",
+      "replication": "rep01",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md",
+        "WORKFLOW.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/contract-flow/rep01/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/contract-flow/rep02",
+      "strategy": "final-spec",
+      "arm": "contract-flow",
+      "replication": "rep02",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md",
+        "WORKFLOW.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/contract-flow/rep02/C6/manifest.json"
+    },
+    {
+      "trajectory_key": "final-spec/contract-flow/rep03",
+      "strategy": "final-spec",
+      "arm": "contract-flow",
+      "replication": "rep03",
+      "expected_capabilities": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ],
+      "expected_governance_artifacts": [
+        "CONTRACTS.md",
+        "WORKFLOW.md"
+      ],
+      "source_manifest": "benchmark/manifests/final-spec/contract-flow/rep03/C6/manifest.json"
+    }
+  ],
+  "spec": {
+    "arms": {
+      "base": {
+        "interpretation": "no-contract baseline",
+        "contract_file": "base.yaml",
+        "governance_artifacts": []
+      },
+      "agent-card": {
+        "interpretation": "documentation-only governance",
+        "contract_file": "agent_card.yaml",
+        "governance_artifacts": [
+          "AGENT_CARD.md"
+        ]
+      },
+      "contract-first": {
+        "interpretation": "contract-governed evolution",
+        "contract_file": "contract_first.yaml",
+        "governance_artifacts": [
+          "CONTRACTS.md"
+        ]
+      },
+      "contract-flow": {
+        "interpretation": "contract-plus-workflow-governed evolution",
+        "contract_file": "contract_flow.yaml",
+        "governance_artifacts": [
+          "CONTRACTS.md",
+          "WORKFLOW.md"
+        ]
+      }
+    },
+    "strategies": {
+      "evolutionary": {
+        "steps": [
+          {
+            "step": "C1",
+            "label": "structured response",
+            "capability_id": "structured_response"
+          },
+          {
+            "step": "C2",
+            "label": "deterministic ticket tool",
+            "capability_id": "deterministic_ticket_tool"
+          },
+          {
+            "step": "C3",
+            "label": "approval workflow",
+            "capability_id": "approval_workflow"
+          },
+          {
+            "step": "C4",
+            "label": "user profile memory",
+            "capability_id": "user_profile_memory"
+          },
+          {
+            "step": "C5",
+            "label": "reviewer validation",
+            "capability_id": "reviewer_validation"
+          },
+          {
+            "step": "C6",
+            "label": "run ledger",
+            "capability_id": "run_ledger"
+          }
+        ]
+      },
+      "final-spec": {
+        "steps": [
+          {
+            "step": "C6",
+            "label": "run ledger",
+            "capability_id": "run_ledger"
+          }
+        ]
+      }
+    },
+    "step_metadata": {
+      "C1": {
+        "label": "structured response",
+        "capability_id": "structured_response"
+      },
+      "C2": {
+        "label": "deterministic ticket tool",
+        "capability_id": "deterministic_ticket_tool"
+      },
+      "C3": {
+        "label": "approval workflow",
+        "capability_id": "approval_workflow"
+      },
+      "C4": {
+        "label": "user profile memory",
+        "capability_id": "user_profile_memory"
+      },
+      "C5": {
+        "label": "reviewer validation",
+        "capability_id": "reviewer_validation"
+      },
+      "C6": {
+        "label": "run ledger",
+        "capability_id": "run_ledger"
+      }
+    },
+    "step_capabilities": {
+      "C1": [
+        "structured_response"
+      ],
+      "C2": [
+        "structured_response",
+        "deterministic_ticket_tool"
+      ],
+      "C3": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow"
+      ],
+      "C4": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory"
+      ],
+      "C5": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation"
+      ],
+      "C6": [
+        "structured_response",
+        "deterministic_ticket_tool",
+        "approval_workflow",
+        "user_profile_memory",
+        "reviewer_validation",
+        "run_ledger"
+      ]
+    },
+    "reconstruction_conditions": {
+      "minimal": {
+        "include_step_note": true,
+        "include_governance_artifacts": false,
+        "include_run_ledger": false,
+        "include_repo_artifacts": []
+      },
+      "governance": {
+        "include_step_note": true,
+        "include_governance_artifacts": true,
+        "include_run_ledger": true,
+        "include_repo_artifacts": []
+      },
+      "code-artifacts": {
+        "include_step_note": true,
+        "include_governance_artifacts": true,
+        "include_run_ledger": true,
+        "include_repo_artifacts": [
+          "app/assistant.py",
+          "app/documents.py",
+          "app/retriever.py",
+          "app/schemas.py",
+          "templates/manifest.template.json",
+          "templates/run_ledger.template.json",
+          "tests/test_t0_rag.py"
+        ]
+      }
+    }
+  }
+}

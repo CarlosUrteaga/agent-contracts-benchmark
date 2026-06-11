@@ -1,0 +1,24 @@
+{
+  "condition": "governance",
+  "strategy": "evolutionary",
+  "arm": "contract-flow",
+  "replication": "rep01",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/CONTRACTS.md",
+    "evidence/STEP_NOTE.md",
+    "evidence/WORKFLOW.md"
+  ],
+  "exact_match": true,
+  "evidence_strength": "governance",
+  "source_manifest_fingerprint": "sha256:f93b09d7fe21313d87fae206e8e88053f4fd5624519fd2b4f379f72d899e4eca"
+}

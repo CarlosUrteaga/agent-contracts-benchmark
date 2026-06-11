@@ -1,0 +1,32 @@
+{
+  "step_id": "C3",
+  "step": "C3",
+  "status": "completed",
+  "agent_executor": "codex",
+  "arm": "base",
+  "strategy": "evolutionary",
+  "replication": "rep03",
+  "changed_files": [
+    "app/approval_workflow.py",
+    "tests/test_contract_benchmark.py"
+  ],
+  "changed_file_count": 2,
+  "change_spread": 0.1,
+  "traceability_ratio": 0.75,
+  "test_failures": 0,
+  "contract_violations": 0,
+  "run_ledger_compliance": false,
+  "capabilities_present": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow"
+  ],
+  "governance_artifacts_present": [],
+  "_mutation": {
+    "mutation_id": "base-evolutionary-rep03-C3-wrong_traceability_ratio",
+    "source_manifest": "benchmark/manifests/evolutionary/base/rep03/C3/manifest.json",
+    "mutation_type": "wrong_traceability_ratio",
+    "expected_verdict": "fail",
+    "expected_rule_id": "traceability.perfect"
+  }
+}

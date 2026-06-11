@@ -1,0 +1,117 @@
+arms:
+  base:
+    interpretation: no-contract baseline
+    contract_file: base.yaml
+    governance_artifacts: []
+  agent-card:
+    interpretation: documentation-only governance
+    contract_file: agent_card.yaml
+    governance_artifacts:
+      - AGENT_CARD.md
+  contract-first:
+    interpretation: contract-governed evolution
+    contract_file: contract_first.yaml
+    governance_artifacts:
+      - CONTRACTS.md
+  contract-flow:
+    interpretation: contract-plus-workflow-governed evolution
+    contract_file: contract_flow.yaml
+    governance_artifacts:
+      - CONTRACTS.md
+      - WORKFLOW.md
+strategies:
+  evolutionary:
+    steps:
+      - step: C1
+        label: structured response
+        capability_id: structured_response
+      - step: C2
+        label: deterministic ticket tool
+        capability_id: deterministic_ticket_tool
+      - step: C3
+        label: approval workflow
+        capability_id: approval_workflow
+      - step: C4
+        label: user profile memory
+        capability_id: user_profile_memory
+      - step: C5
+        label: reviewer validation
+        capability_id: reviewer_validation
+      - step: C6
+        label: run ledger
+        capability_id: run_ledger
+  final-spec:
+    steps:
+      - step: C6
+        label: run ledger
+        capability_id: run_ledger
+step_metadata:
+  C1:
+    label: structured response
+    capability_id: structured_response
+  C2:
+    label: deterministic ticket tool
+    capability_id: deterministic_ticket_tool
+  C3:
+    label: approval workflow
+    capability_id: approval_workflow
+  C4:
+    label: user profile memory
+    capability_id: user_profile_memory
+  C5:
+    label: reviewer validation
+    capability_id: reviewer_validation
+  C6:
+    label: run ledger
+    capability_id: run_ledger
+step_capabilities:
+  C1:
+    - structured_response
+  C2:
+    - structured_response
+    - deterministic_ticket_tool
+  C3:
+    - structured_response
+    - deterministic_ticket_tool
+    - approval_workflow
+  C4:
+    - structured_response
+    - deterministic_ticket_tool
+    - approval_workflow
+    - user_profile_memory
+  C5:
+    - structured_response
+    - deterministic_ticket_tool
+    - approval_workflow
+    - user_profile_memory
+    - reviewer_validation
+  C6:
+    - structured_response
+    - deterministic_ticket_tool
+    - approval_workflow
+    - user_profile_memory
+    - reviewer_validation
+    - run_ledger
+reconstruction_conditions:
+  minimal:
+    include_step_note: true
+    include_governance_artifacts: false
+    include_run_ledger: false
+    include_repo_artifacts: []
+  governance:
+    include_step_note: true
+    include_governance_artifacts: true
+    include_run_ledger: true
+    include_repo_artifacts: []
+  code-artifacts:
+    include_step_note: true
+    include_governance_artifacts: true
+    include_run_ledger: true
+    include_repo_artifacts:
+      - app/assistant.py
+      - app/documents.py
+      - app/retriever.py
+      - app/schemas.py
+      - templates/manifest.template.json
+      - templates/run_ledger.template.json
+      - tests/test_t0_rag.py

@@ -1,0 +1,23 @@
+{
+  "step_id": "C1",
+  "step": "C1",
+  "status": "completed",
+  "agent_executor": "codex",
+  "arm": "base",
+  "strategy": "evolutionary",
+  "replication": "rep03",
+  "changed_files": [
+    "app/structured_response.py",
+    "tests/test_contract_benchmark.py"
+  ],
+  "changed_file_count": 2,
+  "change_spread": 0.1,
+  "traceability_ratio": 1.0,
+  "test_failures": 0,
+  "contract_violations": 0,
+  "run_ledger_compliance": false,
+  "capabilities_present": [
+    "structured_response"
+  ],
+  "governance_artifacts_present": []
+}

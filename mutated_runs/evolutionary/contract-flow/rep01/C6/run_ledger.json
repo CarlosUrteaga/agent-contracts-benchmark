@@ -1,0 +1,8 @@
+{
+  "run_id": "evolutionary-contract-flow-rep01-C6",
+  "arm": "contract-flow",
+  "strategy": "evolutionary",
+  "replication": "rep01",
+  "step": "C6",
+  "status": "completed"
+}

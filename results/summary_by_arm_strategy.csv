@@ -1,0 +1,9 @@
+arm,strategy,manifest_count,avg_changed_file_count,avg_change_spread,avg_traceability_ratio,avg_test_failures,avg_contract_violations
+agent-card,evolutionary,18,2.333333,0.116667,1.0,0.0,0.0
+agent-card,final-spec,3,4.0,0.2,1.0,0.0,0.0
+base,evolutionary,18,2.5,0.125,1.0,0.0,0.0
+base,final-spec,3,5.0,0.25,1.0,0.0,0.0
+contract-first,evolutionary,18,2.333333,0.116667,1.0,0.0,0.0
+contract-first,final-spec,3,4.0,0.2,1.0,0.0,0.0
+contract-flow,evolutionary,18,2.5,0.125,1.0,0.0,0.0
+contract-flow,final-spec,3,5.0,0.25,1.0,0.0,0.0

@@ -1,0 +1,8 @@
+{
+  "manifest_root": "benchmark/manifests",
+  "total_manifests": 84,
+  "expected_total_manifests": 84,
+  "trajectory_count": 24,
+  "expected_trajectory_count": 24,
+  "status": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "condition": "minimal",
+  "strategy": "evolutionary",
+  "arm": "agent-card",
+  "replication": "rep03",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "minimal",
+  "source_manifest_fingerprint": "sha256:cce795e63c0206d6a14dcf2edf68c77f47c2480dec981700a9b60c378bc6f0eb"
+}

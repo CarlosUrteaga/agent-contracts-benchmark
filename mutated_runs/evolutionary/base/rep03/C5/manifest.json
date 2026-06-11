@@ -1,0 +1,34 @@
+{
+  "step_id": "C5",
+  "step": "C5",
+  "status": "completed",
+  "agent_executor": "codex",
+  "arm": "base",
+  "strategy": "evolutionary",
+  "replication": "rep03",
+  "changed_files": [
+    "app/reviewer_validation.py",
+    "tests/test_contract_benchmark.py"
+  ],
+  "changed_file_count": 2,
+  "change_spread": 0.1,
+  "traceability_ratio": 1.0,
+  "test_failures": 1,
+  "contract_violations": 0,
+  "run_ledger_compliance": false,
+  "capabilities_present": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation"
+  ],
+  "governance_artifacts_present": [],
+  "_mutation": {
+    "mutation_id": "base-evolutionary-rep03-C5-nonzero_test_failures",
+    "source_manifest": "benchmark/manifests/evolutionary/base/rep03/C5/manifest.json",
+    "mutation_type": "nonzero_test_failures",
+    "expected_verdict": "fail",
+    "expected_rule_id": "tests.zero_failures"
+  }
+}

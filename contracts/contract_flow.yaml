@@ -1,0 +1,83 @@
+contract_id: contract.contract_flow
+applies_to_arm: contract-flow
+required_artifacts:
+  - CONTRACTS.md
+  - WORKFLOW.md
+required_manifest_fields:
+  - arm
+  - strategy
+  - replication
+  - step
+  - changed_files
+  - changed_file_count
+  - change_spread
+  - traceability_ratio
+  - test_failures
+  - contract_violations
+  - run_ledger_compliance
+  - capabilities_present
+  - governance_artifacts_present
+preconditions:
+  - Contract and workflow-governed evolution is active for this arm.
+invariants:
+  - CONTRACTS.md and WORKFLOW.md must be maintained.
+postconditions:
+  - The first governed capability introduction records both governance artifacts.
+violation_rules:
+  - rule_id: contract.arm_match
+    severity: high
+    kind: consistent_arm_contract
+  - rule_id: contracts.file_required
+    severity: high
+    kind: file_exists
+    artifact: CONTRACTS.md
+  - rule_id: workflow.file_required
+    severity: high
+    kind: file_exists
+    artifact: WORKFLOW.md
+  - rule_id: contracts.declared
+    severity: medium
+    kind: field_contains
+    field: governance_artifacts_present
+    expected: CONTRACTS.md
+  - rule_id: workflow.declared
+    severity: medium
+    kind: field_contains
+    field: governance_artifacts_present
+    expected: WORKFLOW.md
+  - rule_id: contracts.changed_on_introduction
+    severity: medium
+    kind: governed_capability_introduction_changed_files_include
+    artifact: CONTRACTS.md
+  - rule_id: workflow.changed_on_introduction
+    severity: medium
+    kind: governed_capability_introduction_changed_files_include
+    artifact: WORKFLOW.md
+  - rule_id: traceability.perfect
+    severity: high
+    kind: field_equals
+    field: traceability_ratio
+    expected: 1.0
+  - rule_id: contracts.zero_violations
+    severity: high
+    kind: field_equals
+    field: contract_violations
+    expected: 0
+  - rule_id: tests.zero_failures
+    severity: high
+    kind: field_equals
+    field: test_failures
+    expected: 0
+  - rule_id: ledger.required_at_c6
+    severity: high
+    kind: step_field_equals
+    step: C6
+    field: run_ledger_compliance
+    expected: true
+  - rule_id: ledger.artifact_exists
+    severity: medium
+    kind: ledger_required_when_flagged
+  - rule_id: capability.declared
+    severity: high
+    kind: capability_declared
+    capability: structured_response

@@ -1,0 +1,27 @@
+{
+  "condition": "code-artifacts",
+  "strategy": "evolutionary",
+  "arm": "base",
+  "replication": "rep02",
+  "source_manifest": "benchmark/manifests/evolutionary/base/rep02/C6/manifest.json",
+  "expected_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "evidence_files": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json",
+    "evidence/repo/app/assistant.py",
+    "evidence/repo/app/documents.py",
+    "evidence/repo/app/retriever.py",
+    "evidence/repo/app/schemas.py",
+    "evidence/repo/templates/manifest.template.json",
+    "evidence/repo/templates/run_ledger.template.json",
+    "evidence/repo/tests/test_t0_rag.py",
+    "evidence/run_ledger.json"
+  ]
+}

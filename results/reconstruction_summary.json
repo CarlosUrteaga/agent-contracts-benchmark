@@ -1,0 +1,600 @@
+{
+  "total_audits": 72,
+  "exact_match_count": 72,
+  "exact_match_rate": 1.0,
+  "by_condition": {
+    "code-artifacts": {
+      "total": 24,
+      "exact_match_count": 24,
+      "exact_match_rate": 1.0
+    },
+    "governance": {
+      "total": 24,
+      "exact_match_count": 24,
+      "exact_match_rate": 1.0
+    },
+    "minimal": {
+      "total": 24,
+      "exact_match_count": 24,
+      "exact_match_rate": 1.0
+    }
+  },
+  "details": [
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/agent-card/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/agent-card/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/agent-card/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/base/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/base/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/base/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/contract-first/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/contract-first/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/contract-first/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/contract-flow/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/contract-flow/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/evolutionary/contract-flow/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/agent-card/rep01/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/agent-card/rep02/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/agent-card/rep03/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/base/rep01/audit_result.json",
+      "trajectory_key": "final-spec/base/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/base/rep02/audit_result.json",
+      "trajectory_key": "final-spec/base/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/base/rep03/audit_result.json",
+      "trajectory_key": "final-spec/base/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/contract-first/rep01/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/contract-first/rep02/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/contract-first/rep03/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/contract-flow/rep01/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep01",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/contract-flow/rep02/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep02",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/code-artifacts/final-spec/contract-flow/rep03/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep03",
+      "condition": "code-artifacts",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/agent-card/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/agent-card/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/agent-card/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/base/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/base/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/base/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/contract-first/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/contract-first/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/contract-first/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/contract-flow/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/contract-flow/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/evolutionary/contract-flow/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/agent-card/rep01/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/agent-card/rep02/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/agent-card/rep03/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/base/rep01/audit_result.json",
+      "trajectory_key": "final-spec/base/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/base/rep02/audit_result.json",
+      "trajectory_key": "final-spec/base/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/base/rep03/audit_result.json",
+      "trajectory_key": "final-spec/base/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/contract-first/rep01/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/contract-first/rep02/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/contract-first/rep03/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/contract-flow/rep01/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep01",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/contract-flow/rep02/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep02",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/governance/final-spec/contract-flow/rep03/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep03",
+      "condition": "governance",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/agent-card/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/agent-card/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/agent-card/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/agent-card/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/base/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/base/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/base/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/base/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/contract-first/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/contract-first/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/contract-first/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/contract-first/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/contract-flow/rep01/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/contract-flow/rep02/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/evolutionary/contract-flow/rep03/audit_result.json",
+      "trajectory_key": "evolutionary/contract-flow/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/agent-card/rep01/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/agent-card/rep02/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/agent-card/rep03/audit_result.json",
+      "trajectory_key": "final-spec/agent-card/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/base/rep01/audit_result.json",
+      "trajectory_key": "final-spec/base/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/base/rep02/audit_result.json",
+      "trajectory_key": "final-spec/base/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/base/rep03/audit_result.json",
+      "trajectory_key": "final-spec/base/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/contract-first/rep01/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/contract-first/rep02/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/contract-first/rep03/audit_result.json",
+      "trajectory_key": "final-spec/contract-first/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/contract-flow/rep01/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep01",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/contract-flow/rep02/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep02",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    },
+    {
+      "audit_path": "audit/minimal/final-spec/contract-flow/rep03/audit_result.json",
+      "trajectory_key": "final-spec/contract-flow/rep03",
+      "condition": "minimal",
+      "missing_capabilities": [],
+      "spurious_capabilities": [],
+      "exact_match": true
+    }
+  ]
+}

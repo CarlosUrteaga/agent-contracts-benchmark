@@ -1,0 +1,23 @@
+{
+  "condition": "minimal",
+  "strategy": "final-spec",
+  "arm": "agent-card",
+  "replication": "rep01",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "minimal",
+  "source_manifest_fingerprint": "sha256:8938e764b9e596c46d9d8c95933b750b36c999cc18205d80fcf8b40d2538b1e4"
+}

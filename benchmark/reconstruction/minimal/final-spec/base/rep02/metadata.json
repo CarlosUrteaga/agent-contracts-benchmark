@@ -1,0 +1,19 @@
+{
+  "condition": "minimal",
+  "strategy": "final-spec",
+  "arm": "base",
+  "replication": "rep02",
+  "source_manifest": "benchmark/manifests/final-spec/base/rep02/C6/manifest.json",
+  "expected_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "evidence_files": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ]
+}

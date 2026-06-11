@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "architectural-contracts-benchmark"
+version = "0.1.0"
+description = "Reproducible benchmark scaffold for agent contracts, reconstruction audit, and post-hoc governance validation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "Carlos Urteaga" }
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+packages = ["app", "tools", "tools.governor", "tools.violation_injection"]
+

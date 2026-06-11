@@ -1,0 +1,34 @@
+{
+  "step_id": "C1",
+  "step": "C1",
+  "status": "completed",
+  "agent_executor": "codex",
+  "arm": "contract-flow",
+  "strategy": "evolutionary",
+  "replication": "rep01",
+  "changed_files": [
+    "app/structured_response.py",
+    "tests/test_contract_benchmark.py",
+    "CONTRACTS.md",
+    "WORKFLOW.md"
+  ],
+  "changed_file_count": 4,
+  "change_spread": 0.2,
+  "traceability_ratio": 1.0,
+  "test_failures": 0,
+  "contract_violations": 0,
+  "run_ledger_compliance": false,
+  "capabilities_present": [
+    "structured_response"
+  ],
+  "governance_artifacts_present": [
+    "CONTRACTS.md"
+  ],
+  "_mutation": {
+    "mutation_id": "contract-flow-evolutionary-rep01-C1-missing_workflow_md",
+    "source_manifest": "benchmark/manifests/evolutionary/contract-flow/rep01/C1/manifest.json",
+    "mutation_type": "missing_workflow_md",
+    "expected_verdict": "fail",
+    "expected_rule_id": "workflow.file_required"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "condition": "code-artifacts",
+  "strategy": "evolutionary",
+  "arm": "agent-card",
+  "replication": "rep01",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/AGENT_CARD.md",
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "code-artifacts",
+  "source_manifest_fingerprint": "sha256:60ccf629b5cf0f775920e4f6d27259821cd332416527a9b33bf6dc013e528622"
+}

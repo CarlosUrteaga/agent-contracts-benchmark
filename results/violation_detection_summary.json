@@ -1,0 +1,27 @@
+{
+  "true_positives": 84,
+  "false_positives": 0,
+  "true_negatives": 0,
+  "false_negatives": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "F1": 1.0,
+  "detection_rate_by_mutation_type": {
+    "missing_required_artifact": 1.0,
+    "capability_present_but_not_declared": 1.0,
+    "fingerprint_mismatch": 1.0,
+    "nonzero_test_failures": 1.0,
+    "wrong_traceability_ratio": 1.0,
+    "nonzero_contract_violations": 1.0,
+    "missing_contracts_md": 1.0,
+    "inconsistent_arm_contract": 1.0,
+    "missing_workflow_md": 1.0,
+    "missing_run_ledger": 1.0
+  },
+  "detection_rate_by_arm": {
+    "agent-card": 1.0,
+    "base": 1.0,
+    "contract-first": 1.0,
+    "contract-flow": 1.0
+  }
+}

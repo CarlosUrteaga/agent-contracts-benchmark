@@ -1,0 +1,24 @@
+{
+  "condition": "governance",
+  "strategy": "evolutionary",
+  "arm": "base",
+  "replication": "rep03",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json",
+    "evidence/run_ledger.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "governance",
+  "source_manifest_fingerprint": "sha256:c3c9d8f82fe7e8515610436faa55ddf9f0632d2be41e16a304319f9f9c7ea211"
+}

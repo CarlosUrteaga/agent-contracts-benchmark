@@ -1,0 +1,33 @@
+{
+  "step_id": "C4",
+  "step": "C4",
+  "status": "completed",
+  "agent_executor": "codex",
+  "arm": "contract-first",
+  "strategy": "evolutionary",
+  "replication": "rep03",
+  "changed_files": [
+    "app/user_profile_memory.py",
+    "tests/test_contract_benchmark.py"
+  ],
+  "changed_file_count": 2,
+  "change_spread": 0.1,
+  "traceability_ratio": 1.0,
+  "test_failures": 0,
+  "contract_violations": 0,
+  "run_ledger_compliance": false,
+  "capabilities_present": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory"
+  ],
+  "governance_artifacts_present": [],
+  "_mutation": {
+    "mutation_id": "contract-first-evolutionary-rep03-C4-missing_contracts_md",
+    "source_manifest": "benchmark/manifests/evolutionary/contract-first/rep03/C4/manifest.json",
+    "mutation_type": "missing_contracts_md",
+    "expected_verdict": "fail",
+    "expected_rule_id": "contracts.file_required"
+  }
+}

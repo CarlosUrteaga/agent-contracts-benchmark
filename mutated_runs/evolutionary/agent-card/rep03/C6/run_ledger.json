@@ -1,0 +1,8 @@
+{
+  "run_id": "evolutionary-agent-card-rep03-C6",
+  "arm": "agent-card",
+  "strategy": "evolutionary",
+  "replication": "rep03",
+  "step": "C6",
+  "status": "completed"
+}

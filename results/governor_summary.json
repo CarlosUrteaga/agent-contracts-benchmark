@@ -1,0 +1,14 @@
+{
+  "total_manifests": 84,
+  "pass_count": 84,
+  "fail_count": 0,
+  "compliance_rate_by_arm": {
+    "agent-card": 1.0,
+    "base": 1.0,
+    "contract-first": 1.0,
+    "contract-flow": 1.0
+  },
+  "median_latency_ms": 1.795072,
+  "p95_latency_ms": 3.723653,
+  "max_latency_ms": 127.162723
+}

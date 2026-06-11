@@ -1,0 +1,36 @@
+{
+  "step_id": "C6",
+  "step": "C6",
+  "status": "completed",
+  "agent_executor": "codex",
+  "arm": "base",
+  "strategy": "evolutionary",
+  "replication": "rep03",
+  "changed_files": [
+    "app/run_ledger.py",
+    "tests/test_contract_benchmark.py",
+    "run_ledger.json"
+  ],
+  "changed_file_count": 3,
+  "change_spread": 0.15,
+  "traceability_ratio": 1.0,
+  "test_failures": 0,
+  "contract_violations": 0,
+  "run_ledger_compliance": true,
+  "capabilities_present": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "governance_artifacts_present": [],
+  "_mutation": {
+    "mutation_id": "base-evolutionary-rep03-C6-fingerprint_mismatch",
+    "source_manifest": "benchmark/manifests/evolutionary/base/rep03/C6/manifest.json",
+    "mutation_type": "fingerprint_mismatch",
+    "expected_verdict": "fail",
+    "expected_rule_id": "manifest.fingerprint_match"
+  }
+}

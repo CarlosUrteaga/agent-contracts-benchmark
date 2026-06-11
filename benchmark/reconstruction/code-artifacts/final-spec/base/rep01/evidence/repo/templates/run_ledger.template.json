@@ -1,0 +1,13 @@
+{
+  "run_id": "",
+  "arm": "base",
+  "strategy": "evolutionary",
+  "replication": "rep01",
+  "step_id": "T0",
+  "agent_executor": "ralph-loop",
+  "started_at": "",
+  "finished_at": "",
+  "status": "pending",
+  "artifacts": [],
+  "notes": ""
+}

@@ -1,0 +1,24 @@
+{
+  "condition": "code-artifacts",
+  "strategy": "final-spec",
+  "arm": "base",
+  "replication": "rep02",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json",
+    "evidence/repo/app/assistant.py"
+  ],
+  "exact_match": true,
+  "evidence_strength": "code-artifacts",
+  "source_manifest_fingerprint": "sha256:0d0329706fac949ac4426905563a0770c2e758e3afb3e5338d4efaf1b50690d5"
+}

@@ -1,0 +1,24 @@
+{
+  "condition": "code-artifacts",
+  "strategy": "evolutionary",
+  "arm": "contract-first",
+  "replication": "rep01",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/CONTRACTS.md",
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "code-artifacts",
+  "source_manifest_fingerprint": "sha256:ccc10f475a7a1962f3a5a63bb205114d3dd2370f2c47a70c04341578390e7d36"
+}

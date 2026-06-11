@@ -1,0 +1,23 @@
+{
+  "condition": "minimal",
+  "strategy": "final-spec",
+  "arm": "contract-first",
+  "replication": "rep02",
+  "recovered_capabilities": [
+    "structured_response",
+    "deterministic_ticket_tool",
+    "approval_workflow",
+    "user_profile_memory",
+    "reviewer_validation",
+    "run_ledger"
+  ],
+  "missing_capabilities": [],
+  "spurious_capabilities": [],
+  "evidence_citations": [
+    "evidence/STEP_NOTE.md",
+    "evidence/manifest.json"
+  ],
+  "exact_match": true,
+  "evidence_strength": "minimal",
+  "source_manifest_fingerprint": "sha256:96bcf3f7d3875c97771e4c08330275b60f145e041d140659d59a6ec983e87760"
+}
