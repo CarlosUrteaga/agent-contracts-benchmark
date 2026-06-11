@@ -1,0 +1,27 @@
+{
+  "run_id": "S-010-guarded-rep01",
+  "scenario_id": "S-010",
+  "mode": "guarded",
+  "contract_id": "enforcement.guarded.v2",
+  "provider": "mock",
+  "model_id": "mock-agent",
+  "replication_id": "rep01",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset"
+      },
+      "result": {
+        "evidence_ids": [
+          "password-policy"
+        ],
+        "query": "password reset"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ]
+}
