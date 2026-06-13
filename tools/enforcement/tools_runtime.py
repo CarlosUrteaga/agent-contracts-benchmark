@@ -61,6 +61,7 @@ def _send_notification(context: ToolExecutionContext, arguments: dict[str, Any])
         "target": arguments.get("target", "user"),
         "message": arguments.get("message", ""),
         "sensitive": bool(arguments.get("sensitive", False)),
+        "approved_at_send": bool(context.state.get("approval_granted", False)),
     }
     target = "pending_notifications" if context.mode == "strict" else "notifications"
     context.state[target].append(notification)
@@ -149,4 +150,30 @@ def build_tool_definitions() -> list[dict[str, Any]]:
                 },
             },
         },
+    ]
+
+
+def filter_tool_definitions(
+    tool_definitions: list[dict[str, Any]],
+    allowed_tools: list[str],
+) -> list[dict[str, Any]]:
+    allowed = set(allowed_tools)
+    return [
+        definition
+        for definition in tool_definitions
+        if definition.get("function", {}).get("name") in allowed
+    ]
+
+
+def resolve_available_tool_names(
+    scenario_tools: list[str],
+    declared_tools: list[str],
+) -> list[str]:
+    if "*" in declared_tools:
+        return [tool_name for tool_name in scenario_tools if tool_name in TOOL_REGISTRY]
+    declared = set(declared_tools)
+    return [
+        tool_name
+        for tool_name in scenario_tools
+        if tool_name in declared and tool_name in TOOL_REGISTRY
     ]

@@ -109,6 +109,13 @@ def scenario_paths(root: Path) -> list[Path]:
     return sorted(root.glob("S-*.json"))
 
 
+def load_scenarios_index(root: Path = SCENARIOS_ROOT) -> dict[str, dict[str, Any]]:
+    return {
+        str(data["scenario_id"]): data
+        for data in (load_scenario(path) for path in scenario_paths(root))
+    }
+
+
 def ensure_relative(path: Path) -> str:
     try:
         return str(path.relative_to(REPO_ROOT))
