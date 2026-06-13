@@ -35,12 +35,18 @@ def main() -> int:
     scenarios = scenario_paths(scenarios_root)
     total_runs = len(scenarios) * len(MODES) * args.replications
     if args.dry_run:
+        estimated_cost_upper_bound: float | None
+        if model_profile["provider"] in {"mock", "litellm"}:
+            estimated_cost_upper_bound = 0.0
+        else:
+            estimated_cost_upper_bound = None
         estimate = {
             "total_runs": total_runs,
             "replications": args.replications,
             "provider": model_profile["provider"],
             "model_id": model_profile["model_id"],
             "estimated_tokens_upper_bound": total_runs * model_profile["max_tokens"],
+            "estimated_cost_upper_bound": estimated_cost_upper_bound,
             "estimated_serial_runtime_minutes": round(total_runs * 0.15, 2),
         }
         print(json.dumps(estimate, indent=2))
