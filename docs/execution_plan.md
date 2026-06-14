@@ -147,6 +147,59 @@ uv run --group litellm python -m tools.enforcement.run \
 
 El modelo responde, el runtime produce `summary.json` y el Governor interviene correctamente en el escenario adversarial.
 
+## Fase 1.5. Campaña overnight pre-freeze
+
+### Objetivo
+
+Ejecutar la validación pre-freeze completa de `21 × 4 × 1` de forma reanudable y segura.
+
+### Regla operativa
+
+- no borrar el árbol de resultados por defecto
+- no reejecutar runs ya completos y válidos
+- reejecutar automáticamente runs parciales o corruptos
+- no marcar freeze-ready sólo por haber terminado la ejecución; también deben correr la validación y el postproceso
+
+### Comando oficial para arrancar o reanudar
+
+```bash
+uv run --group litellm python -m tools.enforcement.run_pre_freeze_validation --resume
+```
+
+### Comando oficial para reiniciar desde cero
+
+```bash
+uv run --group litellm python -m tools.enforcement.run_pre_freeze_validation --force-rerun
+```
+
+### Validación de completitud
+
+```bash
+python3 -m tools.enforcement.validate_campaign \
+  --runs results/enforcement/pre-freeze-validation \
+  --expected-runs 84 \
+  --strict
+```
+
+### Postproceso oficial
+
+```bash
+python3 -m tools.enforcement.finalize_pre_freeze_validation
+```
+
+### Criterio de salida
+
+El benchmark queda **freeze-ready** sólo si:
+
+- la campaña completa tiene `84` runs válidos
+- cada run tiene `summary.json`
+- cada run tiene `trace.jsonl`
+- cada run tiene `run_ledger.json`
+- cada run tiene `run_complete.json`
+- no existen directorios parciales o corruptos contados como completos
+- `f1_diagnosis.json` se genera correctamente
+- `summary.json` se genera correctamente
+
 ## Fase 2. Corrida base replicada del modelo actual
 
 ### Objetivo

@@ -9,6 +9,7 @@ from typing import Any
 
 from .adapters import AgentModelAdapter, build_model_adapter
 from .common import (
+    RUN_COMPLETE_FILE,
     REQUIRED_LEDGER_KEYS,
     REPO_ROOT,
     RUN_LEDGER_FILE,
@@ -23,6 +24,7 @@ from .common import (
     write_json,
     write_jsonl,
 )
+from .validate_campaign import validate_run_dir
 from .tools_runtime import (
     TOOL_REGISTRY,
     ToolExecutionContext,
@@ -106,8 +108,6 @@ class GovernorRuntime:
             violations.append(_violation("run_ledger.complete", phase="post_execution"))
         if forbidden_outcomes_triggered:
             violations.append(_violation("forbidden.outcome_triggered", phase="post_execution"))
-        if not final_properties.get("task_completed", False) and self.mode == "strict":
-            violations.append(_violation("task.completion_required", phase="post_execution", severity="medium"))
         return violations
 
 
@@ -188,6 +188,54 @@ def _run_ledger_payload(
         "actions": executed_actions,
         "artifacts": [TRACE_FILE, SUMMARY_FILE],
     }
+
+
+def _artifact_run_ledger_payload(
+    base_run_ledger: dict[str, Any],
+    *,
+    presented_to_governor: bool,
+    complete_for_governor: bool,
+    valid_for_governor: bool,
+) -> dict[str, Any]:
+    payload = dict(base_run_ledger)
+    payload["persisted_as_artifact"] = True
+    payload["presented_to_governor"] = presented_to_governor
+    payload["complete_for_governor"] = complete_for_governor
+    payload["valid_for_governor"] = valid_for_governor
+    return payload
+
+
+def _write_completed_run(
+    *,
+    out_dir: Path,
+    trace_rows: list[dict[str, Any]],
+    summary: dict[str, Any],
+    run_ledger_artifact: dict[str, Any],
+    profile_id: str,
+) -> None:
+    write_jsonl(out_dir / TRACE_FILE, trace_rows)
+    write_json(out_dir / RUN_LEDGER_FILE, run_ledger_artifact)
+    write_json(out_dir / SUMMARY_FILE, summary)
+    report = validate_run_dir(
+        out_dir,
+        expected_scenario_id=str(summary["scenario_id"]),
+        expected_mode=str(summary["mode"]),
+        expected_replication_id=str(summary["replication_id"]),
+        expected_profile_id=profile_id,
+        require_completion_marker=False,
+    )
+    if not report["complete"]:
+        raise ValueError(f"incomplete run artifacts for {out_dir}: {report['problems']}")
+    completion = {
+        "scenario_id": summary["scenario_id"],
+        "mode": summary["mode"],
+        "replication_id": summary["replication_id"],
+        "profile_id": profile_id,
+        "final_status": summary["final_status"],
+        "artifacts": [SUMMARY_FILE, TRACE_FILE, RUN_LEDGER_FILE],
+        "completed_at": round(time.time(), 6),
+    }
+    write_json(out_dir / RUN_COMPLETE_FILE, completion)
 
 
 def _messages_for_agent(
@@ -431,10 +479,25 @@ def run_scenario(
     pre_status = _phase_status(pre_violations)
     trace_rows.append(_event("pre_execution_validation", status=pre_status, violations=pre_violations))
     if pre_violations and mode == "strict":
+        run_ledger = _run_ledger_payload(
+            scenario=scenario,
+            mode=mode,
+            contract=contract,
+            model_profile=model_profile,
+            replication_id=replication_id,
+            executed_actions=[],
+        )
+        run_ledger_artifact = _artifact_run_ledger_payload(
+            run_ledger,
+            presented_to_governor=False,
+            complete_for_governor=False,
+            valid_for_governor=False,
+        )
         summary = {
             "scenario_id": scenario["scenario_id"],
             "scenario_type": scenario["scenario_type"],
             "mode": mode,
+            "profile_id": model_profile["profile_id"],
             "contract_id": contract["contract_id"],
             "replication_id": replication_id,
             "provider": model_profile["provider"],
@@ -446,6 +509,9 @@ def run_scenario(
             "violations": all_violations,
             "validation_phases": {"pre_execution": pre_status, "runtime": "not_run", "post_execution": "not_run"},
             "final_status": "aborted_pre_execution",
+            "run_ledger_artifact_present": True,
+            "run_ledger_presented_to_governor": False,
+            "run_ledger_complete_for_governor": False,
             "run_ledger_present": False,
             "run_ledger_valid": False,
             "side_effects_committed": False,
@@ -466,8 +532,13 @@ def run_scenario(
             "expected_violations_if_attempted": list(scenario["expected_violations_if_attempted"]),
         }
         trace_rows.append(_event("run_finished", final_status=summary["final_status"]))
-        write_jsonl(out_dir / TRACE_FILE, trace_rows)
-        write_json(out_dir / SUMMARY_FILE, summary)
+        _write_completed_run(
+            out_dir=out_dir,
+            trace_rows=trace_rows,
+            summary=summary,
+            run_ledger_artifact=run_ledger_artifact,
+            profile_id=str(model_profile["profile_id"]),
+        )
         return summary
 
     max_iterations = int(scenario["max_agent_iterations"])
@@ -653,14 +724,24 @@ def run_scenario(
         executed_actions=executed_actions,
     )
     if scenario["fixtures"].get("force_missing_ledger", False):
-        run_ledger_present = False
+        run_ledger_presented_to_governor = False
+        run_ledger_complete_for_governor = False
         run_ledger_payload = None
     else:
-        run_ledger_present = True
-        run_ledger_payload = run_ledger
+        run_ledger_presented_to_governor = True
+        run_ledger_payload = dict(run_ledger)
         if scenario["fixtures"].get("force_incomplete_ledger", False):
-            run_ledger_payload = dict(run_ledger)
             run_ledger_payload.pop("artifacts")
+            run_ledger_complete_for_governor = False
+        else:
+            run_ledger_complete_for_governor = True
+    run_ledger_valid = bool(run_ledger_payload and all(key in run_ledger_payload for key in REQUIRED_LEDGER_KEYS))
+    run_ledger_artifact = _artifact_run_ledger_payload(
+        run_ledger,
+        presented_to_governor=run_ledger_presented_to_governor,
+        complete_for_governor=run_ledger_complete_for_governor,
+        valid_for_governor=run_ledger_valid,
+    )
 
     post_started = time.perf_counter()
     post_violations = governor.validate_post(final_response, run_ledger_payload, final_properties, forbidden_outcomes_triggered)
@@ -697,6 +778,7 @@ def run_scenario(
         "scenario_id": scenario["scenario_id"],
         "scenario_type": scenario["scenario_type"],
         "mode": mode,
+        "profile_id": model_profile["profile_id"],
         "contract_id": contract["contract_id"],
         "replication_id": replication_id,
         "provider": model_profile["provider"],
@@ -712,8 +794,11 @@ def run_scenario(
             "post_execution": post_status,
         },
         "final_status": final_status,
-        "run_ledger_present": run_ledger_present,
-        "run_ledger_valid": bool(run_ledger_payload and all(key in run_ledger_payload for key in REQUIRED_LEDGER_KEYS)),
+        "run_ledger_artifact_present": True,
+        "run_ledger_presented_to_governor": run_ledger_presented_to_governor,
+        "run_ledger_complete_for_governor": run_ledger_complete_for_governor,
+        "run_ledger_present": run_ledger_presented_to_governor,
+        "run_ledger_valid": run_ledger_valid,
         "side_effects_committed": side_effects_committed,
         "iterations_used": len(proposed_actions) + int(final_response is not None),
         "token_usage": token_usage_total,
@@ -733,10 +818,13 @@ def run_scenario(
     }
 
     trace_rows.append(_event("run_finished", final_status=final_status))
-    write_jsonl(out_dir / TRACE_FILE, trace_rows)
-    if run_ledger_payload is not None:
-        write_json(out_dir / RUN_LEDGER_FILE, run_ledger_payload)
-    write_json(out_dir / SUMMARY_FILE, summary)
+    _write_completed_run(
+        out_dir=out_dir,
+        trace_rows=trace_rows,
+        summary=summary,
+        run_ledger_artifact=run_ledger_artifact,
+        profile_id=str(model_profile["profile_id"]),
+    )
     return summary
 
 

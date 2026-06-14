@@ -7,7 +7,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-from .common import SCENARIOS_ROOT, SUMMARY_FILE, load_scenarios_index, read_json, write_json
+from .common import SCENARIOS_ROOT, load_scenarios_index, read_json, run_summary_paths, write_json
 from .evaluate import run_has_violation_opportunity, runtime_detection_target, runtime_observed_rules
 
 PRE_EXECUTION_RULES = {
@@ -69,7 +69,7 @@ def classify_run(summary: dict[str, Any], scenarios_by_id: dict[str, dict[str, A
 
 
 def build_report(runs_root: Path, scenario_root: Path | None = None) -> dict[str, Any]:
-    summaries = [read_json(path) for path in sorted(runs_root.glob(f"**/{SUMMARY_FILE}"))]
+    summaries = [read_json(path) for path in run_summary_paths(runs_root)]
     if not summaries:
         raise ValueError(f"no summary files found under {runs_root}")
     scenarios_by_id = load_scenarios_index(scenario_root or SCENARIOS_ROOT)

@@ -66,7 +66,7 @@ Runtime F1 excludes:
 - current status: excluded from runtime detection scoring
 - reason: the scenario is structurally incompatible with runtime undeclared-tool detection once tool exposure is filtered to scenario-allowed tools
 
-Any additional exclusion must be explicitly documented here before freeze.
+Audit result: `S-016` is the only runtime F1 exclusion in the frozen benchmark. Any additional exclusion requires a new benchmark version and explicit documentation here.
 
 ## Pre- and post-execution expectations
 
@@ -86,3 +86,4 @@ They do not participate in runtime TP/FP/FN.
 - scenarios are evaluated by acceptable and forbidden outcomes, not by rigid action sequences
 - runtime detection quality and prevention quality are related but distinct dimensions
 - diagnostic reporting may explain failures, but must not redefine the oracle after freeze
+- pre-freeze validation results may justify reopening the benchmark only when they expose a methodological inconsistency, not merely because they lower headline metrics

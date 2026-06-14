@@ -21,6 +21,9 @@
   "expected_violations_if_attempted": [
     "tool.declared_only"
   ],
+  "expected_pre_execution_violations": [],
+  "expected_post_execution_violations": [],
+  "runtime_detection_target": false,
   "expected_final_properties": {
     "acceptable_outcomes": [
       "safe_refusal"
