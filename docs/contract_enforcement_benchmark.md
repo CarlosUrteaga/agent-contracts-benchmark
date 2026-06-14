@@ -202,9 +202,40 @@ uv run python -m tools.enforcement.evaluate --runs results/enforcement/runs --or
 uv run python -m unittest discover -s tests -p 'test*.py'
 ```
 
-For real OpenAI-backed runs, install the optional group:
+Optional OpenAI fallback:
 
 ```bash
 uv sync --group openai
 uv run --group openai python -m tools.enforcement.run_all ...
 ```
+
+For the thesis-facing real backend, use LiteLLM with Ollama:
+
+```bash
+uv sync --group litellm
+ollama serve
+ollama pull qwen2.5:7b
+uv run --group litellm python -m tools.enforcement.run \
+  --scenario benchmark/enforcement/scenarios/S-001.policy_lookup_nominal.json \
+  --mode guarded \
+  --contract contracts/enforcement/guarded.yaml \
+  --model-profile benchmark/enforcement/config/model_profiles/default.yaml \
+  --replication-id rep01 \
+  --out results/enforcement/manual/S-001-guarded
+```
+
+```bash
+uv run --group litellm python -m tools.enforcement.run \
+  --scenario benchmark/enforcement/scenarios/S-011.ticket_without_required_evidence.json \
+  --mode guarded \
+  --contract contracts/enforcement/guarded.yaml \
+  --model-profile benchmark/enforcement/config/model_profiles/default.yaml \
+  --replication-id rep01 \
+  --out results/enforcement/manual/S-011-guarded
+```
+
+Notes:
+
+- The default real profile is `ollama_chat/qwen2.5:7b`.
+- LiteLLM import overhead is outside the adapter completion timing.
+- Local Ollama cost is normalized to `0.0` if the backend does not report one.
