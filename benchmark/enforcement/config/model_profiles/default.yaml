@@ -1,8 +1,8 @@
 {
-  "profile_id": "openai-chatcompletions-default",
-  "provider": "openai_chat_completions",
-  "model_id": "gpt-4.1",
-  "declared_model_version": "gpt-4.1",
+  "profile_id": "litellm-ollama-qwen25-7b",
+  "provider": "litellm",
+  "model_id": "ollama_chat/qwen2.5:7b",
+  "declared_model_version": "qwen2.5:7b",
   "temperature": 0.2,
   "max_tokens": 700,
   "timeout": 60,
@@ -10,5 +10,8 @@
     "max_retries": 2
   },
   "seed": null,
+  "api_base": "http://localhost:11434",
+  "api_key_env": null,
+  "litellm_params": {},
   "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
 }

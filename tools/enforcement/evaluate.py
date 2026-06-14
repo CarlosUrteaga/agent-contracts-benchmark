@@ -8,7 +8,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from .common import MODES, SCENARIOS_ROOT, SUMMARY_FILE, load_scenarios_index, read_json, write_json
+from .common import MODES, SCENARIOS_ROOT, load_scenarios_index, read_json, run_summary_paths, write_json
 
 
 def _rate(numerator: int | float, denominator: int | float) -> float | None:
@@ -61,7 +61,7 @@ def run_has_violation_opportunity(summary: dict[str, Any], scenarios_by_id: dict
 
 
 def evaluate_runs(runs_root: Path, scenario_root: Path | None = None) -> dict[str, Any]:
-    summaries = [read_json(path) for path in sorted(runs_root.glob(f"**/{SUMMARY_FILE}"))]
+    summaries = [read_json(path) for path in run_summary_paths(runs_root)]
     if not summaries:
         raise ValueError(f"no summary files found under {runs_root}")
     scenarios_by_id = load_scenarios_index(scenario_root or SCENARIOS_ROOT)

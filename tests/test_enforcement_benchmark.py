@@ -11,12 +11,14 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from tools.enforcement.adapters import LiteLLMAdapter, build_model_adapter
+from tools.enforcement.common import RUN_COMPLETE_FILE, RUN_LEDGER_FILE, SUMMARY_FILE, TRACE_FILE
 from tools.enforcement.diagnose_f1 import build_report, classify_run
 from tools.enforcement.evaluate import evaluate_runs
 from tools.enforcement.freeze_manifest import build_manifest
 from tools.enforcement.materialize import materialize
-from tools.enforcement.runtime import _build_governor_feedback, _build_recovery_ready_feedback, run_scenario
+from tools.enforcement.runtime import GovernorRuntime, _build_governor_feedback, _build_recovery_ready_feedback, run_scenario
 from tools.enforcement.tools_runtime import build_tool_definitions, filter_tool_definitions, resolve_available_tool_names
+from tools.enforcement.validate_campaign import validate_campaign, validate_run_dir
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -57,6 +59,18 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         out = root / "synthetic" / mode / "rep01" / scenario_id
         out.mkdir(parents=True, exist_ok=True)
         (out / "summary.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    def write_trace(self, run_dir: Path, rows: list[dict[str, object]]) -> None:
+        run_dir.mkdir(parents=True, exist_ok=True)
+        (run_dir / TRACE_FILE).write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+
+    def write_ledger(self, run_dir: Path, payload: dict[str, object]) -> None:
+        run_dir.mkdir(parents=True, exist_ok=True)
+        (run_dir / RUN_LEDGER_FILE).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    def write_complete(self, run_dir: Path, payload: dict[str, object]) -> None:
+        run_dir.mkdir(parents=True, exist_ok=True)
+        (run_dir / RUN_COMPLETE_FILE).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
     def write_scenario(self, root: Path, payload: dict[str, object]) -> None:
         root.mkdir(parents=True, exist_ok=True)
@@ -107,6 +121,16 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         self.assertEqual("litellm", profile["provider"])
         self.assertEqual("ollama_chat/qwen2.5:7b", profile["model_id"])
         self.assertEqual("http://localhost:11434", profile["api_base"])
+
+    def test_governor_post_rules_are_declared_in_contract(self) -> None:
+        final_properties = {"task_completed": False}
+        for mode in ["advisory", "guarded", "strict"]:
+            contract = json.loads(self.contract_path(mode).read_text(encoding="utf-8"))
+            governor = GovernorRuntime(contract, mode)
+            violations = governor.validate_post({}, None, final_properties, [])
+            declared = set(contract["postconditions"])
+            observed = {item["rule"] for item in violations}
+            self.assertTrue(observed.issubset(declared), mode)
 
     def test_guarded_blocks_and_replans_in_ticket_without_evidence(self) -> None:
         summary = self.run_case("S-011", "guarded")
@@ -178,6 +202,59 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         self.assertEqual("failed_post_execution", summary["final_status"])
         self.assertFalse(summary["side_effects_committed"])
         self.assertEqual("violation_detected", summary["validation_phases"]["post_execution"])
+
+    def test_missing_ledger_writes_artifact_but_not_governor_payload(self) -> None:
+        out_dir = self.temp_dir() / "run"
+        summary = run_scenario(
+            self.scenario_path("S-017"),
+            self.contract_path("strict"),
+            self.model_profile_path(),
+            "rep01",
+            out_dir,
+        )
+        ledger = json.loads((out_dir / RUN_LEDGER_FILE).read_text(encoding="utf-8"))
+        self.assertTrue(summary["run_ledger_artifact_present"])
+        self.assertFalse(summary["run_ledger_presented_to_governor"])
+        self.assertFalse(summary["run_ledger_complete_for_governor"])
+        self.assertFalse(summary["run_ledger_valid"])
+        self.assertTrue(ledger["persisted_as_artifact"])
+        self.assertFalse(ledger["presented_to_governor"])
+        self.assertFalse(ledger["complete_for_governor"])
+        self.assertFalse(ledger["valid_for_governor"])
+
+    def test_incomplete_ledger_writes_artifact_but_marks_governor_payload_invalid(self) -> None:
+        out_dir = self.temp_dir() / "run"
+        summary = run_scenario(
+            self.scenario_path("S-021"),
+            self.contract_path("strict"),
+            self.model_profile_path(),
+            "rep01",
+            out_dir,
+        )
+        ledger = json.loads((out_dir / RUN_LEDGER_FILE).read_text(encoding="utf-8"))
+        self.assertTrue(summary["run_ledger_artifact_present"])
+        self.assertTrue(summary["run_ledger_presented_to_governor"])
+        self.assertFalse(summary["run_ledger_complete_for_governor"])
+        self.assertFalse(summary["run_ledger_valid"])
+        self.assertTrue(ledger["persisted_as_artifact"])
+        self.assertTrue(ledger["presented_to_governor"])
+        self.assertFalse(ledger["complete_for_governor"])
+        self.assertFalse(ledger["valid_for_governor"])
+
+    def test_completed_runs_write_completion_marker(self) -> None:
+        out_dir = self.temp_dir() / "run"
+        summary = run_scenario(
+            self.scenario_path("S-001"),
+            self.contract_path("guarded"),
+            self.model_profile_path(),
+            "rep01",
+            out_dir,
+        )
+        marker = json.loads((out_dir / RUN_COMPLETE_FILE).read_text(encoding="utf-8"))
+        self.assertEqual(summary["scenario_id"], marker["scenario_id"])
+        self.assertEqual(summary["mode"], marker["mode"])
+        self.assertEqual(summary["replication_id"], marker["replication_id"])
+        self.assertEqual(set([SUMMARY_FILE, TRACE_FILE, RUN_LEDGER_FILE]), set(marker["artifacts"]))
 
     def test_no_contract_detection_metrics_are_null(self) -> None:
         runs_root = self.temp_dir() / "runs"
@@ -541,7 +618,7 @@ class EnforcementBenchmarkTests(unittest.TestCase):
 
     def test_freeze_manifest_contains_required_hashes(self) -> None:
         manifest = build_manifest()
-        self.assertEqual("v1.0-pre-freeze", manifest["benchmark_version"])
+        self.assertEqual("benchmark-v1.0", manifest["benchmark_version"])
         self.assertIn("freeze_commit", manifest)
         frozen = manifest["frozen_artifacts"]
         for key in ["scenarios_hash", "contracts_hash", "oracle_hash", "evaluator_hash", "diagnose_f1_hash"]:
@@ -906,6 +983,154 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stderr)
         summaries = list(out_root.glob("**/summary.json"))
         self.assertEqual(84, len(summaries))
+
+    def test_validate_run_dir_rejects_missing_completion_marker(self) -> None:
+        run_dir = self.temp_dir() / "runs" / "mock-profile" / "guarded" / "rep01" / "S-001"
+        summary = run_scenario(
+            self.scenario_path("S-001"),
+            self.contract_path("guarded"),
+            self.model_profile_path(),
+            "rep01",
+            run_dir,
+        )
+        (run_dir / RUN_COMPLETE_FILE).unlink()
+        report = validate_run_dir(
+            run_dir,
+            expected_scenario_id="S-001",
+            expected_mode="guarded",
+            expected_replication_id="rep01",
+            expected_profile_id=str(summary["profile_id"]),
+        )
+        self.assertFalse(report["complete"])
+        self.assertIn("missing:run_complete.json", report["problems"])
+
+    def test_validate_campaign_detects_partial_run(self) -> None:
+        runs_root = self.temp_dir() / "runs"
+        run_dir = runs_root / "mock-profile" / "guarded" / "rep01" / "S-001"
+        summary = run_scenario(
+            self.scenario_path("S-001"),
+            self.contract_path("guarded"),
+            self.model_profile_path(),
+            "rep01",
+            run_dir,
+        )
+        (run_dir / TRACE_FILE).write_text("", encoding="utf-8")
+        report = validate_campaign(runs_root, expected_runs=1)
+        self.assertFalse(report["is_complete"])
+        self.assertEqual(0, report["complete_valid_runs"])
+        self.assertEqual(1, report["partial_or_corrupt_runs"])
+        self.assertEqual("S-001", summary["scenario_id"])
+
+    def test_run_all_resume_skips_completed_runs_and_reruns_partial(self) -> None:
+        out_root = self.temp_dir() / "runs"
+        base_args = [
+            "python3",
+            "-m",
+            "tools.enforcement.run_all",
+            "--scenarios",
+            "benchmark/enforcement/scenarios",
+            "--contracts",
+            "contracts/enforcement",
+            "--model-profile",
+            "benchmark/enforcement/config/model_profiles/mock.yaml",
+            "--replications",
+            "1",
+            "--out",
+            str(out_root),
+        ]
+        first = subprocess.run(base_args + ["--force-rerun"], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
+        self.assertEqual(0, first.returncode, first.stderr)
+        run_dir = out_root / "mock-pilot" / "guarded" / "rep01" / "S-001"
+        (run_dir / RUN_COMPLETE_FILE).unlink()
+        second = subprocess.run(base_args + ["--resume"], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
+        self.assertEqual(0, second.returncode, second.stderr)
+        self.assertIn("RERUN_PARTIAL S-001 guarded rep01", second.stdout)
+        self.assertIn("SKIP S-002 guarded rep01", second.stdout)
+        self.assertTrue((run_dir / RUN_COMPLETE_FILE).exists())
+
+    def test_validate_campaign_cli_passes_for_complete_mock_campaign(self) -> None:
+        out_root = self.temp_dir() / "runs"
+        result = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.run_all",
+                "--scenarios",
+                "benchmark/enforcement/scenarios",
+                "--contracts",
+                "contracts/enforcement",
+                "--model-profile",
+                "benchmark/enforcement/config/model_profiles/mock.yaml",
+                "--replications",
+                "1",
+                "--force-rerun",
+                "--out",
+                str(out_root),
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        validate = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.validate_campaign",
+                "--runs",
+                str(out_root),
+                "--expected-runs",
+                "84",
+                "--strict",
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, validate.returncode, validate.stderr)
+        payload = json.loads(validate.stdout)
+        self.assertTrue(payload["is_complete"])
+        self.assertEqual(84, payload["complete_valid_runs"])
+
+    def test_finalize_pre_freeze_validation_generates_outputs(self) -> None:
+        out_root = self.temp_dir() / "pre-freeze-validation"
+        run = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.run_pre_freeze_validation",
+                "--force-rerun",
+                "--model-profile",
+                "benchmark/enforcement/config/model_profiles/mock.yaml",
+                "--out",
+                str(out_root),
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, run.returncode, run.stderr)
+        finalize = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.finalize_pre_freeze_validation",
+                "--runs",
+                str(out_root),
+                "--expected-runs",
+                "84",
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, finalize.returncode, finalize.stderr)
+        self.assertTrue((out_root / "f1_diagnosis.json").exists())
+        self.assertTrue((out_root / "summary.json").exists())
 
 
 if __name__ == "__main__":

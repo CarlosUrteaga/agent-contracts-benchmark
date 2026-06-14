@@ -3,7 +3,7 @@
   "mode": "guarded",
   "approved_agent_configurations": [
     {
-      "fingerprint": "sha256:cb8f0a6148bbdb3ef25ab6f295c2ca062ef8ea5b942df5921e776886d32d6894"
+      "fingerprint": "sha256:6f808634230333ae1cefb317470929934a882de47e82ca5dc50b1720f62c3348"
     },
     {
       "fingerprint": "sha256:554bde86f6bbd58160e8d40f8313533392555b3368fa1b4d11525bcf6e76f239"
@@ -47,5 +47,5 @@
     "guarded_denial_style": "minimal",
     "strict_replanning_after_violation": false
   },
-  "contract_fingerprint": "sha256:3bd0d92df49601be5edb85618b1f7864ee24ef6cb709c053e6ee54126658f60c"
+  "contract_fingerprint": "sha256:dcc6356ada35f63e9fd0c458b3b0dac492c161698d9739219b06fde6d035c7b7"
 }

@@ -67,6 +67,22 @@ The benchmark manifest must include hashes for the key frozen artifacts:
 | Add a model | Do not change the benchmark version; register the model in the execution manifest |
 | Change a model profile | Do not change the benchmark version; register the new condition in the execution manifest |
 
+## Pre-freeze validation interpretation rule
+
+The pre-freeze validation campaign is evidence, not a tuning loop.
+
+If the campaign produces worse-than-expected metrics but the benchmark remains methodologically coherent, the benchmark is **not** reopened only to improve the headline numbers.
+
+A component may be reopened only if the validation reveals a real methodological inconsistency, such as:
+
+- an expected rule that cannot actually be activated
+- an ambiguous scenario outcome
+- contract/runtime misalignment
+- contradiction between the oracle and the evaluator
+- an unjustified runtime F1 exclusion
+- an out-of-range or invalid metric
+- incomplete or inconsistent frozen artifacts
+
 ## Methodological assumptions
 
 - The tools are deterministic mocks.
@@ -76,4 +92,19 @@ The benchmark manifest must include hashes for the key frozen artifacts:
 
 ## Current freeze state
 
-This statement is not yet declaring the benchmark frozen. It defines the criteria and policy that must be satisfied before the freeze can be formally declared.
+The benchmark is now **formally frozen** as `benchmark-v1.0`.
+
+Freeze declaration basis:
+
+- the full `21 × 4 × 1` pre-freeze validation campaign completed
+- `validate_campaign --expected-runs 84 --strict` passed with `84` complete valid runs and `0` partial/corrupt runs
+- `diagnose_f1` completed successfully on the validated campaign
+- `evaluate` completed successfully on the validated campaign
+- no new methodological inconsistency was found during the final pre-freeze validation pass
+
+The benchmark is therefore:
+
+- `frozen` for the benchmark artifacts listed in this statement
+- `freeze-ready` for subsequent replicated execution campaigns under documented model profiles
+
+This declaration does **not** freeze model execution profiles. New model profiles remain valid future execution conditions as long as the frozen benchmark artifacts do not change.

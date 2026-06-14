@@ -22,6 +22,7 @@ RESULTS_ROOT = REPO_ROOT / "results" / "enforcement"
 RUN_LEDGER_FILE = "run_ledger.json"
 TRACE_FILE = "trace.jsonl"
 SUMMARY_FILE = "summary.json"
+RUN_COMPLETE_FILE = "run_complete.json"
 
 MODES = ["no_contract", "advisory", "guarded", "strict"]
 TOOLS = ["search_policy", "create_ticket", "approve_request", "store_memory", "send_notification"]
@@ -107,6 +108,10 @@ def compute_agent_configuration_fingerprint(
 
 def scenario_paths(root: Path) -> list[Path]:
     return sorted(root.glob("S-*.json"))
+
+
+def run_summary_paths(root: Path) -> list[Path]:
+    return sorted(path for path in root.glob(f"**/{SUMMARY_FILE}") if path.parent.name.startswith("S-"))
 
 
 def load_scenarios_index(root: Path = SCENARIOS_ROOT) -> dict[str, dict[str, Any]]:

@@ -53,7 +53,7 @@ def build_manifest() -> dict[str, object]:
     diagnose_paths = [REPO_ROOT / "tools" / "enforcement" / "diagnose_f1.py"]
 
     return {
-        "benchmark_version": "v1.0-pre-freeze",
+        "benchmark_version": "benchmark-v1.0",
         "freeze_commit": _git_head(),
         "generated_at": datetime.now(UTC).isoformat(),
         "frozen_artifacts": {
@@ -64,7 +64,7 @@ def build_manifest() -> dict[str, object]:
             "diagnose_f1_hash": _hash_files(diagnose_paths),
         },
         "notes": [
-            "This manifest identifies the current benchmark-only freeze candidate.",
+            "This manifest identifies the frozen benchmark-only artifact set.",
             "Model profiles are execution conditions and are not part of the benchmark identity.",
         ],
     }

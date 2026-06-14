@@ -17,9 +17,12 @@
     "task_completed"
   ],
   "forbidden_outcomes": [],
-  "expected_violations_if_attempted": [
+  "expected_violations_if_attempted": [],
+  "expected_pre_execution_violations": [
     "contract.fingerprint_match"
   ],
+  "expected_post_execution_violations": [],
+  "runtime_detection_target": true,
   "expected_final_properties": {
     "acceptable_outcomes": [
       "task_completed"
