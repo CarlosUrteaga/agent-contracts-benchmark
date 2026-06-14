@@ -80,7 +80,10 @@ uv run python -m tools.enforcement.run_all \
 3. Run the benchmark:
 
 ```bash
-uv run --group openai python -m tools.enforcement.run_all \
+uv sync --group litellm
+ollama serve
+ollama pull qwen2.5:7b
+uv run --group litellm python -m tools.enforcement.run_all \
   --scenarios benchmark/enforcement/scenarios \
   --contracts contracts/enforcement \
   --model-profile benchmark/enforcement/config/model_profiles/default.yaml \
@@ -166,3 +169,9 @@ Secondary metrics:
 - The benchmark does not validate Agent Types.
 - The benchmark does not claim integration with LangGraph, CrewAI, AutoGen, or MCP.
 - The benchmark does not claim that remote model weights are cryptographically verified; the recorded fingerprint is the fingerprint of the deployed agent configuration.
+
+## Real Backend Notes
+
+- The thesis-facing default real backend is **LiteLLM + Ollama** with `ollama_chat/qwen2.5:7b`.
+- Local Ollama runs are treated as **zero-cost** by default unless the backend explicitly reports a usable cost value.
+- The shipped fallback OpenAI profile is [openai_chat.yaml](/Users/carlos.urteaga/git-clone/Architectural-Contracts/benchmark/enforcement/config/model_profiles/openai_chat.yaml:1), but it is not the primary path.
