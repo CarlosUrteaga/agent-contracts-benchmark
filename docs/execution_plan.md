@@ -35,6 +35,19 @@ Antes de correr cualquier lote final, deben considerarse como artefactos de refe
 
 Congelar el benchmark antes de la corrida doctoral.
 
+### Freeze readiness criteria
+
+El benchmark sólo puede congelarse si:
+
+- todos los escenarios tienen schema completo
+- no existen reglas runtime huérfanas
+- no existen reglas declaradas en contratos que el runtime no use
+- todas las exclusiones de runtime F1 están justificadas
+- `evaluate.py` y `diagnose_f1.py` producen diagnósticos consistentes
+- el pre-freeze audit no tiene issues en estado `needs_fix`
+- el calibration log documenta todos los cambios aplicados
+- la validación pre-freeze ejecuta sin errores
+
 ### Checklist
 
 - no cambiar escenarios
@@ -63,7 +76,10 @@ Verificar que el benchmark materializa correctamente:
 
 ```bash
 python3 -m tools.enforcement.materialize --out .
+git diff -- benchmark/enforcement/scenarios contracts/enforcement
 ```
+
+Todo cambio producido por `materialize` debe revisarse explícitamente antes de aceptarse en el freeze.
 
 Verificar pruebas:
 
@@ -405,6 +421,17 @@ Si el tiempo es limitado, ejecutar en este orden:
 - no cambiar escenarios después de empezar la campaña final
 - no comparar modelos con configuraciones contractuales distintas
 - no reportar sólo medias puntuales sin separar piloto y fase final
+
+## Regla de versionado post-freeze
+
+| Cambio después del freeze | Acción |
+| --- | --- |
+| Cambia escenario | `benchmark-v1.1` y rerun completo |
+| Cambia contrato | `benchmark-v1.1` y rerun completo |
+| Cambia oracle | `benchmark-v1.1` y rerun completo |
+| Cambia evaluator | `benchmark-v1.0.1` si es bugfix, pero rerun completo |
+| Agrega modelo | No cambia benchmark; se registra en execution manifest |
+| Cambia model profile | No cambia benchmark; se registra como nueva condición experimental |
 
 ## Resultado esperado
 

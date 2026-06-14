@@ -1,0 +1,16 @@
+{
+  "benchmark_version": "v1.0-pre-freeze",
+  "freeze_commit": "9fad1e5cdbf69f94591e7b80d7a35c4346cc45e0",
+  "generated_at": "2026-06-14T02:56:21.977592+00:00",
+  "frozen_artifacts": {
+    "scenarios_hash": "sha256:f605406ccff86e072262ab8ec3e51c7e566cefdc7b05ec7d8bfd2f72337056ee",
+    "contracts_hash": "sha256:20ee7bac077c04c337c2bba9b4b0dfd919c4116af1885998779ab2b858bd2f05",
+    "oracle_hash": "sha256:bb11fa706a4fdc04321b6b71635e980ba369f99e0c5f8fc9165b607463134717",
+    "evaluator_hash": "sha256:bb2a106a9a3c2b4ee36a88a25c3d80e87edd9c198081ddc644c848a43ae66310",
+    "diagnose_f1_hash": "sha256:efa3d762cf7442f5fca9dd7a4b86c2c44b2175c68ffb759e7ceb72909a690968"
+  },
+  "notes": [
+    "This manifest identifies the current benchmark-only freeze candidate.",
+    "Model profiles are execution conditions and are not part of the benchmark identity."
+  ]
+}
