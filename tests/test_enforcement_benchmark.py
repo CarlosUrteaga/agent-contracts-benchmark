@@ -34,7 +34,10 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         return root
 
     def scenario_path(self, scenario_id: str) -> Path:
-        return next((REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob(f"{scenario_id}.*.json"))
+        matches = sorted((REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob(f"{scenario_id}*.json"))
+        if not matches:
+            raise FileNotFoundError(f"scenario not found: {scenario_id}")
+        return matches[0]
 
     def contract_path(self, mode: str) -> Path:
         return REPO_ROOT / "contracts" / "enforcement" / f"{mode}.yaml"
@@ -106,6 +109,14 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         scenario = json.loads(self.scenario_path("S-016").read_text(encoding="utf-8"))
         self.assertFalse(scenario["runtime_detection_target"])
 
+    def test_only_structural_runtime_detection_exclusions_are_documented(self) -> None:
+        excluded = []
+        for path in (REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob("S-*.json"):
+            scenario = json.loads(path.read_text(encoding="utf-8"))
+            if not scenario["runtime_detection_target"]:
+                excluded.append(scenario["scenario_id"])
+        self.assertEqual(["S-016"], sorted(excluded))
+
     def test_filter_tool_definitions_uses_only_allowed_tools(self) -> None:
         definitions = build_tool_definitions()
         filtered = filter_tool_definitions(definitions, ["approve_request", "send_notification"])
@@ -132,12 +143,62 @@ class EnforcementBenchmarkTests(unittest.TestCase):
             observed = {item["rule"] for item in violations}
             self.assertTrue(observed.issubset(declared), mode)
 
+    def test_declared_runtime_rules_have_expected_scenario_coverage(self) -> None:
+        expected = {
+            "tool.declared_only": {"S-016"},
+            "ticket_requires_evidence": {"S-011"},
+            "authorization.role_required": {"S-012", "S-020"},
+            "memory.scope_allowed": {"S-014", "S-020"},
+            "sensitive_requires_approval": {"S-013"},
+        }
+        actual = {rule: set() for rule in expected}
+        for path in (REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob("S-*.json"):
+            scenario = json.loads(path.read_text(encoding="utf-8"))
+            for rule in scenario["expected_violations_if_attempted"]:
+                if rule in actual:
+                    actual[rule].add(scenario["scenario_id"])
+        for mode in ["advisory", "guarded", "strict"]:
+            contract = json.loads(self.contract_path(mode).read_text(encoding="utf-8"))
+            self.assertEqual(set(expected), set(contract["runtime_rules"]), mode)
+        self.assertEqual(expected, actual)
+
+    def test_declared_postconditions_have_expected_scenario_coverage(self) -> None:
+        expected = {
+            "response.schema_complete": {"S-015"},
+            "run_ledger.required": {"S-017"},
+            "run_ledger.complete": {"S-021"},
+            "forbidden.outcome_triggered": set(),
+        }
+        actual = {rule: set() for rule in expected}
+        for path in (REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob("S-*.json"):
+            scenario = json.loads(path.read_text(encoding="utf-8"))
+            for rule in scenario["expected_post_execution_violations"]:
+                if rule in actual:
+                    actual[rule].add(scenario["scenario_id"])
+        for mode in ["advisory", "guarded", "strict"]:
+            contract = json.loads(self.contract_path(mode).read_text(encoding="utf-8"))
+            self.assertEqual(set(expected), set(contract["postconditions"]), mode)
+        self.assertEqual({"S-015"}, actual["response.schema_complete"])
+        self.assertEqual({"S-017"}, actual["run_ledger.required"])
+        self.assertEqual({"S-021"}, actual["run_ledger.complete"])
+        self.assertEqual(set(), actual["forbidden.outcome_triggered"])
+
     def test_guarded_blocks_and_replans_in_ticket_without_evidence(self) -> None:
         summary = self.run_case("S-011", "guarded")
         self.assertEqual("completed_after_replan", summary["final_status"])
         self.assertTrue(summary["actions_blocked"])
         self.assertTrue(summary["violation_opportunity_observed"])
         self.assertTrue(summary["acceptable_outcome_satisfied"])
+
+    def test_advisory_logs_runtime_violation_without_blocking(self) -> None:
+        summary = self.run_case("S-011", "advisory")
+        self.assertEqual("failed_post_execution", summary["final_status"])
+        self.assertFalse(summary["actions_blocked"])
+        self.assertTrue(summary["side_effects_committed"])
+        self.assertEqual(
+            {"ticket_requires_evidence", "forbidden.outcome_triggered"},
+            {item["rule"] for item in summary["violations"]},
+        )
 
     def test_s013_guarded_completes_only_after_approved_notification(self) -> None:
         summary = self.run_case("S-013", "guarded")
@@ -270,6 +331,13 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         self.assertIsNone(summary["per_mode"]["no_contract"]["precision"])
         self.assertIsNone(summary["per_mode"]["no_contract"]["recall"])
         self.assertIsNone(summary["per_mode"]["no_contract"]["f1"])
+
+    def test_no_contract_executes_risky_path_without_recorded_violations(self) -> None:
+        summary = self.run_case("S-011", "no_contract")
+        self.assertEqual("completed", summary["final_status"])
+        self.assertEqual([], summary["violations"])
+        self.assertTrue(summary["side_effects_committed"])
+        self.assertEqual(1, summary["unsafe_side_effects_committed"])
 
     def test_evaluator_run_level_prevention_metrics_are_bounded(self) -> None:
         runs_root = self.temp_dir() / "runs"
