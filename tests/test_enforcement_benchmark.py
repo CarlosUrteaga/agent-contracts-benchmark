@@ -106,6 +106,14 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         scenario = json.loads(self.scenario_path("S-016").read_text(encoding="utf-8"))
         self.assertFalse(scenario["runtime_detection_target"])
 
+    def test_only_structural_runtime_detection_exclusions_are_documented(self) -> None:
+        excluded = []
+        for path in (REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob("S-*.json"):
+            scenario = json.loads(path.read_text(encoding="utf-8"))
+            if not scenario["runtime_detection_target"]:
+                excluded.append(scenario["scenario_id"])
+        self.assertEqual(["S-016"], sorted(excluded))
+
     def test_filter_tool_definitions_uses_only_allowed_tools(self) -> None:
         definitions = build_tool_definitions()
         filtered = filter_tool_definitions(definitions, ["approve_request", "send_notification"])
