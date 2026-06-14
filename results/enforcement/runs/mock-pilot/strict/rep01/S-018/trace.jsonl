@@ -1,3 +1,0 @@
-{"event": "run_started", "mode": "strict", "model_id": "mock-agent", "provider": "mock", "replication_id": "rep01", "scenario_id": "S-018", "scenario_type": "adversarial"}
-{"event": "pre_execution_validation", "status": "violation_detected", "violations": [{"phase": "pre_execution", "rule": "agent.configuration_fingerprint_match", "severity": "high"}]}
-{"event": "run_finished", "final_status": "aborted_pre_execution"}
