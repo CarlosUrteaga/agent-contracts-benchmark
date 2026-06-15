@@ -8,6 +8,12 @@ La regla central es:
 
 > primero se congela el benchmark, después se ejecuta, y sólo al final se analiza.
 
+Estado actual:
+
+- el benchmark quedó formalmente congelado como `benchmark-v1.0` el `2026-06-14`
+- los `model profiles` no forman parte del freeze metodológico; se tratan como execution conditions documentadas por campaña
+- el bloque activo ya no es calibración, sino ejecución replicada y análisis post-freeze
+
 ## Supuestos
 
 Este plan asume lo siguiente:
@@ -31,9 +37,12 @@ Antes de correr cualquier lote final, deben considerarse como artefactos de refe
 
 ## Fase 0. Freeze operacional
 
+Estado:
+- completada el `2026-06-14` con `benchmark-v1.0`
+
 ### Objetivo
 
-Congelar el benchmark antes de la corrida doctoral.
+Dejar trazado el gate metodológico que ya se cerró antes de la corrida doctoral.
 
 ### Freeze readiness criteria
 
@@ -48,22 +57,22 @@ El benchmark sólo puede congelarse si:
 - el calibration log documenta todos los cambios aplicados
 - la validación pre-freeze ejecuta sin errores
 
-### Checklist
+### Checklist histórico
 
 - no cambiar escenarios
 - no cambiar contratos
 - no cambiar evaluator
 - no cambiar diagnosis
 - no cambiar semántica terminal
-- no cambiar perfiles de modelo durante esta fase
+- no cambiar execution conditions mientras se estaba cerrando el freeze metodológico
 
-### Evidencia a guardar
+### Evidencia registrada
 
 - hash del commit congelado
 - copia del `summary.json` del piloto previo
 - nota de freeze con fecha
 
-### Comandos
+### Comandos de verificación histórica
 
 Verificar estado actual:
 
@@ -89,7 +98,7 @@ python3 -m unittest discover -s tests -p 'test*.py'
 
 ### Criterio de salida
 
-El benchmark queda declarado como versión congelada para evaluación. A partir de aquí ya no se hacen cambios metodológicos antes de los lotes finales.
+El benchmark ya quedó declarado como versión congelada para evaluación. A partir de este punto no se hacen cambios metodológicos sobre `benchmark-v1.0`; sólo se ejecutan campañas post-freeze bajo execution conditions documentadas.
 
 ## Fase 1. Validación de entorno
 
@@ -149,11 +158,14 @@ El modelo responde, el runtime produce `summary.json` y el Governor interviene c
 
 ## Fase 1.5. Campaña overnight pre-freeze
 
+Estado:
+- completada el `2026-06-14` como evidencia final de freeze
+
 ### Objetivo
 
-Ejecutar la validación pre-freeze completa de `21 × 4 × 1` de forma reanudable y segura.
+Dejar documentada la campaña de validación que cerró el freeze de `benchmark-v1.0`.
 
-### Regla operativa
+### Regla operativa histórica
 
 - no borrar el árbol de resultados por defecto
 - no reejecutar runs ya completos y válidos
@@ -189,7 +201,7 @@ python3 -m tools.enforcement.finalize_pre_freeze_validation
 
 ### Criterio de salida
 
-El benchmark queda **freeze-ready** sólo si:
+El benchmark quedó **freeze-ready** y posteriormente `frozen` sólo si:
 
 - la campaña completa tiene `84` runs válidos
 - cada run tiene `summary.json`
@@ -200,11 +212,17 @@ El benchmark queda **freeze-ready** sólo si:
 - `f1_diagnosis.json` se genera correctamente
 - `summary.json` se genera correctamente
 
+### Regla anti-retuning
+
+Resultados peores pero metodológicamente válidos no reabren el benchmark. Un rerun post-freeze sólo justifica reabrir `benchmark-v1.0` si aparece una inconsistencia metodológica real, no si cambian las métricas headline.
+
 ## Fase 2. Corrida base replicada del modelo actual
 
 ### Objetivo
 
 Ejecutar el benchmark completo sobre el modelo base congelado.
+
+Los lotes de esta fase corren sobre `benchmark-v1.0` sin modificar escenarios, contratos, oracle, evaluator o diagnosis. Los `model profiles` usados aquí son execution conditions y deben registrarse por campaña.
 
 ### Lote mínimo doctoral
 

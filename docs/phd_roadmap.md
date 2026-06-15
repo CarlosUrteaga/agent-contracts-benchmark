@@ -26,6 +26,12 @@ La pregunta ya no es si el Governor funciona en un piloto, sino:
 
 Primero se congela el benchmark. Después se ejecuta. Después se analiza. No al revés.
 
+Estado actual:
+
+- ese freeze metodológico ya se cerró el `2026-06-14`
+- la versión congelada vigente es `benchmark-v1.0`
+- los `model profiles` ya no deben tratarse como artefactos congelados del benchmark, sino como execution conditions de campañas post-freeze
+
 Eso implica separar con claridad:
 
 1. fase de calibración
@@ -43,7 +49,7 @@ Dejar el harness listo debe significar:
 - contratos congelados
 - oracle congelado
 - evaluator congelado
-- perfiles de modelo congelados
+- condiciones de ejecución documentadas por campaña
 - comandos reproducibles
 - artefactos de salida estables
 - documentación de exclusiones y supuestos
@@ -120,12 +126,15 @@ Entregables:
 - identificación de qué quedó ya estabilizado
 
 Criterio de salida:
-- queda explícito que los resultados actuales son valiosos, pero todavía no constituyen la versión congelada doctoral
+- queda explícito que los resultados del piloto fueron valiosos para calibración, pero ya no gobiernan el benchmark congelado vigente
 
 ## Fase 1. Freeze del benchmark
 
+Estado:
+- completada el `2026-06-14` como `benchmark-v1.0`
+
 Objetivo:
-- congelar el harness y el diseño experimental
+- dejar congelado el harness y el diseño experimental
 
 Incluye:
 - escenarios
@@ -133,7 +142,7 @@ Incluye:
 - evaluator
 - oracle
 - reglas de diagnóstico
-- perfiles de modelo
+- exclusiones y supuestos metodológicos
 - semántica terminal
 
 Entregables:
@@ -142,7 +151,7 @@ Entregables:
 - checklist reproducible de ejecución
 
 Criterio de salida:
-- ninguna métrica o escenario cambia más antes de la corrida doctoral
+- ninguna métrica, escenario, contrato, oracle o evaluator cambia más dentro de `benchmark-v1.0`; las campañas posteriores sólo cambian execution conditions documentadas
 
 ## Fase 2. Infraestructura de ejecución
 
@@ -163,6 +172,11 @@ Entregables:
 
 Criterio de salida:
 - el equipo ya no está “desarrollando” el benchmark, sino ejecutándolo
+
+Bloque activo actual:
+- campañas replicadas del modelo base
+- segundo modelo bajo el mismo benchmark congelado
+- análisis estadístico post-freeze
 
 ## Fase 3. Réplicas del modelo base
 

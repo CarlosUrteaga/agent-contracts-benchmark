@@ -29,6 +29,9 @@ Se usa la siguiente lógica:
 Prioridad:
 - `P0`
 
+Estado:
+- completada el `2026-06-14` como `benchmark-v1.0`
+
 Objetivo:
 - separar explícitamente calibración y evaluación final
 
@@ -42,6 +45,9 @@ Backlog:
 Definition of Done:
 - existe una “versión congelada” del benchmark
 - ya no se cambian reglas, escenarios ni evaluator antes de la corrida doctoral
+
+Nota:
+- los `model profiles` no forman parte del benchmark congelado; se registran como execution conditions por campaña
 
 ## Evolución 2. Harness operativo
 
@@ -62,6 +68,11 @@ Backlog:
 Definition of Done:
 - el equipo puede correr el benchmark sin tocar el código
 - el trabajo deja de ser de desarrollo y pasa a ser de ejecución
+
+Bloque activo inmediato:
+- réplicas del modelo base sobre `benchmark-v1.0`
+- segundo modelo bajo el mismo benchmark congelado
+- análisis estadístico post-freeze
 
 ## Evolución 3. Réplicas del modelo base
 
@@ -115,7 +126,7 @@ Objetivo:
 
 Backlog:
 - seleccionar segundo modelo
-- crear perfil congelado
+- crear profile de ejecución adicional
 - ejecutar al menos `21 × 4 × 3`
 - comparar patrón de resultados con el modelo base
 
