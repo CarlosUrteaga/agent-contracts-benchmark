@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-16T00:19:34.563613+00:00",
+  "campaign_id": "campaign-base-r3",
+  "runs_root": "results/enforcement/campaign-base-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/default.yaml",
+  "model_profile_hash": "sha256:9a3d96848e811d36f8ce6ce12113aea07e85e154f1877431786eeaf1671448ed",
+  "profile_id": "litellm-ollama-qwen25-7b",
+  "provider": "litellm",
+  "model_id": "ollama_chat/qwen2.5:7b",
+  "declared_model_version": "qwen2.5:7b",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}

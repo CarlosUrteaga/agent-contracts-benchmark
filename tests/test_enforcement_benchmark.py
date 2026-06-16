@@ -14,6 +14,7 @@ from tools.enforcement.adapters import LiteLLMAdapter, build_model_adapter
 from tools.enforcement.common import MODES, RUN_COMPLETE_FILE, RUN_LEDGER_FILE, SUMMARY_FILE, TOOLS, TRACE_FILE
 from tools.enforcement.diagnose_f1 import build_report, classify_run
 from tools.enforcement.evaluate import evaluate_runs
+from tools.enforcement.execution_manifest import SCHEMA_VERSION, build_execution_manifest
 from tools.enforcement.freeze_manifest import build_manifest
 from tools.enforcement.materialize import materialize
 from tools.enforcement.runtime import GovernorRuntime, _build_governor_feedback, _build_recovery_ready_feedback, run_scenario
@@ -765,6 +766,133 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         for key in ["scenarios_hash", "contracts_hash", "oracle_hash", "evaluator_hash", "diagnose_f1_hash"]:
             self.assertIn(key, frozen)
             self.assertTrue(str(frozen[key]).startswith("sha256:"))
+
+    def test_execution_manifest_contains_required_fields(self) -> None:
+        manifest = build_execution_manifest(
+            benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+            model_profile_path=self.default_profile_path(),
+            replications=3,
+            runs_root=REPO_ROOT / "results" / "enforcement" / "campaign-base-r3",
+        )
+        self.assertEqual(SCHEMA_VERSION, manifest["manifest_schema_version"])
+        self.assertEqual("benchmark-v1.0", manifest["benchmark_version"])
+        self.assertEqual("campaign-base-r3", manifest["campaign_id"])
+        self.assertEqual("results/enforcement/campaign-base-r3", manifest["runs_root"])
+        self.assertEqual("benchmark/enforcement/config/model_profiles/default.yaml", manifest["model_profile_path"])
+        self.assertEqual("litellm-ollama-qwen25-7b", manifest["profile_id"])
+        self.assertEqual("litellm", manifest["provider"])
+        self.assertEqual("ollama_chat/qwen2.5:7b", manifest["model_id"])
+        self.assertEqual("qwen2.5:7b", manifest["declared_model_version"])
+        self.assertEqual(21, manifest["scenario_count"])
+        self.assertEqual(len(MODES), manifest["mode_count"])
+        self.assertEqual(252, manifest["expected_total_runs"])
+        self.assertTrue(str(manifest["model_profile_hash"]).startswith("sha256:"))
+        self.assertEqual([], manifest["notes"])
+        self.assertEqual("tools.enforcement.execution_manifest", manifest["generator"]["tool"])
+
+    def test_execution_manifest_uses_freeze_commit_from_benchmark_manifest(self) -> None:
+        benchmark_manifest = self.temp_dir() / "benchmark_manifest.json"
+        benchmark_manifest.write_text(
+            json.dumps({"benchmark_version": "benchmark-v1.0", "freeze_commit": "freeze-sha-123"}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        manifest = build_execution_manifest(
+            benchmark_manifest_path=benchmark_manifest,
+            model_profile_path=self.default_profile_path(),
+            replications=1,
+            runs_root=self.temp_dir() / "campaign-base-r1",
+        )
+        self.assertEqual("freeze-sha-123", manifest["freeze_commit"])
+
+    def test_execution_manifest_hash_depends_only_on_profile_content(self) -> None:
+        content = self.default_profile_path().read_text(encoding="utf-8")
+        profile_a = self.temp_dir() / "a" / "profile.yaml"
+        profile_b = self.temp_dir() / "b" / "profile.yaml"
+        profile_a.parent.mkdir(parents=True, exist_ok=True)
+        profile_b.parent.mkdir(parents=True, exist_ok=True)
+        profile_a.write_text(content, encoding="utf-8")
+        profile_b.write_text(content, encoding="utf-8")
+        manifest_a = build_execution_manifest(
+            benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+            model_profile_path=profile_a,
+            replications=1,
+            runs_root=self.temp_dir() / "campaign-a",
+        )
+        manifest_b = build_execution_manifest(
+            benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+            model_profile_path=profile_b,
+            replications=1,
+            runs_root=self.temp_dir() / "campaign-b",
+        )
+        self.assertEqual(manifest_a["model_profile_hash"], manifest_b["model_profile_hash"])
+
+    def test_execution_manifest_rejects_incomplete_profile(self) -> None:
+        profile = self.temp_dir() / "broken.yaml"
+        profile.write_text(json.dumps({"provider": "litellm"}, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "model profile missing required fields"):
+            build_execution_manifest(
+                benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+                model_profile_path=profile,
+                replications=1,
+                runs_root=self.temp_dir() / "campaign-broken",
+            )
+
+    def test_execution_manifest_cli_refuses_overwrite_without_force(self) -> None:
+        out_path = self.temp_dir() / "execution_manifest.json"
+        out_path.write_text("existing\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.execution_manifest",
+                "--benchmark-manifest",
+                "benchmark/enforcement/benchmark_manifest.json",
+                "--model-profile",
+                "benchmark/enforcement/config/model_profiles/default.yaml",
+                "--replications",
+                "3",
+                "--runs-root",
+                "results/enforcement/campaign-base-r3",
+                "--out",
+                str(out_path),
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(1, result.returncode)
+        self.assertIn("Refusing to overwrite existing execution manifest", result.stdout)
+
+    def test_execution_manifest_cli_overwrites_with_force(self) -> None:
+        out_path = self.temp_dir() / "execution_manifest.json"
+        out_path.write_text("existing\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.execution_manifest",
+                "--benchmark-manifest",
+                "benchmark/enforcement/benchmark_manifest.json",
+                "--model-profile",
+                "benchmark/enforcement/config/model_profiles/default.yaml",
+                "--replications",
+                "5",
+                "--runs-root",
+                "results/enforcement/campaign-base-r5",
+                "--out",
+                str(out_path),
+                "--force",
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        payload = json.loads(out_path.read_text(encoding="utf-8"))
+        self.assertEqual("campaign-base-r5", payload["campaign_id"])
+        self.assertEqual(420, payload["expected_total_runs"])
 
     def test_violation_opportunity_observed_requires_risky_proposal(self) -> None:
         guarded = self.run_case("S-011", "guarded")
