@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-001",
+  "mode": "guarded",
+  "replication_id": "rep02",
+  "profile_id": "litellm-ollama-qwen25-7b",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781588339.710398
+}

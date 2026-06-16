@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-16T15:20:42.194582+00:00",
+  "campaign_id": "campaign-gemma4-r3",
+  "runs_root": "results/enforcement/campaign-gemma4-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/gemma4_26b.yaml",
+  "model_profile_hash": "sha256:fc572f86f80545fc1cc71ccde18bf9b92de2129fecb9ad3ce0a94a44aa561550",
+  "profile_id": "litellm-ollama-gemma4-26b",
+  "provider": "litellm",
+  "model_id": "ollama_chat/gemma4:26b",
+  "declared_model_version": "gemma4:26b",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}

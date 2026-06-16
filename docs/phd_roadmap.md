@@ -202,8 +202,15 @@ Objetivo:
 
 Plan recomendado:
 - mantener `qwen2.5:7b`
-- agregar `llama3.1:8b` o equivalente
+- agregar `gemma4:26b` o equivalente
 - si alcanza el presupuesto, agregar un modelo API pequeño
+
+Gate actual:
+- no arrancar `campaign-gemma4-r3` hasta cerrar `campaign-base-r3` con validación estricta y closeout formal
+
+Condición operativa preferida:
+- `gemma4:26b` vía `LiteLLM` y `Ollama`
+- `openai_chat.yaml` sólo como fallback opcional, no como ruta principal de este bloque
 
 Entregables:
 - mismos escenarios

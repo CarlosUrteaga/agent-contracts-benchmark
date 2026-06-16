@@ -130,9 +130,21 @@ Backlog:
 - ejecutar al menos `21 × 4 × 3`
 - comparar patrón de resultados con el modelo base
 
+Secuencia obligatoria:
+- cerrar primero `campaign-base-r3`
+- emitir y validar `results/enforcement/campaign-gemma4-r3/execution_manifest.json`
+- ejecutar `campaign-gemma4-r3` con `--resume`
+- cerrar la campaña con `closeout_campaign`
+
 Recomendación:
 - primero un abierto/local comparable
 - luego, si alcanza tiempo o presupuesto, un modelo API pequeño
+
+Default elegido:
+- `benchmark/enforcement/config/model_profiles/gemma4_26b.yaml`
+- `provider: "litellm"`
+- `model_id: "ollama_chat/gemma4:26b"`
+- `openai_chat.yaml` sólo como fallback opcional
 
 Definition of Done:
 - la tesis ya no depende de un solo backend

@@ -387,11 +387,13 @@ Existen distribuciones por modo y por escenario para el modelo base, no sólo re
 
 Reducir la dependencia de un solo backend.
 
+Este bloque sigue corriendo sobre `benchmark-v1.0` sin modificar escenarios, contratos, oracle, evaluator o diagnosis.
+
 ### Recomendación mínima
 
 Agregar un segundo perfil:
 
-- modelo abierto/local comparable, por ejemplo `llama3.1:8b`
+- modelo abierto/local comparable, por ejemplo `gemma4:26b`
 
 ### Recomendación fuerte
 
@@ -407,40 +409,126 @@ Crear o verificar perfiles adicionales en:
 
 Ejemplos sugeridos:
 
-- `llama31_8b.yaml`
+- `gemma4_26b.yaml`
 - `gpt4o_mini.yaml`
 
 Nota:
 
-- `results/enforcement/campaign-llama31-r3/execution_manifest.json` se emite sólo después de crear `benchmark/enforcement/config/model_profiles/llama31_8b.yaml`
+- `results/enforcement/campaign-gemma4-r3/execution_manifest.json` se emite sólo después de crear `benchmark/enforcement/config/model_profiles/gemma4_26b.yaml`
 - este step no usa placeholder ni sustituye ese manifest por `openai_chat.yaml`
+- `openai_chat.yaml` queda sólo como fallback opcional, no como ruta principal del segundo modelo
+
+### Gate previo obligatorio
+
+`campaign-gemma4-r3` sólo puede arrancar después de:
+
+- `campaign-base-r3` validada con `validate_campaign --strict`
+- `campaign-base-r3` cerrada con `closeout_campaign`
+- ausencia de inconsistencia metodológica real
+
+El estado actual debe tratarse así:
+
+- `campaign-base-r3` incompleta o sin closeout = gate no resuelto
+- `Ollama` no disponible o modelo no descargado = bloqueo operacional
+- contradicción oracle/evaluator, métrica fuera de rango o exclusión injustificada = inconsistencia metodológica
+- resultados peores pero metodológicamente válidos = no reabren `benchmark-v1.0`
+
+### Profile objetivo
+
+El segundo modelo se ejecuta con:
+
+- `benchmark/enforcement/config/model_profiles/gemma4_26b.yaml`
+- `provider: "litellm"`
+- `model_id: "ollama_chat/gemma4:26b"`
+- `declared_model_version: "gemma4:26b"`
+- mismos `temperature`, `max_tokens`, `timeout` y `retry_policy` del profile base salvo limitación técnica real
+
+### Preflight del execution manifest
+
+Generación:
+
+```bash
+python3 -m tools.enforcement.execution_manifest \
+  --benchmark-manifest benchmark/enforcement/benchmark_manifest.json \
+  --model-profile benchmark/enforcement/config/model_profiles/gemma4_26b.yaml \
+  --replications 3 \
+  --runs-root results/enforcement/campaign-gemma4-r3 \
+  --out results/enforcement/campaign-gemma4-r3/execution_manifest.json
+```
+
+Validación:
+
+```bash
+python3 -m tools.enforcement.validate_execution_manifest \
+  --manifest results/enforcement/campaign-gemma4-r3/execution_manifest.json \
+  --benchmark-manifest benchmark/enforcement/benchmark_manifest.json \
+  --model-profile benchmark/enforcement/config/model_profiles/gemma4_26b.yaml \
+  --replications 3 \
+  --runs-root results/enforcement/campaign-gemma4-r3
+```
 
 ### Ejecución
 
-Para cada modelo adicional:
+Dry run:
 
 ```bash
 uv run --group litellm python -m tools.enforcement.run_all \
   --scenarios benchmark/enforcement/scenarios \
   --contracts contracts/enforcement \
-  --model-profile benchmark/enforcement/config/model_profiles/<perfil>.yaml \
+  --model-profile benchmark/enforcement/config/model_profiles/gemma4_26b.yaml \
   --replications 3 \
-  --out results/enforcement/<campaign-name>
+  --dry-run \
+  --out results/enforcement/campaign-gemma4-r3
 ```
+
+Campaña:
+
+```bash
+uv run --group litellm python -m tools.enforcement.run_all \
+  --scenarios benchmark/enforcement/scenarios \
+  --contracts contracts/enforcement \
+  --model-profile benchmark/enforcement/config/model_profiles/gemma4_26b.yaml \
+  --replications 3 \
+  --resume \
+  --out results/enforcement/campaign-gemma4-r3
+```
+
+Regla de ejecución:
+
+- no borrar ni reemplazar runs completos válidos
+- sólo rerunear runs faltantes, parciales o corruptos
+- usar `--resume` como modo normal de ejecución
 
 ### Post-proceso
 
-```bash
-python3 -m tools.enforcement.diagnose_f1 \
-  --runs results/enforcement/<campaign-name> \
-  --out results/enforcement/<campaign-name>/f1_diagnosis.json
-```
+Validación estricta:
 
 ```bash
-python3 -m tools.enforcement.evaluate \
-  --runs results/enforcement/<campaign-name> \
-  --oracle benchmark/enforcement/oracle \
-  --out results/enforcement/<campaign-name>/summary.json
+python3 -m tools.enforcement.validate_campaign \
+  --runs results/enforcement/campaign-gemma4-r3 \
+  --expected-runs 252 \
+  --strict
+```
+
+Closeout formal:
+
+```bash
+python3 -m tools.enforcement.closeout_campaign \
+  --manifest results/enforcement/campaign-gemma4-r3/execution_manifest.json
+```
+
+Artefactos de cierre:
+
+- `execution_manifest.json`
+- `summary.json`
+- `f1_diagnosis.json`
+- `artifact_hashes.json`
+- `campaign_closeout.md`
+
+```bash
+python3 -m tools.enforcement.diagnose_f1 \
+  --runs results/enforcement/campaign-gemma4-r3 \
+  --out results/enforcement/campaign-gemma4-r3/f1_diagnosis.json
 ```
 
 ### Criterio de salida
