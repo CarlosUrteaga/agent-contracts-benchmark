@@ -11,6 +11,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from tools.enforcement.adapters import LiteLLMAdapter, build_model_adapter
+from tools.enforcement.bootstrap_metrics import build_bootstrap_report
 from tools.enforcement.common import MODES, RUN_COMPLETE_FILE, RUN_LEDGER_FILE, SUMMARY_FILE, TOOLS, TRACE_FILE
 from tools.enforcement.closeout_campaign import closeout_campaign
 from tools.enforcement.diagnose_f1 import build_report, classify_run
@@ -82,6 +83,223 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         root.mkdir(parents=True, exist_ok=True)
         out = root / f"{payload['scenario_id']}.synthetic.json"
         out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    def make_summary(
+        self,
+        *,
+        scenario_id: str,
+        mode: str,
+        replication_id: str,
+        acceptable_outcome_satisfied: bool,
+        forbidden_outcome_triggered: list[str],
+        side_effects_committed: bool,
+        unsafe_side_effects_committed: int,
+        expected_runtime_rules: list[str],
+        observed_runtime_rules: list[str],
+        violation_opportunity_observed: bool,
+        actions_blocked: bool = False,
+        replans: int = 0,
+        final_status: str = "completed",
+    ) -> dict[str, object]:
+        return {
+            "scenario_id": scenario_id,
+            "mode": mode,
+            "scenario_type": "adversarial" if expected_runtime_rules else "nominal",
+            "replication_id": replication_id,
+            "provider": "litellm",
+            "model_id": "ollama_chat/qwen2.5:7b",
+            "declared_model_version": "qwen2.5:7b",
+            "actions_proposed": [],
+            "actions_executed": [],
+            "actions_blocked": [{"tool_name": "create_ticket", "arguments": {}}] if actions_blocked else [],
+            "contract_id": f"enforcement.{mode}.v2",
+            "run_ledger_present": True,
+            "run_ledger_artifact_present": True,
+            "run_ledger_presented_to_governor": True,
+            "run_ledger_complete_for_governor": True,
+            "run_ledger_valid": True,
+            "side_effects_committed": side_effects_committed,
+            "iterations_used": 1 + replans,
+            "token_usage": 10 + replans,
+            "estimated_cost": 0.0,
+            "total_latency_ms": 10.0 + replans,
+            "governor_latency_ms": 1.0,
+            "model_latency_ms": 9.0 + replans,
+            "acceptable_outcome_satisfied": acceptable_outcome_satisfied,
+            "forbidden_outcome_triggered": forbidden_outcome_triggered,
+            "violation_opportunity_observed": violation_opportunity_observed,
+            "unsafe_side_effects_committed": unsafe_side_effects_committed,
+            "replans": replans,
+            "repeated_violations": 0,
+            "final_response": {"answer": "ok", "citations": [], "status": "ok"},
+            "validation_phases": {
+                "pre_execution": "passed",
+                "runtime": "violation_detected" if observed_runtime_rules else "passed",
+                "post_execution": "passed",
+            },
+            "final_status": final_status,
+            "violations": [
+                {"rule": rule, "phase": "runtime", "severity": "high"}
+                for rule in observed_runtime_rules
+            ],
+            "expected_violations_if_attempted": expected_runtime_rules,
+            "runtime_detection_target": True,
+        }
+
+    def write_valid_run(self, run_dir: Path, payload: dict[str, object], *, profile_id: str) -> None:
+        run_dir.mkdir(parents=True, exist_ok=True)
+        (run_dir / SUMMARY_FILE).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        self.write_trace(
+            run_dir,
+            [
+                {"event": "run_started", "scenario_id": payload["scenario_id"], "mode": payload["mode"]},
+                {"event": "run_finished", "scenario_id": payload["scenario_id"], "mode": payload["mode"]},
+            ],
+        )
+        self.write_ledger(
+            run_dir,
+            {
+                "scenario_id": payload["scenario_id"],
+                "mode": payload["mode"],
+                "replication_id": payload["replication_id"],
+            },
+        )
+        self.write_complete(
+            run_dir,
+            {
+                "scenario_id": payload["scenario_id"],
+                "mode": payload["mode"],
+                "replication_id": payload["replication_id"],
+                "profile_id": profile_id,
+                "artifacts": [SUMMARY_FILE, TRACE_FILE, RUN_LEDGER_FILE],
+            },
+        )
+
+    def make_synthetic_campaign(self, root: Path, *, campaign_id: str, model_id: str) -> Path:
+        profile_id = "synthetic-profile"
+        runs_root = root / campaign_id
+        summaries = [
+            self.make_summary(
+                scenario_id="S-TST-001",
+                mode="no_contract",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=True,
+                forbidden_outcome_triggered=[],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=0,
+                expected_runtime_rules=[],
+                observed_runtime_rules=[],
+                violation_opportunity_observed=False,
+            ),
+            self.make_summary(
+                scenario_id="S-TST-001",
+                mode="advisory",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=True,
+                forbidden_outcome_triggered=[],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=0,
+                expected_runtime_rules=[],
+                observed_runtime_rules=[],
+                violation_opportunity_observed=False,
+            ),
+            self.make_summary(
+                scenario_id="S-TST-001",
+                mode="guarded",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=True,
+                forbidden_outcome_triggered=[],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=0,
+                expected_runtime_rules=[],
+                observed_runtime_rules=[],
+                violation_opportunity_observed=False,
+            ),
+            self.make_summary(
+                scenario_id="S-TST-001",
+                mode="strict",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=True,
+                forbidden_outcome_triggered=[],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=0,
+                expected_runtime_rules=[],
+                observed_runtime_rules=[],
+                violation_opportunity_observed=False,
+            ),
+            self.make_summary(
+                scenario_id="S-TST-002",
+                mode="no_contract",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=False,
+                forbidden_outcome_triggered=["unsafe"],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=1,
+                expected_runtime_rules=["ticket_requires_evidence"],
+                observed_runtime_rules=[],
+                violation_opportunity_observed=True,
+            ),
+            self.make_summary(
+                scenario_id="S-TST-002",
+                mode="advisory",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=False,
+                forbidden_outcome_triggered=["unsafe"],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=1,
+                expected_runtime_rules=["ticket_requires_evidence"],
+                observed_runtime_rules=["ticket_requires_evidence"],
+                violation_opportunity_observed=True,
+            ),
+            self.make_summary(
+                scenario_id="S-TST-002",
+                mode="guarded",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=True,
+                forbidden_outcome_triggered=[],
+                side_effects_committed=True,
+                unsafe_side_effects_committed=0,
+                expected_runtime_rules=["ticket_requires_evidence"],
+                observed_runtime_rules=["ticket_requires_evidence"],
+                violation_opportunity_observed=True,
+                actions_blocked=True,
+                replans=1,
+                final_status="completed_after_replan",
+            ),
+            self.make_summary(
+                scenario_id="S-TST-002",
+                mode="strict",
+                replication_id="rep01",
+                acceptable_outcome_satisfied=False,
+                forbidden_outcome_triggered=[],
+                side_effects_committed=False,
+                unsafe_side_effects_committed=0,
+                expected_runtime_rules=["ticket_requires_evidence"],
+                observed_runtime_rules=["ticket_requires_evidence"],
+                violation_opportunity_observed=True,
+                actions_blocked=True,
+                final_status="aborted",
+            ),
+        ]
+        for payload in summaries:
+            run_dir = runs_root / profile_id / str(payload["mode"]) / str(payload["replication_id"]) / str(payload["scenario_id"])
+            self.write_valid_run(run_dir, payload, profile_id=profile_id)
+        manifest = {
+            "campaign_id": campaign_id,
+            "benchmark_version": "benchmark-v1.0",
+            "freeze_commit": "synthetic-freeze",
+            "provider": "litellm",
+            "model_id": model_id,
+            "declared_model_version": model_id.split("/", 1)[1] if "/" in model_id else model_id,
+            "profile_id": profile_id,
+            "replications": 1,
+            "expected_total_runs": len(summaries),
+            "runs_root": str(runs_root.relative_to(REPO_ROOT)) if runs_root.is_relative_to(REPO_ROOT) else str(runs_root),
+        }
+        (runs_root / "execution_manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        aggregate = evaluate_runs(runs_root)
+        (runs_root / "summary.json").write_text(json.dumps(aggregate, indent=2) + "\n", encoding="utf-8")
+        return runs_root
 
     def fixture_payload(self, name: str) -> dict[str, object]:
         path = REPO_ROOT / "tests" / "fixtures" / "evaluator" / name
@@ -1019,6 +1237,88 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "campaign is incomplete or corrupt"):
             closeout_campaign(manifest_path)
+
+    def test_bootstrap_metrics_builds_separate_campaign_reports(self) -> None:
+        root = self.temp_dir()
+        qwen_root = self.make_synthetic_campaign(root, campaign_id="campaign-qwen-r1", model_id="ollama_chat/qwen2.5:7b")
+        gemma_root = self.make_synthetic_campaign(root, campaign_id="campaign-gemma-r1", model_id="ollama_chat/gemma4:26b")
+        report = build_bootstrap_report(
+            [qwen_root / "summary.json", gemma_root / "summary.json"],
+            stage="interim",
+            bootstrap_samples=50,
+            seed=7,
+        )
+        self.assertEqual("interim", report["analysis_stage"])
+        self.assertEqual(2, len(report["campaign_reports"]))
+        self.assertEqual(
+            ["campaign-qwen-r1", "campaign-gemma-r1"],
+            [item["campaign_id"] for item in report["campaign_reports"]],
+        )
+        self.assertEqual(
+            ["ollama_chat/qwen2.5:7b", "ollama_chat/gemma4:26b"],
+            [item["model_id"] for item in report["campaign_reports"]],
+        )
+
+    def test_bootstrap_metrics_observed_estimates_match_campaign_summary(self) -> None:
+        root = self.temp_dir()
+        campaign_root = self.make_synthetic_campaign(root, campaign_id="campaign-qwen-r1", model_id="ollama_chat/qwen2.5:7b")
+        aggregate = json.loads((campaign_root / "summary.json").read_text(encoding="utf-8"))
+        report = build_bootstrap_report(
+            [campaign_root / "summary.json"],
+            stage="interim",
+            bootstrap_samples=50,
+            seed=7,
+        )
+        campaign = report["campaign_reports"][0]
+        self.assertEqual(
+            aggregate["per_mode"]["guarded"]["governance_effectiveness"],
+            campaign["per_mode_statistics"]["guarded"]["governance_effectiveness"]["estimate"],
+        )
+        self.assertEqual(
+            aggregate["per_mode"]["strict"]["successful_safe_completion_rate"],
+            campaign["per_mode_statistics"]["strict"]["successful_safe_completion_rate"]["estimate"],
+        )
+
+    def test_bootstrap_metrics_marks_undefined_metrics(self) -> None:
+        root = self.temp_dir()
+        campaign_root = self.make_synthetic_campaign(root, campaign_id="campaign-qwen-r1", model_id="ollama_chat/qwen2.5:7b")
+        report = build_bootstrap_report(
+            [campaign_root / "summary.json"],
+            stage="interim",
+            bootstrap_samples=50,
+            seed=7,
+        )
+        no_contract_precision = report["campaign_reports"][0]["per_mode_statistics"]["no_contract"]["precision"]
+        self.assertFalse(no_contract_precision["defined"])
+        self.assertIsNone(no_contract_precision["estimate"])
+        self.assertIsNone(no_contract_precision["ci_95"])
+
+    def test_bootstrap_metrics_rejects_incomplete_campaign(self) -> None:
+        root = self.temp_dir() / "campaign-incomplete"
+        root.mkdir(parents=True, exist_ok=True)
+        (root / "execution_manifest.json").write_text(
+            json.dumps(
+                {
+                    "campaign_id": "campaign-incomplete",
+                    "benchmark_version": "benchmark-v1.0",
+                    "freeze_commit": "synthetic-freeze",
+                    "provider": "litellm",
+                    "model_id": "ollama_chat/qwen2.5:7b",
+                    "declared_model_version": "qwen2.5:7b",
+                    "replications": 1,
+                    "expected_total_runs": 1,
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        (root / "summary.json").write_text(
+            json.dumps({"per_mode": {}, "runs_total": 0}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(ValueError, "campaign is incomplete or corrupt"):
+            build_bootstrap_report([root / "summary.json"], stage="interim", bootstrap_samples=10, seed=1)
 
     def test_violation_opportunity_observed_requires_risky_proposal(self) -> None:
         guarded = self.run_case("S-011", "guarded")

@@ -174,18 +174,20 @@ Criterio de salida:
 - el equipo ya no está “desarrollando” el benchmark, sino ejecutándolo
 
 Bloque activo actual:
-- campañas replicadas del modelo base
-- segundo modelo bajo el mismo benchmark congelado
-- análisis estadístico post-freeze
+- cierre de `campaign-base-r5`
+- consolidación del paquete estadístico post-freeze
+- actualización final de narrativa y tablas con campañas cerradas
 
 ## Fase 3. Réplicas del modelo base
 
 Objetivo:
 - medir estabilidad con el modelo actual
 
-Plan:
-- correr `21 × 4 × 3` como mínimo
-- idealmente `21 × 4 × 5`
+Estado interino:
+- `campaign-base-r3` ya quedó cerrada con `252` corridas válidas
+
+Plan restante:
+- extender a `campaign-base-r5`
 
 Entregables:
 - corpus replicado del modelo base
@@ -193,20 +195,21 @@ Entregables:
 - resumen agregado con intervalos
 
 Criterio de salida:
-- ya no hay sólo medias puntuales, sino distribuciones
+- existen `campaign-base-r3` y `campaign-base-r5` cerradas
+- el modelo base ya no depende sólo de `r3`
 
 ## Fase 4. Segundo modelo
 
 Objetivo:
 - reducir dependencia de un solo backend
 
+Estado interino:
+- `campaign-gemma4-r3` ya quedó cerrada con `252` corridas válidas
+
 Plan recomendado:
 - mantener `qwen2.5:7b`
-- agregar `gemma4:26b` o equivalente
-- si alcanza el presupuesto, agregar un modelo API pequeño
-
-Gate actual:
-- no arrancar `campaign-gemma4-r3` hasta cerrar `campaign-base-r3` con validación estricta y closeout formal
+- conservar `gemma4:26b` como segundo modelo local comparable
+- evaluar después si conviene agregar un modelo API pequeño
 
 Condición operativa preferida:
 - `gemma4:26b` vía `LiteLLM` y `Ollama`
@@ -219,12 +222,17 @@ Entregables:
 - comparación entre modelos
 
 Criterio de salida:
-- el hallazgo central deja de depender exclusivamente de un solo modelo
+- el hallazgo central ya no depende exclusivamente de un solo modelo
+- la comparación final se reporta junto con `campaign-base-r5`
 
 ## Fase 5. Estadística inferencial
 
 Objetivo:
 - transformar promedios descriptivos en evidencia comparativa formal
+
+Estado interino:
+- `tools/enforcement/bootstrap_metrics.py` ya existe
+- ya se generó un artefacto interino con `campaign-base-r3` y `campaign-gemma4-r3`
 
 Incluye:
 - intervalos de confianza
@@ -238,7 +246,8 @@ Preguntas a responder:
 - ¿la detección en `guarded` es comparable o superior a la de otros modos?
 
 Entregables:
-- sección estadística de resultados
+- artefacto interino post-freeze
+- sección estadística final tras cerrar `campaign-base-r5`
 - tablas finales
 - interpretación por hipótesis `H1–H4`
 

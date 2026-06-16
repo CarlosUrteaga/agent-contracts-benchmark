@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-021",
+  "mode": "strict",
+  "replication_id": "rep03",
+  "profile_id": "litellm-ollama-gemma4-26b",
+  "final_status": "aborted_pre_execution",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781648396.840653
+}

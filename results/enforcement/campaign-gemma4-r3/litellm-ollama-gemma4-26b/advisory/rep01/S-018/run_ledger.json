@@ -1,0 +1,18 @@
+{
+  "run_id": "S-018-advisory-rep01",
+  "scenario_id": "S-018",
+  "mode": "advisory",
+  "contract_id": "enforcement.advisory.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/gemma4:26b",
+  "replication_id": "rep01",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

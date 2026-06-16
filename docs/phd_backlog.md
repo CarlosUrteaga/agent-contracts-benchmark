@@ -70,9 +70,9 @@ Definition of Done:
 - el trabajo deja de ser de desarrollo y pasa a ser de ejecución
 
 Bloque activo inmediato:
-- réplicas del modelo base sobre `benchmark-v1.0`
-- segundo modelo bajo el mismo benchmark congelado
-- análisis estadístico post-freeze
+- cierre de `campaign-base-r5`
+- consolidación del paquete estadístico post-freeze
+- actualización final de resultados y resumen ejecutivo
 
 ## Evolución 3. Réplicas del modelo base
 
@@ -82,14 +82,16 @@ Prioridad:
 Objetivo:
 - obtener estabilidad experimental del backend actual
 
-Backlog:
-- correr `21 × 4 × 3`
+Estado interino:
+- `campaign-base-r3` ya quedó cerrada
+
+Backlog restante:
 - extender a `21 × 4 × 5`
 - consolidar resultados por escenario y por modo
 - generar distribuciones, no sólo medias
 
 Definition of Done:
-- existen entre `252` y `420` corridas del modelo base
+- `campaign-base-r3` y `campaign-base-r5` están cerradas
 - cada métrica principal tiene variación observable y no sólo un valor puntual
 
 ## Evolución 4. Paquete estadístico
@@ -99,6 +101,10 @@ Prioridad:
 
 Objetivo:
 - convertir el experimento de descriptivo a inferencial
+
+Estado interino:
+- existe `tools/enforcement/bootstrap_metrics.py`
+- existe un artefacto interino con campañas cerradas separadas por modelo
 
 Backlog:
 - bootstrap para:
@@ -124,17 +130,16 @@ Prioridad:
 Objetivo:
 - reducir sesgo por dependencia de `qwen2.5:7b`
 
-Backlog:
-- seleccionar segundo modelo
-- crear profile de ejecución adicional
-- ejecutar al menos `21 × 4 × 3`
-- comparar patrón de resultados con el modelo base
+Estado interino:
+- `gemma4:26b` ya está integrado como segundo perfil LiteLLM
+- `campaign-gemma4-r3` ya quedó cerrada
 
-Secuencia obligatoria:
-- cerrar primero `campaign-base-r3`
-- emitir y validar `results/enforcement/campaign-gemma4-r3/execution_manifest.json`
-- ejecutar `campaign-gemma4-r3` con `--resume`
-- cerrar la campaña con `closeout_campaign`
+Backlog restante:
+- comparar el patrón de `campaign-gemma4-r3` contra el cierre final del modelo base
+
+Secuencia obligatoria restante:
+- cerrar `campaign-base-r5`
+- regenerar el paquete estadístico final incluyendo base extendida y segundo modelo
 
 Recomendación:
 - primero un abierto/local comparable
@@ -148,6 +153,7 @@ Default elegido:
 
 Definition of Done:
 - la tesis ya no depende de un solo backend
+- la comparación entre modelos aparece en el paquete estadístico final
 
 ## Evolución 6. Oracle formalizado
 
