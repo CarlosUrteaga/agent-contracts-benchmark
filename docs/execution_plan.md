@@ -239,6 +239,46 @@ Usar carpetas separadas por campaña:
 - `results/enforcement/campaign-base-r3/`
 - `results/enforcement/campaign-base-r5/`
 
+### Execution manifest obligatorio
+
+Toda campaña post-freeze debe tener su propio `execution_manifest.json`.
+
+Ese artefacto registra:
+
+- el benchmark congelado de referencia
+- el model profile usado
+- el número de réplicas
+- el tamaño esperado de la matriz de ejecución
+- la carpeta raíz de resultados
+
+El benchmark identity sigue estando en:
+
+- `benchmark/enforcement/benchmark_manifest.json`
+
+El execution manifest identifica la campaña, no el benchmark.
+
+Para `3` réplicas:
+
+```bash
+python3 -m tools.enforcement.execution_manifest \
+  --benchmark-manifest benchmark/enforcement/benchmark_manifest.json \
+  --model-profile benchmark/enforcement/config/model_profiles/default.yaml \
+  --replications 3 \
+  --runs-root results/enforcement/campaign-base-r3 \
+  --out results/enforcement/campaign-base-r3/execution_manifest.json
+```
+
+Para `5` réplicas:
+
+```bash
+python3 -m tools.enforcement.execution_manifest \
+  --benchmark-manifest benchmark/enforcement/benchmark_manifest.json \
+  --model-profile benchmark/enforcement/config/model_profiles/default.yaml \
+  --replications 5 \
+  --runs-root results/enforcement/campaign-base-r5 \
+  --out results/enforcement/campaign-base-r5/execution_manifest.json
+```
+
 ### Comando de lote completo
 
 Para `3` réplicas:
@@ -321,6 +361,11 @@ Ejemplos sugeridos:
 
 - `llama31_8b.yaml`
 - `gpt4o_mini.yaml`
+
+Nota:
+
+- `results/enforcement/campaign-llama31-r3/execution_manifest.json` se emite sólo después de crear `benchmark/enforcement/config/model_profiles/llama31_8b.yaml`
+- este step no usa placeholder ni sustituye ese manifest por `openai_chat.yaml`
 
 ### Ejecución
 
