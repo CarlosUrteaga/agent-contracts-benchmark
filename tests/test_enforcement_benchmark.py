@@ -12,6 +12,7 @@ from unittest.mock import patch
 
 from tools.enforcement.adapters import LiteLLMAdapter, build_model_adapter
 from tools.enforcement.common import MODES, RUN_COMPLETE_FILE, RUN_LEDGER_FILE, SUMMARY_FILE, TOOLS, TRACE_FILE
+from tools.enforcement.closeout_campaign import closeout_campaign
 from tools.enforcement.diagnose_f1 import build_report, classify_run
 from tools.enforcement.evaluate import evaluate_runs
 from tools.enforcement.execution_manifest import SCHEMA_VERSION, build_execution_manifest
@@ -20,6 +21,7 @@ from tools.enforcement.materialize import materialize
 from tools.enforcement.runtime import GovernorRuntime, _build_governor_feedback, _build_recovery_ready_feedback, run_scenario
 from tools.enforcement.tools_runtime import build_tool_definitions, filter_tool_definitions, resolve_available_tool_names
 from tools.enforcement.validate_campaign import validate_campaign, validate_run_dir
+from tools.enforcement.validate_execution_manifest import validate_execution_manifest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -893,6 +895,130 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         payload = json.loads(out_path.read_text(encoding="utf-8"))
         self.assertEqual("campaign-base-r5", payload["campaign_id"])
         self.assertEqual(420, payload["expected_total_runs"])
+
+    def test_validate_execution_manifest_matches_expected_inputs(self) -> None:
+        manifest_path = self.temp_dir() / "execution_manifest.json"
+        manifest_path.write_text(
+            json.dumps(
+                build_execution_manifest(
+                    benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+                    model_profile_path=self.default_profile_path(),
+                    replications=3,
+                    runs_root=REPO_ROOT / "results" / "enforcement" / "campaign-base-r3",
+                ),
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        report = validate_execution_manifest(
+            manifest_path,
+            benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+            model_profile_path=self.default_profile_path(),
+            replications=3,
+            runs_root=REPO_ROOT / "results" / "enforcement" / "campaign-base-r3",
+        )
+        self.assertTrue(report["matches"])
+        self.assertEqual([], report["mismatches"])
+
+    def test_validate_execution_manifest_detects_replication_mismatch(self) -> None:
+        manifest_path = self.temp_dir() / "execution_manifest.json"
+        manifest_path.write_text(
+            json.dumps(
+                build_execution_manifest(
+                    benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+                    model_profile_path=self.default_profile_path(),
+                    replications=3,
+                    runs_root=REPO_ROOT / "results" / "enforcement" / "campaign-base-r3",
+                ),
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        report = validate_execution_manifest(
+            manifest_path,
+            benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+            model_profile_path=self.default_profile_path(),
+            replications=5,
+            runs_root=REPO_ROOT / "results" / "enforcement" / "campaign-base-r3",
+        )
+        self.assertFalse(report["matches"])
+        self.assertIn("replications", report["mismatches"])
+        self.assertIn("expected_total_runs", report["mismatches"])
+
+    def test_closeout_campaign_generates_artifacts_for_complete_mock_campaign(self) -> None:
+        out_root = self.temp_dir() / "campaign-base-r1"
+        run = subprocess.run(
+            [
+                "python3",
+                "-m",
+                "tools.enforcement.run_all",
+                "--scenarios",
+                "benchmark/enforcement/scenarios",
+                "--contracts",
+                "contracts/enforcement",
+                "--model-profile",
+                "benchmark/enforcement/config/model_profiles/mock.yaml",
+                "--replications",
+                "1",
+                "--force-rerun",
+                "--out",
+                str(out_root),
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, run.returncode, run.stderr)
+        manifest_path = out_root / "execution_manifest.json"
+        manifest_path.write_text(
+            json.dumps(
+                build_execution_manifest(
+                    benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+                    model_profile_path=self.model_profile_path(),
+                    replications=1,
+                    runs_root=out_root,
+                ),
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        report = closeout_campaign(manifest_path)
+        self.assertEqual("campaign-base-r1", report["campaign_id"])
+        self.assertEqual(84, report["expected_total_runs"])
+        self.assertTrue((out_root / "summary.json").exists())
+        self.assertTrue((out_root / "f1_diagnosis.json").exists())
+        self.assertTrue((out_root / "artifact_hashes.json").exists())
+        self.assertTrue((out_root / "campaign_closeout.md").exists())
+        hashes = json.loads((out_root / "artifact_hashes.json").read_text(encoding="utf-8"))
+        self.assertIn("execution_manifest.json", hashes)
+        self.assertIn("summary.json", hashes)
+        self.assertIn("f1_diagnosis.json", hashes)
+        closeout_text = (out_root / "campaign_closeout.md").read_text(encoding="utf-8")
+        self.assertIn("no benchmark changes after execution", closeout_text)
+
+    def test_closeout_campaign_rejects_incomplete_campaign(self) -> None:
+        out_root = self.temp_dir() / "campaign-base-r1"
+        manifest_path = out_root / "execution_manifest.json"
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        manifest_path.write_text(
+            json.dumps(
+                build_execution_manifest(
+                    benchmark_manifest_path=REPO_ROOT / "benchmark" / "enforcement" / "benchmark_manifest.json",
+                    model_profile_path=self.model_profile_path(),
+                    replications=1,
+                    runs_root=out_root,
+                ),
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(ValueError, "campaign is incomplete or corrupt"):
+            closeout_campaign(manifest_path)
 
     def test_violation_opportunity_observed_requires_risky_proposal(self) -> None:
         guarded = self.run_case("S-011", "guarded")

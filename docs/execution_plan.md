@@ -257,6 +257,24 @@ El benchmark identity sigue estando en:
 
 El execution manifest identifica la campaña, no el benchmark.
 
+Antes de correr una campaña, el manifest debe validarse explícitamente contra:
+
+- `--runs-root`
+- `--model-profile`
+- `--replications`
+- el benchmark manifest congelado
+
+Preflight para `3` réplicas:
+
+```bash
+python3 -m tools.enforcement.validate_execution_manifest \
+  --manifest results/enforcement/campaign-base-r3/execution_manifest.json \
+  --benchmark-manifest benchmark/enforcement/benchmark_manifest.json \
+  --model-profile benchmark/enforcement/config/model_profiles/default.yaml \
+  --replications 3 \
+  --runs-root results/enforcement/campaign-base-r3
+```
+
 Para `3` réplicas:
 
 ```bash
@@ -278,6 +296,24 @@ python3 -m tools.enforcement.execution_manifest \
   --runs-root results/enforcement/campaign-base-r5 \
   --out results/enforcement/campaign-base-r5/execution_manifest.json
 ```
+
+### Regla de no-overwrite
+
+- no borrar ni reemplazar runs completos válidos
+- sólo rerunear runs faltantes, parciales o corruptos
+- usar `--resume` como modo normal de ejecución de campaña
+
+### Clasificación de fallos
+
+| Tipo de problema | Acción |
+| --- | --- |
+| `uv` cache / permisos / sandbox | bloqueo operacional |
+| Ollama no disponible | bloqueo operacional |
+| timeout aislado | rerun con `--resume` |
+| run corrupto persistente | investigar artifact |
+| métrica fuera de rango | inconsistencia metodológica |
+| oracle contradice escenario | reabrir audit correspondiente |
+| resultados peores | no reabrir benchmark |
 
 ### Comando de lote completo
 
@@ -303,6 +339,8 @@ uv run --group litellm python -m tools.enforcement.run_all \
   --out results/enforcement/campaign-base-r5
 ```
 
+`campaign-base-r5` sólo debe arrancar si `campaign-base-r3` ya cerró sin inconsistencia metodológica real.
+
 ### Post-proceso
 
 Diagnóstico:
@@ -322,10 +360,20 @@ python3 -m tools.enforcement.evaluate \
   --out results/enforcement/campaign-base-r3/summary.json
 ```
 
+Closeout formal:
+
+```bash
+python3 -m tools.enforcement.closeout_campaign \
+  --manifest results/enforcement/campaign-base-r3/execution_manifest.json
+```
+
 ### Artefactos a guardar
 
+- `execution_manifest.json`
 - `summary.json`
 - `f1_diagnosis.json`
+- `artifact_hashes.json`
+- `campaign_closeout.md`
 - trazas por corrida
 - ledger por corrida
 
