@@ -67,6 +67,11 @@ The benchmark manifest must include hashes for the key frozen artifacts:
 | Add a model | Do not change the benchmark version; register the model in the execution manifest |
 | Change a model profile | Do not change the benchmark version; register the new condition in the execution manifest |
 
+Oracle formalization note:
+
+- adding or changing oracle artifacts such as `docs/oracle_spec.md`, `benchmark/enforcement/oracle/scenario_catalog.json`, or oracle validation invariants is an oracle change under this policy
+- such a change is not justified by metric quality; if adopted, it must be versioned and rerun as a new benchmark release
+
 ## Pre-freeze validation interpretation rule
 
 The pre-freeze validation campaign is evidence, not a tuning loop.

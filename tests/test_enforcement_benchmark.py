@@ -23,6 +23,7 @@ from tools.enforcement.runtime import GovernorRuntime, _build_governor_feedback,
 from tools.enforcement.tools_runtime import build_tool_definitions, filter_tool_definitions, resolve_available_tool_names
 from tools.enforcement.validate_campaign import validate_campaign, validate_run_dir
 from tools.enforcement.validate_execution_manifest import validate_execution_manifest
+from tools.enforcement.validate_oracle import validate_oracle
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -338,6 +339,122 @@ class EnforcementBenchmarkTests(unittest.TestCase):
                 excluded.append(scenario["scenario_id"])
         self.assertEqual(["S-016"], sorted(excluded))
 
+    def test_oracle_catalog_covers_all_frozen_scenarios(self) -> None:
+        catalog_path = REPO_ROOT / "benchmark" / "enforcement" / "oracle" / "scenario_catalog.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        scenarios = sorted(path.stem.split(".", 1)[0] for path in (REPO_ROOT / "benchmark" / "enforcement" / "scenarios").glob("S-*.json"))
+        catalog_ids = sorted(row["scenario_id"] for row in catalog["scenarios"])
+        self.assertEqual(scenarios, catalog_ids)
+        self.assertEqual(len(scenarios), catalog["scenarios_total"])
+
+    def test_oracle_catalog_runtime_rules_are_runtime_only(self) -> None:
+        disallowed = {
+            "agent.configuration_fingerprint_match",
+            "contract.fingerprint_match",
+            "response.schema_complete",
+            "run_ledger.required",
+            "run_ledger.complete",
+        }
+        catalog_path = REPO_ROOT / "benchmark" / "enforcement" / "oracle" / "scenario_catalog.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        for row in catalog["scenarios"]:
+            self.assertTrue(disallowed.isdisjoint(set(row["expected_runtime_rules"])), row["scenario_id"])
+            self.assertTrue(set(row["expected_runtime_rules"]).isdisjoint(set(row["expected_pre_execution_rules"])), row["scenario_id"])
+            self.assertTrue(set(row["expected_runtime_rules"]).isdisjoint(set(row["expected_post_execution_rules"])), row["scenario_id"])
+            self.assertTrue(set(row["expected_pre_execution_rules"]).isdisjoint(set(row["expected_post_execution_rules"])), row["scenario_id"])
+
+    def test_oracle_catalog_marks_only_s016_as_structural_runtime_f1_exclusion(self) -> None:
+        catalog_path = REPO_ROOT / "benchmark" / "enforcement" / "oracle" / "scenario_catalog.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        excluded = sorted(
+            row["scenario_id"]
+            for row in catalog["scenarios"]
+            if not row["runtime_f1_participates"]
+        )
+        self.assertEqual(["S-016"], excluded)
+        s016 = next(row for row in catalog["scenarios"] if row["scenario_id"] == "S-016")
+        self.assertEqual("structural_runtime_exclusion", s016["structural_exclusion_reason"])
+
+    def test_validate_oracle_accepts_current_catalog(self) -> None:
+        report = validate_oracle(
+            scenario_root=REPO_ROOT / "benchmark" / "enforcement" / "scenarios",
+            catalog_path=REPO_ROOT / "benchmark" / "enforcement" / "oracle" / "scenario_catalog.json",
+            spec_path=REPO_ROOT / "docs" / "oracle_spec.md",
+        )
+        self.assertTrue(report["ok"])
+        self.assertEqual([], report["errors"])
+        self.assertEqual(21, report["scenario_count"])
+
+    def test_validate_oracle_rejects_overlap_between_runtime_pre_post_rules(self) -> None:
+        root = self.temp_dir()
+        scenario_root = root / "scenarios"
+        catalog_path = root / "scenario_catalog.json"
+        spec_path = root / "oracle_spec.md"
+        self.write_scenario(
+            scenario_root,
+            {
+                "scenario_id": "S-900",
+                "scenario_type": "adversarial",
+                "acceptable_outcomes": ["safe"],
+                "forbidden_outcomes": ["unsafe"],
+                "expected_violations_if_attempted": ["ticket_requires_evidence"],
+                "expected_pre_execution_violations": [],
+                "expected_post_execution_violations": [],
+                "runtime_detection_target": True,
+                "expected_final_properties": {"task_completed": True},
+            },
+        )
+        catalog_path.write_text(
+            json.dumps(
+                {
+                    "benchmark_version": "benchmark-v1.1",
+                    "scenarios_total": 1,
+                    "scenario_types": {"adversarial": 1},
+                    "runtime_f1_exclusions": {},
+                    "primary_metrics": [],
+                    "scenarios": [
+                        {
+                            "scenario_id": "S-900",
+                            "scenario_type": "adversarial",
+                            "acceptable_outcomes": ["safe"],
+                            "forbidden_outcomes": ["unsafe"],
+                            "expected_runtime_rules": ["ticket_requires_evidence"],
+                            "expected_pre_execution_rules": ["ticket_requires_evidence"],
+                            "expected_post_execution_rules": [],
+                            "runtime_detection_target": True,
+                            "runtime_f1_participates": True,
+                            "structural_exclusion_reason": None,
+                            "expected_final_properties": {"task_completed": True},
+                        }
+                    ],
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        spec_path.write_text(
+            "\n".join(
+                [
+                    "# Oracle Specification",
+                    "## Purpose",
+                    "## Oracle inputs",
+                    "## Oracle outputs",
+                    "## Success definition",
+                    "## Unsafe opportunity definition",
+                    "## Runtime violation definition",
+                    "## Runtime F1 participation",
+                    "## Structural exclusions",
+                    "## Oracle invariants",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        report = validate_oracle(scenario_root=scenario_root, catalog_path=catalog_path, spec_path=spec_path)
+        self.assertFalse(report["ok"])
+        self.assertTrue(any("overlap" in error for error in report["errors"]))
+
     def test_filter_tool_definitions_uses_only_allowed_tools(self) -> None:
         definitions = build_tool_definitions()
         filtered = filter_tool_definitions(definitions, ["approve_request", "send_notification"])
@@ -363,6 +480,13 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         self.assertEqual("litellm", profile["provider"])
         self.assertEqual("ollama_chat/qwen2.5:7b", profile["model_id"])
         self.assertEqual("http://localhost:11434", profile["api_base"])
+
+    def test_materialize_preserves_non_core_model_profiles(self) -> None:
+        profile_path = REPO_ROOT / "benchmark" / "enforcement" / "config" / "model_profiles" / "gemma4_26b.yaml"
+        before = profile_path.read_text(encoding="utf-8")
+        materialize(REPO_ROOT)
+        after = profile_path.read_text(encoding="utf-8")
+        self.assertEqual(before, after)
 
     def test_governor_post_rules_are_declared_in_contract(self) -> None:
         final_properties = {"task_completed": False}

@@ -168,10 +168,16 @@ Backlog:
 - definir oportunidad de violación
 - definir criterios de outcome aceptable y prohibido
 - documentar exclusiones de runtime F1
-- versionar el oracle
+- materializar un catálogo validable del oracle
+- agregar regresión automática contra drift del catálogo o de la spec
+- versionar el oracle si se adopta como benchmark vigente
 
 Opcional fuerte:
 - validación externa pequeña con revisores humanos
+
+Estado interino:
+- `docs/oracle_spec.md`, `docs/oracle_traceability_matrix.md` y `tools/enforcement/validate_oracle.py` ya existen
+- falta decidir si esta formalización se promueve a una nueva versión de benchmark con rerun completo
 
 Definition of Done:
 - otro lector puede entender y reproducir la lógica de evaluación

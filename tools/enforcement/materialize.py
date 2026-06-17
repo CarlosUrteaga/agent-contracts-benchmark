@@ -72,6 +72,16 @@ OPENAI_FALLBACK_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+BENCHMARK_VERSION = "benchmark-v1.1"
+PRIMARY_METRICS = [
+    "unsafe_side_effect_rate",
+    "governance_effectiveness",
+    "successful_safe_completion_rate",
+]
+STRUCTURAL_RUNTIME_EXCLUSIONS = {
+    "S-016": "structural_runtime_exclusion",
+}
+
 
 def _yaml_scalar(value: Any) -> str:
     if isinstance(value, bool):
@@ -505,6 +515,48 @@ def _scenario_catalog() -> list[dict[str, Any]]:
     return scenarios
 
 
+def _oracle_catalog_payload(scenarios: list[dict[str, Any]]) -> dict[str, Any]:
+    scenario_rows: list[dict[str, Any]] = []
+    scenario_types = {"nominal": 0, "adversarial": 0}
+    runtime_f1_exclusions: list[dict[str, str]] = []
+    for scenario in scenarios:
+        scenario_id = str(scenario["scenario_id"])
+        scenario_type = str(scenario["scenario_type"])
+        scenario_types[scenario_type] += 1
+        structural_exclusion_reason = STRUCTURAL_RUNTIME_EXCLUSIONS.get(scenario_id)
+        if structural_exclusion_reason is not None:
+            runtime_f1_exclusions.append(
+                {
+                    "scenario_id": scenario_id,
+                    "reason": structural_exclusion_reason,
+                }
+            )
+        scenario_rows.append(
+            {
+                "scenario_id": scenario_id,
+                "scenario_type": scenario_type,
+                "acceptable_outcomes": list(scenario["acceptable_outcomes"]),
+                "forbidden_outcomes": list(scenario["forbidden_outcomes"]),
+                "expected_runtime_rules": list(scenario.get("expected_violations_if_attempted", [])),
+                "expected_pre_execution_rules": list(scenario.get("expected_pre_execution_violations", [])),
+                "expected_post_execution_rules": list(scenario.get("expected_post_execution_violations", [])),
+                "runtime_detection_target": bool(scenario.get("runtime_detection_target", True)),
+                "runtime_f1_participates": bool(scenario.get("runtime_detection_target", True))
+                and structural_exclusion_reason is None,
+                "structural_exclusion_reason": structural_exclusion_reason,
+                "expected_final_properties": dict(scenario["expected_final_properties"]),
+            }
+        )
+    return {
+        "benchmark_version": BENCHMARK_VERSION,
+        "scenarios_total": len(scenarios),
+        "scenario_types": scenario_types,
+        "runtime_f1_exclusions": runtime_f1_exclusions,
+        "primary_metrics": PRIMARY_METRICS,
+        "scenarios": scenario_rows,
+    }
+
+
 def _contract(mode: str, agent_configuration_fingerprints: list[str]) -> dict[str, Any]:
     contract: dict[str, Any] = {
         "contract_id": f"enforcement.{mode}.v2",
@@ -546,22 +598,14 @@ def materialize(out_root: Path) -> dict[str, int]:
     tampered_root = root / TAMPERED_ROOT.relative_to(REPO_ROOT)
     oracle_root = root / Path("benchmark/enforcement/oracle")
 
-    managed_roots = [scenarios_root, contracts_root, model_profiles_root, tampered_root, oracle_root]
+    managed_roots = [scenarios_root, contracts_root, tampered_root, oracle_root]
     for managed_root in managed_roots:
         if managed_root.exists():
             for path in sorted(managed_root.rglob("*"), reverse=True):
                 if path.is_file():
                     path.unlink()
-    for pattern_root, pattern in [
-        (scenarios_root, "S-*.json"),
-        (contracts_root, "*.yaml"),
-        (model_profiles_root, "*.yaml"),
-        (tampered_root, "*.yaml"),
-        (oracle_root, "*.json"),
-    ]:
-        if pattern_root.exists():
-            for path in pattern_root.glob(pattern):
-                path.unlink(missing_ok=True)
+    for profile_name in ["mock.yaml", "default.yaml", "openai_chat.yaml"]:
+        (model_profiles_root / profile_name).unlink(missing_ok=True)
 
     write_text(system_prompt_path, SYSTEM_PROMPT_TEXT)
     write_json(model_profiles_root / "mock.yaml", MOCK_PROFILE)
@@ -590,7 +634,8 @@ def materialize(out_root: Path) -> dict[str, int]:
             _contract(mode, [default_agent_fingerprint, mock_agent_fingerprint]),
         )
 
-    for scenario in _scenario_catalog():
+    scenarios = _scenario_catalog()
+    for scenario in scenarios:
         write_json(scenarios_root / f"{scenario['scenario_id']}.{scenario['name']}.json", scenario)
 
     write_json(
@@ -601,18 +646,7 @@ def materialize(out_root: Path) -> dict[str, int]:
         tampered_root / "contract_tampered.yaml",
         {"contract_fingerprint": "sha256:tampered-contract-v2"},
     )
-    write_json(
-        oracle_root / "scenario_catalog.json",
-        {
-            "scenarios_total": 21,
-            "scenario_types": {"nominal": 10, "adversarial": 11},
-            "primary_metrics": [
-                "unsafe_side_effect_rate",
-                "governance_effectiveness",
-                "successful_safe_completion_rate",
-            ],
-        },
-    )
+    write_json(oracle_root / "scenario_catalog.json", _oracle_catalog_payload(scenarios))
     return {"scenarios": 21, "contracts": 4}
 
 

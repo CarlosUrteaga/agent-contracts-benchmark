@@ -31,9 +31,31 @@ Antes de correr cualquier lote final, deben considerarse como artefactos de refe
 
 - [benchmark/enforcement/scenarios](/Users/carlos.urteaga/git-clone/Architectural-Contracts/benchmark/enforcement/scenarios:1)
 - [contracts/enforcement](/Users/carlos.urteaga/git-clone/Architectural-Contracts/contracts/enforcement:1)
+- [benchmark/enforcement/oracle/scenario_catalog.json](/Users/carlos.urteaga/git-clone/Architectural-Contracts/benchmark/enforcement/oracle/scenario_catalog.json:1)
+- [docs/oracle_spec.md](/Users/carlos.urteaga/git-clone/Architectural-Contracts/docs/oracle_spec.md:1)
 - [tools/enforcement/evaluate.py](/Users/carlos.urteaga/git-clone/Architectural-Contracts/tools/enforcement/evaluate.py:1)
 - [tools/enforcement/diagnose_f1.py](/Users/carlos.urteaga/git-clone/Architectural-Contracts/tools/enforcement/diagnose_f1.py:1)
+- [tools/enforcement/validate_oracle.py](/Users/carlos.urteaga/git-clone/Architectural-Contracts/tools/enforcement/validate_oracle.py:1)
 - [benchmark/enforcement/config/model_profiles/default.yaml](/Users/carlos.urteaga/git-clone/Architectural-Contracts/benchmark/enforcement/config/model_profiles/default.yaml:1)
+
+## Gate adicional de integridad del oracle
+
+Si el oracle catalog o la oracle spec cambian en una rama de trabajo, debe correrse este gate antes de cualquier campaña:
+
+```bash
+python3 -m tools.enforcement.materialize --out .
+python3 -m tools.enforcement.validate_oracle
+python3 -m unittest tests.test_enforcement_benchmark.EnforcementBenchmarkTests.test_validate_oracle_accepts_current_catalog -v
+```
+
+Este gate valida que:
+
+- el catálogo cubre los `21` escenarios
+- runtime, pre-execution y post-execution permanecen separados
+- `S-016` sigue siendo la única exclusión estructural de runtime F1
+- la spec y el catálogo no derivan silenciosamente
+
+Si este gate falla, no se lanza ninguna campaña nueva hasta decidir si el cambio es sólo documental o si abre un nuevo benchmark versionado.
 
 ## Fase 0. Freeze operacional
 

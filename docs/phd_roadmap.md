@@ -238,6 +238,30 @@ Incluye:
 - intervalos de confianza
 - bootstrap
 - comparaciones entre modos
+
+## Fase 6. Oracle formalizado
+
+Objetivo:
+- tratar el oracle como un instrumento experimental explícito y validable
+
+Estado interino:
+- `docs/oracle_spec.md` ya define entradas, salidas e invariantes
+- `benchmark/enforcement/oracle/scenario_catalog.json` ya materializa el catálogo escenario por escenario
+- `docs/oracle_traceability_matrix.md` ya resume trazabilidad oracle por escenario
+- `python3 -m tools.enforcement.validate_oracle` ya valida catálogo, spec e invariantes
+
+Implicación metodológica:
+- si esta formalización se adopta como benchmark vigente, deja de ser sólo documentación y pasa a ser un cambio de oracle
+- por política de freeze, eso exige versionado de benchmark y rerun completo
+
+Entregables:
+- especificación formal legible
+- catálogo validable por máquina
+- suite de regresión de invariantes del oracle
+
+Criterio de salida:
+- otro lector puede reconstruir las expectativas del oracle sin inferirlas desde el evaluator
+- el catálogo y la spec fallan explícitamente si deriva la clasificación runtime/pre/post o si aparece otra exclusión estructural aparte de `S-016`
 - tamaños de efecto
 
 Preguntas a responder:
