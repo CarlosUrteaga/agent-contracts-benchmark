@@ -1,0 +1,895 @@
+{
+  "bootstrap_schema_version": "bootstrap-metrics-v1",
+  "analysis_stage": "final",
+  "generated_at": "2026-06-17T15:24:50.606869+00:00",
+  "bootstrap_samples": 10000,
+  "seed": 42,
+  "campaign_reports": [
+    {
+      "campaign_id": "campaign-base-r3",
+      "runs_root": "results/enforcement/campaign-base-r3",
+      "benchmark_version": "benchmark-v1.0",
+      "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+      "provider": "litellm",
+      "model_id": "ollama_chat/qwen2.5:7b",
+      "declared_model_version": "qwen2.5:7b",
+      "profile_id": "litellm-ollama-qwen25-7b",
+      "replications": 3,
+      "expected_total_runs": 252,
+      "runs_total": 252,
+      "cells_total": 63,
+      "per_mode_statistics": {
+        "no_contract": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.571429,
+            "ci_95": [
+              0.444444,
+              0.698413
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "f1": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          }
+        },
+        "advisory": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.571429,
+            "ci_95": [
+              0.444444,
+              0.698413
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 0.625,
+            "ci_95": [
+              0.428463,
+              0.814815
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 0.833333,
+            "ci_95": [
+              0.7,
+              1.0
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.714286,
+            "ci_95": [
+              0.558074,
+              0.84
+            ],
+            "defined": true
+          }
+        },
+        "guarded": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.888889,
+            "ci_95": [
+              0.809524,
+              0.952381
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 0.666667,
+            "ci_95": [
+              0.461458,
+              0.84
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.8,
+            "ci_95": [
+              0.631504,
+              0.913043
+            ],
+            "defined": true
+          }
+        },
+        "strict": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.333333,
+            "ci_95": [
+              0.222222,
+              0.460317
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 0.625,
+            "ci_95": [
+              0.428463,
+              0.814815
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 0.833333,
+            "ci_95": [
+              0.7,
+              1.0
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.714286,
+            "ci_95": [
+              0.558074,
+              0.84
+            ],
+            "defined": true
+          }
+        }
+      },
+      "paired_mode_differences": {
+        "guarded_vs_strict": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.555556,
+            "ci_95": [
+              0.428572,
+              0.68254
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": 0.041667,
+            "ci_95": [
+              0.0,
+              0.081451
+            ],
+            "defined": true
+          },
+          "recall": {
+            "difference_estimate": 0.166667,
+            "ci_95": [
+              0.0,
+              0.3
+            ],
+            "defined": true
+          },
+          "f1": {
+            "difference_estimate": 0.085714,
+            "ci_95": [
+              0.0,
+              0.163043
+            ],
+            "defined": true
+          }
+        },
+        "guarded_vs_no_contract": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.31746,
+            "ci_95": [
+              0.206349,
+              0.428572
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "f1": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          }
+        },
+        "guarded_vs_advisory": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.31746,
+            "ci_95": [
+              0.206349,
+              0.428572
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": 0.041667,
+            "ci_95": [
+              0.0,
+              0.081451
+            ],
+            "defined": true
+          },
+          "recall": {
+            "difference_estimate": 0.166667,
+            "ci_95": [
+              0.0,
+              0.3
+            ],
+            "defined": true
+          },
+          "f1": {
+            "difference_estimate": 0.085714,
+            "ci_95": [
+              0.0,
+              0.163043
+            ],
+            "defined": true
+          }
+        }
+      },
+      "notes": [
+        "Bootstrap resamples paired scenario_id + replication_id cells within each campaign.",
+        "Campaigns are reported separately; no cross-model pooled mean is produced."
+      ]
+    },
+    {
+      "campaign_id": "campaign-base-r5",
+      "runs_root": "results/enforcement/campaign-base-r5",
+      "benchmark_version": "benchmark-v1.0",
+      "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+      "provider": "litellm",
+      "model_id": "ollama_chat/qwen2.5:7b",
+      "declared_model_version": "qwen2.5:7b",
+      "profile_id": "litellm-ollama-qwen25-7b",
+      "replications": 5,
+      "expected_total_runs": 420,
+      "runs_total": 420,
+      "cells_total": 105,
+      "per_mode_statistics": {
+        "no_contract": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.590476,
+            "ci_95": [
+              0.495238,
+              0.685714
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "f1": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          }
+        },
+        "advisory": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.571429,
+            "ci_95": [
+              0.47619,
+              0.666667
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 0.625,
+            "ci_95": [
+              0.472222,
+              0.770848
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 0.833333,
+            "ci_95": [
+              0.727273,
+              0.954545
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.714286,
+            "ci_95": [
+              0.596491,
+              0.810811
+            ],
+            "defined": true
+          }
+        },
+        "guarded": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.904762,
+            "ci_95": [
+              0.847619,
+              0.952381
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 0.652174,
+            "ci_95": [
+              0.5,
+              0.787879
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.789474,
+            "ci_95": [
+              0.666667,
+              0.881356
+            ],
+            "defined": true
+          }
+        },
+        "strict": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.342857,
+            "ci_95": [
+              0.257143,
+              0.438095
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 0.625,
+            "ci_95": [
+              0.472222,
+              0.770848
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 0.833333,
+            "ci_95": [
+              0.727273,
+              0.954545
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.714286,
+            "ci_95": [
+              0.596491,
+              0.810811
+            ],
+            "defined": true
+          }
+        }
+      },
+      "paired_mode_differences": {
+        "guarded_vs_strict": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.561905,
+            "ci_95": [
+              0.466666,
+              0.657143
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": 0.027174,
+            "ci_95": [
+              -0.02051,
+              0.067874
+            ],
+            "defined": true
+          },
+          "recall": {
+            "difference_estimate": 0.166667,
+            "ci_95": [
+              0.045455,
+              0.272727
+            ],
+            "defined": true
+          },
+          "f1": {
+            "difference_estimate": 0.075188,
+            "ci_95": [
+              0.008336,
+              0.140951
+            ],
+            "defined": true
+          }
+        },
+        "guarded_vs_no_contract": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.314286,
+            "ci_95": [
+              0.219047,
+              0.409524
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "f1": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          }
+        },
+        "guarded_vs_advisory": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.333333,
+            "ci_95": [
+              0.238096,
+              0.428571
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": 0.027174,
+            "ci_95": [
+              -0.02051,
+              0.067874
+            ],
+            "defined": true
+          },
+          "recall": {
+            "difference_estimate": 0.166667,
+            "ci_95": [
+              0.045455,
+              0.272727
+            ],
+            "defined": true
+          },
+          "f1": {
+            "difference_estimate": 0.075188,
+            "ci_95": [
+              0.008336,
+              0.140951
+            ],
+            "defined": true
+          }
+        }
+      },
+      "notes": [
+        "Bootstrap resamples paired scenario_id + replication_id cells within each campaign.",
+        "Campaigns are reported separately; no cross-model pooled mean is produced."
+      ]
+    },
+    {
+      "campaign_id": "campaign-gemma4-r3",
+      "runs_root": "results/enforcement/campaign-gemma4-r3",
+      "benchmark_version": "benchmark-v1.0",
+      "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+      "provider": "litellm",
+      "model_id": "ollama_chat/gemma4:26b",
+      "declared_model_version": "gemma4:26b",
+      "profile_id": "litellm-ollama-gemma4-26b",
+      "replications": 3,
+      "expected_total_runs": 252,
+      "runs_total": 252,
+      "cells_total": 63,
+      "per_mode_statistics": {
+        "no_contract": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.714286,
+            "ci_95": [
+              0.603175,
+              0.825397
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "f1": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          }
+        },
+        "advisory": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.730159,
+            "ci_95": [
+              0.619048,
+              0.84127
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 0.222222,
+            "ci_95": [
+              0.0,
+              0.48
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.363636,
+            "ci_95": [
+              0.0,
+              0.648649
+            ],
+            "defined": true
+          }
+        },
+        "guarded": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.730159,
+            "ci_95": [
+              0.619048,
+              0.84127
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "recall": {
+            "estimate": 0.222222,
+            "ci_95": [
+              0.0,
+              0.5
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.363636,
+            "ci_95": [
+              0.0,
+              0.666667
+            ],
+            "defined": true
+          }
+        },
+        "strict": {
+          "successful_safe_completion_rate": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "precision": {
+            "estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "f1": {
+            "estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          }
+        }
+      },
+      "paired_mode_differences": {
+        "guarded_vs_strict": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.730159,
+            "ci_95": [
+              0.619048,
+              0.84127
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "precision": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "difference_estimate": 0.222222,
+            "ci_95": [
+              0.0,
+              0.5
+            ],
+            "defined": true
+          },
+          "f1": {
+            "difference_estimate": 0.363636,
+            "ci_95": [
+              0.0,
+              0.666667
+            ],
+            "defined": true
+          }
+        },
+        "guarded_vs_no_contract": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.015873,
+            "ci_95": [
+              0.0,
+              0.047619
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "recall": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          },
+          "f1": {
+            "difference_estimate": null,
+            "ci_95": null,
+            "defined": false
+          }
+        },
+        "guarded_vs_advisory": {
+          "successful_safe_completion_rate": {
+            "difference_estimate": 0.0,
+            "ci_95": [
+              -0.047619,
+              0.047619
+            ],
+            "defined": true
+          },
+          "governance_effectiveness": {
+            "difference_estimate": 1.0,
+            "ci_95": [
+              1.0,
+              1.0
+            ],
+            "defined": true
+          },
+          "precision": {
+            "difference_estimate": 0.0,
+            "ci_95": [
+              0.0,
+              0.0
+            ],
+            "defined": true
+          },
+          "recall": {
+            "difference_estimate": 0.0,
+            "ci_95": [
+              -0.307692,
+              0.307692
+            ],
+            "defined": true
+          },
+          "f1": {
+            "difference_estimate": 0.0,
+            "ci_95": [
+              -0.421053,
+              0.421053
+            ],
+            "defined": true
+          }
+        }
+      },
+      "notes": [
+        "Bootstrap resamples paired scenario_id + replication_id cells within each campaign.",
+        "Campaigns are reported separately; no cross-model pooled mean is produced."
+      ]
+    }
+  ],
+  "notes": [
+    "summary.json paths are used as campaign entrypoints; bootstrap is recomputed from complete campaign runs.",
+    "Final statistical closure additionally requires a complete and closed campaign-base-r5."
+  ]
+}

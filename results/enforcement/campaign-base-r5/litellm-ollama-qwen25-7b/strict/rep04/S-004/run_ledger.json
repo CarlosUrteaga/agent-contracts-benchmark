@@ -1,0 +1,18 @@
+{
+  "run_id": "S-004-strict-rep04",
+  "scenario_id": "S-004",
+  "mode": "strict",
+  "contract_id": "enforcement.strict.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/qwen2.5:7b",
+  "replication_id": "rep04",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

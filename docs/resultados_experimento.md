@@ -1,6 +1,6 @@
 # Pruebas, complicaciones, adecuaciones, hallazgos y resultados
 
-Esta sección ya no debe leerse como un reporte del piloto de calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Por tanto, los resultados relevantes para la tesis se organizan por campañas cerradas contra el mismo benchmark congelado.
+Esta sección ya no debe leerse como un reporte del piloto de calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-17`, el bloque principal de ejecución y análisis post-freeze ya cuenta con tres campañas cerradas y con un paquete estadístico final reproducible.
 
 ## Estado metodológico
 
@@ -11,24 +11,26 @@ Esta sección ya no debe leerse como un reporte del piloto de calibración. Desd
 
 ## Campañas cerradas disponibles
 
-Al `2026-06-16`, existen dos campañas post-freeze cerradas y utilizables para análisis estadístico interino:
+Las campañas cerradas y utilizables para análisis final son:
 
 - `campaign-base-r3`
   - perfil: `litellm:ollama_chat/qwen2.5:7b`
   - matriz: `21 × 4 × 3 = 252` corridas
+  - estado: validada con cierre formal
+- `campaign-base-r5`
+  - perfil: `litellm:ollama_chat/qwen2.5:7b`
+  - matriz: `21 × 4 × 5 = 420` corridas
   - estado: validada con cierre formal
 - `campaign-gemma4-r3`
   - perfil: `litellm:ollama_chat/gemma4:26b`
   - matriz: `21 × 4 × 3 = 252` corridas
   - estado: validada con cierre formal
 
-La campaña objetivo del modelo base `campaign-base-r5` sigue pendiente para el cierre final del bloque post-freeze.
+## Artefacto estadístico final
 
-## Artefacto estadístico vigente
+El análisis inferencial final vigente se genera con:
 
-El análisis inferencial actual se genera con:
-
-- [results/enforcement/statistics/interim-base-r3-plus-gemma4-r3.json](/Users/carlos.urteaga/git-clone/Architectural-Contracts/results/enforcement/statistics/interim-base-r3-plus-gemma4-r3.json:1)
+- [results/enforcement/statistics/final-base-r3-base-r5-gemma4-r3.json](/Users/carlos.urteaga/git-clone/Architectural-Contracts/results/enforcement/statistics/final-base-r3-base-r5-gemma4-r3.json:1)
 
 Este artefacto:
 
@@ -36,59 +38,62 @@ Este artefacto:
 - reporta métricas por modo
 - mantiene campañas separadas por modelo
 - no mezcla modelos distintos en una sola media sin etiquetado explícito
+- permite comparar estabilidad del modelo base entre `r3` y `r5`
 
-## Hallazgos interinos del modelo base
+## Hallazgos finales del modelo base
 
-En `campaign-base-r3`, el patrón central del benchmark congelado se mantiene:
+El patrón central del benchmark congelado se mantiene y se fortalece al extender el modelo base a `campaign-base-r5`.
+
+En `campaign-base-r5`:
 
 - `guarded` conserva `governance_effectiveness = 1.0`
 - `strict` también conserva `governance_effectiveness = 1.0`
 - `guarded` preserva mucha más utilidad:
-  - `successful_safe_completion_rate = 0.888889`
-  - intervalo bootstrap `95%`: `[0.809524, 0.952381]`
+  - `successful_safe_completion_rate = 0.904762`
+  - intervalo bootstrap `95%`: `[0.847619, 0.952381]`
 - `strict` queda muy por debajo:
-  - `successful_safe_completion_rate = 0.333333`
-  - intervalo bootstrap `95%`: `[0.222222, 0.460317]`
+  - `successful_safe_completion_rate = 0.342857`
+  - intervalo bootstrap `95%`: `[0.257143, 0.438095]`
 
-La diferencia pareada `guarded vs strict` en `successful_safe_completion_rate` es:
+La diferencia pareada `guarded vs strict` en `successful_safe_completion_rate` para `campaign-base-r5` es:
 
-- `0.555556`
-- intervalo bootstrap `95%`: `[0.428572, 0.68254]`
+- `0.561905`
+- intervalo bootstrap `95%`: `[0.466666, 0.657143]`
 
-Eso sostiene, al menos de forma interina, el hallazgo principal de la tesis: el modo `guarded` mantiene la prevención sin pagar el mismo costo de utilidad que `strict`.
+La señal no sólo persiste respecto a `campaign-base-r3`; también se vuelve más estable con más réplica. En detección runtime, `guarded` en `campaign-base-r5` mantiene:
 
-## Hallazgos interinos del segundo modelo
+- `f1 = 0.789474`
+- intervalo bootstrap `95%`: `[0.666667, 0.881356]`
 
-En `campaign-gemma4-r3`, el patrón cambia en magnitud pero no invalida el benchmark:
+Eso sostiene el hallazgo principal de la tesis: el modo `guarded` mantiene la prevención sin pagar el mismo costo de utilidad que `strict`.
+
+## Lectura del segundo modelo
+
+En `campaign-gemma4-r3`, el benchmark congelado sigue distinguiendo prevención de utilidad, pero el patrón cambia de magnitud:
 
 - `guarded` mantiene `governance_effectiveness = 1.0`
-- `strict` muestra una degradación operativa fuerte
-- la detección runtime de `guarded` es más conservadora:
-  - `precision = 1.0`
-  - `recall = 0.222222`
+- `guarded` conserva mejor utilidad que `strict`:
+  - `successful_safe_completion_rate = 0.730159`
+  - intervalo bootstrap `95%`: `[0.619048, 0.84127]`
+- `strict` cae a:
+  - `successful_safe_completion_rate = 0.0`
+  - intervalo bootstrap `95%`: `[0.0, 0.0]`
+- la detección runtime de `guarded` es mucho más débil que en el modelo base:
   - `f1 = 0.363636`
+  - intervalo bootstrap `95%`: `[0.0, 0.666667]`
 
-Este resultado no reabre el benchmark. Por regla metodológica, un resultado peor pero válido sólo documenta sensibilidad al modelo; no justifica rediseñar escenarios, contratos, oracle o evaluator.
+Este resultado no reabre el benchmark. Por regla metodológica, un resultado peor pero válido documenta sensibilidad al modelo, no drift metodológico del benchmark.
 
-## Interpretación actual
+## Interpretación final de este bloque
 
-Con las dos campañas cerradas disponibles, la evidencia post-freeze ya permite sostener cuatro puntos:
+Con las tres campañas cerradas disponibles, la evidencia post-freeze permite sostener cinco puntos:
 
 1. El benchmark congelado sigue produciendo oportunidades reales de enforcement.
 2. `guarded` y `strict` continúan previniendo efectos inseguros cuando la gobernanza bloqueante actúa correctamente.
-3. `guarded` preserva mejor la finalización segura que `strict` en el modelo base cerrado.
-4. El patrón no debe interpretarse con una sola campaña ni con un solo modelo; por eso sigue pendiente `campaign-base-r5`.
+3. En el modelo base, `guarded` preserva de forma robusta mucha más finalización segura que `strict`, incluso al escalar de `r3` a `r5`.
+4. El segundo modelo muestra que el hallazgo depende también del backend, especialmente en calidad de detección y comportamiento bajo aborto estricto.
+5. Las diferencias observadas ahora provienen de campañas post-freeze cerradas, no de calibración del benchmark.
 
-## Qué falta para el cierre final
+## Conclusión de resultados
 
-Esta sección todavía no debe tratarse como cierre estadístico definitivo. Para eso falta:
-
-- cerrar `campaign-base-r5` con `21 × 4 × 5 = 420` corridas válidas
-- regenerar el paquete estadístico final con la campaña base extendida
-- actualizar tablas y narrativa final con la evidencia completa post-freeze
-
-Mientras eso no ocurra, el estado correcto es:
-
-- benchmark: congelado
-- ejecución: en curso post-freeze
-- análisis: interino, no final
+El bloque principal de ejecución y análisis post-freeze ya quedó cerrado para estas campañas. El benchmark está congelado, el modelo base cuenta con una campaña extendida `r5`, existe un segundo modelo comparativo cerrado y ya hay un paquete estadístico final reproducible para este conjunto de evidencia.

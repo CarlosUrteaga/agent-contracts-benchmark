@@ -14,22 +14,23 @@ The benchmark identity is anchored by:
 
 ## Closed Post-Freeze Campaigns
 
-Two post-freeze campaigns are already closed:
+Three post-freeze campaigns are now closed:
 
 - `campaign-base-r3`
   - model: `litellm:ollama_chat/qwen2.5:7b`
   - size: `21 × 4 × 3 = 252` runs
+- `campaign-base-r5`
+  - model: `litellm:ollama_chat/qwen2.5:7b`
+  - size: `21 × 4 × 5 = 420` runs
 - `campaign-gemma4-r3`
   - model: `litellm:ollama_chat/gemma4:26b`
   - size: `21 × 4 × 3 = 252` runs
 
-The target base-model extension `campaign-base-r5` is still pending and remains part of the final closeout gate.
+## Final Statistical Artifact
 
-## Current Statistical Artifact
+The current final inferential package is:
 
-The current inferential package is:
-
-- [results/enforcement/statistics/interim-base-r3-plus-gemma4-r3.json](/Users/carlos.urteaga/git-clone/Architectural-Contracts/results/enforcement/statistics/interim-base-r3-plus-gemma4-r3.json:1)
+- [results/enforcement/statistics/final-base-r3-base-r5-gemma4-r3.json](/Users/carlos.urteaga/git-clone/Architectural-Contracts/results/enforcement/statistics/final-base-r3-base-r5-gemma4-r3.json:1)
 
 It provides:
 
@@ -41,48 +42,46 @@ It provides:
   - `guarded vs advisory`
 - campaign-separated reporting by model and benchmark version
 
-## Main Interim Result
+## Final Base-Model Result
 
-The strongest current result remains the safety-utility gap between `guarded` and `strict` on the closed base campaign:
+The strongest result is still the safety-utility gap between `guarded` and `strict`, and it remains stable after extending the base model from `r3` to `r5`.
 
-- `guarded successful_safe_completion_rate = 0.888889`
-- `strict successful_safe_completion_rate = 0.333333`
-- paired difference: `0.555556`
-- `95%` bootstrap CI: `[0.428572, 0.68254]`
+On `campaign-base-r5`:
+
+- `guarded successful_safe_completion_rate = 0.904762`
+- `strict successful_safe_completion_rate = 0.342857`
+- paired difference: `0.561905`
+- `95%` bootstrap CI: `[0.466666, 0.657143]`
 
 Both `guarded` and `strict` preserve:
 
 - `governance_effectiveness = 1.0`
 
-So the present evidence still supports the core thesis claim that recovery-capable enforcement can preserve more useful completion than immediate-abort enforcement while maintaining prevention.
+So the final base-model evidence continues to support the core thesis claim that recovery-capable enforcement preserves more useful completion than immediate-abort enforcement while maintaining prevention.
 
 ## Second-Model Readout
 
-The closed Gemma campaign shows that post-freeze analysis is now sensitive to backend behavior rather than benchmark drift:
+The closed Gemma campaign shows that post-freeze analysis is sensitive to backend behavior rather than benchmark drift:
 
+- `guarded successful_safe_completion_rate = 0.730159`
+- `strict successful_safe_completion_rate = 0.0`
 - `guarded governance_effectiveness = 1.0`
-- `guarded precision = 1.0`
-- `guarded recall = 0.222222`
 - `guarded f1 = 0.363636`
 
 This is not grounds to reopen the benchmark. It is a model-level result under the same frozen benchmark.
 
-## What Is Final vs Interim
+## What Is Now Complete
 
-Final already completed:
+Completed for this stage:
 
 - benchmark freeze
 - execution manifests
 - campaign validation and closeout for `campaign-base-r3`
+- campaign validation and closeout for `campaign-base-r5`
 - campaign validation and closeout for `campaign-gemma4-r3`
 - bootstrap statistics tooling
-
-Still pending before final post-freeze results:
-
-- close `campaign-base-r5`
-- regenerate the final statistics package including the extended base campaign
-- refresh final result tables and thesis narrative from that complete set
+- final post-freeze statistics for the currently closed campaigns
 
 ## Bottom Line
 
-The benchmark is frozen and operational. Post-freeze execution is underway with two closed campaigns and a working bootstrap analysis package. The evidence is already thesis-relevant, but the final statistical close for this stage still depends on `campaign-base-r5`.
+The benchmark is frozen and operational. The base model now has both `r3` and `r5` closed campaigns, the second model has a closed comparative campaign, and the final statistical package for these closed campaigns is already generated. The central result remains the same: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while model choice materially affects detection quality and operational behavior.

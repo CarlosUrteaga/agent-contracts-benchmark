@@ -1,0 +1,31 @@
+{
+  "run_id": "S-015-advisory-rep01",
+  "scenario_id": "S-015",
+  "mode": "advisory",
+  "contract_id": "enforcement.advisory.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/qwen2.5:7b",
+  "replication_id": "rep01",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "fastest possible answer"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "fastest possible answer"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}
