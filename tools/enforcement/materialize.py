@@ -59,6 +59,118 @@ DEFAULT_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+GEMMA4_26B_PROFILE = {
+    "profile_id": "litellm-ollama-gemma4-26b",
+    "provider": "litellm",
+    "model_id": "ollama_chat/gemma4:26b",
+    "declared_model_version": "gemma4:26b",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+GEMMA4_31B_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-gemma4-31b-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/gemma4:31b-cloud",
+    "declared_model_version": "gemma4:31b-cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+GPT_OSS_120B_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-gpt-oss-120b-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/gpt-oss:120b-cloud",
+    "declared_model_version": "gpt-oss:120b-cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+KIMI_K26_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-kimi-k26-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/kimi-k2.6:cloud",
+    "declared_model_version": "kimi-k2.6:cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+DEEPSEEK_V4_PRO_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-deepseek-v4-pro-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/deepseek-v4-pro:cloud",
+    "declared_model_version": "deepseek-v4-pro:cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+GLM_52_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-glm52-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/glm-5.2:cloud",
+    "declared_model_version": "glm-5.2:cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+QWEN35_397B_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-qwen35-397b-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/qwen3.5:397b-cloud",
+    "declared_model_version": "qwen3.5:397b-cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 OPENAI_FALLBACK_PROFILE = {
     "profile_id": "openai-chatcompletions-fallback",
     "provider": "openai_chat_completions",
@@ -70,6 +182,19 @@ OPENAI_FALLBACK_PROFILE = {
     "retry_policy": {"max_retries": 2},
     "seed": None,
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+CORE_MODEL_PROFILES = {
+    "mock.yaml": MOCK_PROFILE,
+    "default.yaml": DEFAULT_PROFILE,
+    "gemma4_26b.yaml": GEMMA4_26B_PROFILE,
+    "gemma4_31b_cloud.yaml": GEMMA4_31B_CLOUD_PROFILE,
+    "gpt_oss_120b_cloud.yaml": GPT_OSS_120B_CLOUD_PROFILE,
+    "kimi_k26_cloud.yaml": KIMI_K26_CLOUD_PROFILE,
+    "deepseek_v4_pro_cloud.yaml": DEEPSEEK_V4_PRO_CLOUD_PROFILE,
+    "glm_52_cloud.yaml": GLM_52_CLOUD_PROFILE,
+    "qwen35_397b_cloud.yaml": QWEN35_397B_CLOUD_PROFILE,
+    "openai_chat.yaml": OPENAI_FALLBACK_PROFILE,
 }
 
 BENCHMARK_VERSION = "benchmark-v1.1"
@@ -604,34 +729,29 @@ def materialize(out_root: Path) -> dict[str, int]:
             for path in sorted(managed_root.rglob("*"), reverse=True):
                 if path.is_file():
                     path.unlink()
-    for profile_name in ["mock.yaml", "default.yaml", "openai_chat.yaml"]:
+    for profile_name in CORE_MODEL_PROFILES:
         (model_profiles_root / profile_name).unlink(missing_ok=True)
 
     write_text(system_prompt_path, SYSTEM_PROMPT_TEXT)
-    write_json(model_profiles_root / "mock.yaml", MOCK_PROFILE)
-    write_json(model_profiles_root / "default.yaml", DEFAULT_PROFILE)
-    write_json(model_profiles_root / "openai_chat.yaml", OPENAI_FALLBACK_PROFILE)
+    for profile_name, profile_payload in CORE_MODEL_PROFILES.items():
+        write_json(model_profiles_root / profile_name, profile_payload)
 
     tool_defs = build_tool_definitions()
-    default_agent_fingerprint = compute_agent_configuration_fingerprint(
-        system_prompt=SYSTEM_PROMPT_TEXT,
-        model_profile=DEFAULT_PROFILE,
-        tool_definitions=tool_defs,
-        memory_policy="allowed-scope-only",
-        runtime_version="enforcement-runtime-v2",
-    )
-    mock_agent_fingerprint = compute_agent_configuration_fingerprint(
-        system_prompt=SYSTEM_PROMPT_TEXT,
-        model_profile=MOCK_PROFILE,
-        tool_definitions=tool_defs,
-        memory_policy="allowed-scope-only",
-        runtime_version="enforcement-runtime-v2",
-    )
+    approved_agent_fingerprints = [
+        compute_agent_configuration_fingerprint(
+            system_prompt=SYSTEM_PROMPT_TEXT,
+            model_profile=profile_payload,
+            tool_definitions=tool_defs,
+            memory_policy="allowed-scope-only",
+            runtime_version="enforcement-runtime-v2",
+        )
+        for profile_payload in CORE_MODEL_PROFILES.values()
+    ]
 
     for mode in MODES:
         write_json(
             contracts_root / f"{mode}.yaml",
-            _contract(mode, [default_agent_fingerprint, mock_agent_fingerprint]),
+            _contract(mode, approved_agent_fingerprints),
         )
 
     scenarios = _scenario_catalog()

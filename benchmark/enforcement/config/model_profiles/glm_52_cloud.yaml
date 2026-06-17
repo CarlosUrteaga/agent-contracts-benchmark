@@ -1,0 +1,17 @@
+{
+  "profile_id": "litellm-ollama-glm52-cloud",
+  "provider": "litellm",
+  "model_id": "ollama_chat/glm-5.2:cloud",
+  "declared_model_version": "glm-5.2:cloud",
+  "temperature": 0.2,
+  "max_tokens": 700,
+  "timeout": 60,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "api_base": "http://localhost:11434",
+  "api_key_env": null,
+  "litellm_params": {},
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}

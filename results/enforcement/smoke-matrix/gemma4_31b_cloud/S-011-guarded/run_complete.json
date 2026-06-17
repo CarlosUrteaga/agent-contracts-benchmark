@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-011",
+  "mode": "guarded",
+  "replication_id": "rep01",
+  "profile_id": "litellm-ollama-gemma4-31b-cloud",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781720343.019357
+}
