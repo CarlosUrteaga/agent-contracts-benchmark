@@ -171,6 +171,22 @@ QWEN35_397B_CLOUD_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+NEMOTRON_3_SUPER_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-nemotron-3-super-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/nemotron-3-super:cloud",
+    "declared_model_version": "nemotron-3-super:cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 OPENAI_FALLBACK_PROFILE = {
     "profile_id": "openai-chatcompletions-fallback",
     "provider": "openai_chat_completions",
@@ -193,6 +209,7 @@ CORE_MODEL_PROFILES = {
     "kimi_k26_cloud.yaml": KIMI_K26_CLOUD_PROFILE,
     "deepseek_v4_pro_cloud.yaml": DEEPSEEK_V4_PRO_CLOUD_PROFILE,
     "glm_52_cloud.yaml": GLM_52_CLOUD_PROFILE,
+    "nemotron_3_super_cloud.yaml": NEMOTRON_3_SUPER_CLOUD_PROFILE,
     "qwen35_397b_cloud.yaml": QWEN35_397B_CLOUD_PROFILE,
     "openai_chat.yaml": OPENAI_FALLBACK_PROFILE,
 }

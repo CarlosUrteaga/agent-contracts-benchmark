@@ -27,6 +27,9 @@
       "fingerprint": "sha256:f03d57e7817a2770a019c262ded771868fe88a9a22a9432161537cbff9a62159"
     },
     {
+      "fingerprint": "sha256:03c1554d5671ff19582e5d7ac2ef59b23f563a29bac07885e24b3a4b3bd57af1"
+    },
+    {
       "fingerprint": "sha256:e97afe5c1f9c63088b65db1805b73bce21b122566a16b528f2f4d95617d09579"
     },
     {
@@ -71,5 +74,5 @@
     "guarded_denial_style": "minimal",
     "strict_replanning_after_violation": false
   },
-  "contract_fingerprint": "sha256:850cd0f3f9f6c08571138d3b82169faa6c88ec1bf4cfad42d571f70d53926fa4"
+  "contract_fingerprint": "sha256:d66b3126a6bb879d72d68eac31a67e2d75157378a2a8a93e2d28cc813f8b5ec1"
 }
