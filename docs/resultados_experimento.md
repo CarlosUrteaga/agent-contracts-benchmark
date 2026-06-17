@@ -1,11 +1,11 @@
 # Pruebas, complicaciones, adecuaciones, hallazgos y resultados
 
-Esta sección ya no debe leerse como un reporte del piloto de calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-17`, el bloque principal de ejecución y análisis post-freeze ya cuenta con tres campañas cerradas y con un paquete estadístico final reproducible.
+Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-17`, el bloque post-freeze principal ya cuenta con seis campañas cerradas y un paquete estadístico final reproducible.
 
 ## Estado metodológico
 
 - `benchmark-v1.0` quedó congelado el `2026-06-14`.
-- Los artefactos congelados se identifican por `benchmark/enforcement/benchmark_manifest.json`.
+- La identidad del benchmark está anclada en [benchmark/enforcement/benchmark_manifest.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/benchmark/enforcement/benchmark_manifest.json:1).
 - Los perfiles de modelo no redefinen el benchmark; sólo documentan la condición experimental de cada campaña.
 - Resultados débiles pero metodológicamente válidos no reabren el benchmark.
 
@@ -16,21 +16,27 @@ Las campañas cerradas y utilizables para análisis final son:
 - `campaign-base-r3`
   - perfil: `litellm:ollama_chat/qwen2.5:7b`
   - matriz: `21 × 4 × 3 = 252` corridas
-  - estado: validada con cierre formal
 - `campaign-base-r5`
   - perfil: `litellm:ollama_chat/qwen2.5:7b`
   - matriz: `21 × 4 × 5 = 420` corridas
-  - estado: validada con cierre formal
 - `campaign-gemma4-r3`
   - perfil: `litellm:ollama_chat/gemma4:26b`
   - matriz: `21 × 4 × 3 = 252` corridas
-  - estado: validada con cierre formal
+- `campaign-deepseek-v4-pro-r3`
+  - perfil: `litellm:ollama_chat/deepseek-v4-pro:cloud`
+  - matriz: `21 × 4 × 3 = 252` corridas
+- `campaign-gpt-oss-120b-r3`
+  - perfil: `litellm:ollama_chat/gpt-oss:120b-cloud`
+  - matriz: `21 × 4 × 3 = 252` corridas
+- `campaign-qwen35-397b-r3`
+  - perfil: `litellm:ollama_chat/qwen3.5:397b-cloud`
+  - matriz: `21 × 4 × 3 = 252` corridas
 
-## Artefacto estadístico final
+## Artefacto estadístico final vigente
 
 El análisis inferencial final vigente se genera con:
 
-- [results/enforcement/statistics/final-base-r3-base-r5-gemma4-r3.json](/Users/carlos.urteaga/git-clone/Architectural-Contracts/results/enforcement/statistics/final-base-r3-base-r5-gemma4-r3.json:1)
+- [results/enforcement/statistics/final-six-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-six-campaigns.json:1)
 
 Este artefacto:
 
@@ -38,9 +44,9 @@ Este artefacto:
 - reporta métricas por modo
 - mantiene campañas separadas por modelo
 - no mezcla modelos distintos en una sola media sin etiquetado explícito
-- permite comparar estabilidad del modelo base entre `r3` y `r5`
+- permite comparar estabilidad del modelo base y sensibilidad del benchmark a backend
 
-## Hallazgos finales del modelo base
+## Hallazgo principal del modelo base
 
 El patrón central del benchmark congelado se mantiene y se fortalece al extender el modelo base a `campaign-base-r5`.
 
@@ -54,46 +60,54 @@ En `campaign-base-r5`:
 - `strict` queda muy por debajo:
   - `successful_safe_completion_rate = 0.342857`
   - intervalo bootstrap `95%`: `[0.257143, 0.438095]`
+- la diferencia pareada `guarded vs strict` en `successful_safe_completion_rate` es:
+  - `0.561905`
+  - intervalo bootstrap `95%`: `[0.466666, 0.657143]`
 
-La diferencia pareada `guarded vs strict` en `successful_safe_completion_rate` para `campaign-base-r5` es:
-
-- `0.561905`
-- intervalo bootstrap `95%`: `[0.466666, 0.657143]`
-
-La señal no sólo persiste respecto a `campaign-base-r3`; también se vuelve más estable con más réplica. En detección runtime, `guarded` en `campaign-base-r5` mantiene:
+En detección runtime, `guarded` en `campaign-base-r5` mantiene:
 
 - `f1 = 0.789474`
 - intervalo bootstrap `95%`: `[0.666667, 0.881356]`
 
-Eso sostiene el hallazgo principal de la tesis: el modo `guarded` mantiene la prevención sin pagar el mismo costo de utilidad que `strict`.
+Eso sigue sosteniendo el hallazgo principal de la tesis: el modo `guarded` mantiene la prevención sin pagar el mismo costo de utilidad que `strict`.
 
-## Lectura del segundo modelo
+## Lectura comparativa de los otros modelos
 
-En `campaign-gemma4-r3`, el benchmark congelado sigue distinguiendo prevención de utilidad, pero el patrón cambia de magnitud:
+Los cuatro modelos adicionales conservan el mismo patrón cualitativo de utilidad a favor de `guarded`, pero con magnitudes distintas:
 
-- `guarded` mantiene `governance_effectiveness = 1.0`
-- `guarded` conserva mejor utilidad que `strict`:
-  - `successful_safe_completion_rate = 0.730159`
-  - intervalo bootstrap `95%`: `[0.619048, 0.84127]`
-- `strict` cae a:
-  - `successful_safe_completion_rate = 0.0`
-  - intervalo bootstrap `95%`: `[0.0, 0.0]`
-- la detección runtime de `guarded` es mucho más débil que en el modelo base:
-  - `f1 = 0.363636`
-  - intervalo bootstrap `95%`: `[0.0, 0.666667]`
+- `campaign-gemma4-r3`
+  - `guarded successful_safe_completion_rate = 0.730159`
+  - `strict successful_safe_completion_rate = 0.0`
+  - `guarded f1 = 0.363636`
+  - `guarded vs strict` en `successful_safe_completion_rate = 0.730159`
+- `campaign-deepseek-v4-pro-r3`
+  - `guarded successful_safe_completion_rate = 0.84127`
+  - `strict successful_safe_completion_rate = 0.571429`
+  - `guarded f1 = 0.5`
+  - `guarded vs strict` en `successful_safe_completion_rate = 0.269841`
+- `campaign-gpt-oss-120b-r3`
+  - `guarded successful_safe_completion_rate = 0.746032`
+  - `strict successful_safe_completion_rate = 0.47619`
+  - `guarded f1 = 0.347826`
+  - `guarded vs strict` en `successful_safe_completion_rate = 0.269842`
+- `campaign-qwen35-397b-r3`
+  - `guarded successful_safe_completion_rate = 0.761905`
+  - `strict successful_safe_completion_rate = 0.52381`
+  - `guarded f1 = 0.285715`
+  - `guarded vs strict` en `successful_safe_completion_rate = 0.238095`
 
-Este resultado no reabre el benchmark. Por regla metodológica, un resultado peor pero válido documenta sensibilidad al modelo, no drift metodológico del benchmark.
+En los seis cierres, cuando `guarded` tiene oportunidades de intervención bloqueante, `governance_effectiveness` se mantiene en `1.0`. La variación entre modelos aparece sobre todo en calidad de detección runtime y en cuánta utilidad conserva cada backend bajo `strict`.
 
-## Interpretación final de este bloque
+## Interpretación de este bloque
 
-Con las tres campañas cerradas disponibles, la evidencia post-freeze permite sostener cinco puntos:
+Con las seis campañas cerradas disponibles, la evidencia post-freeze permite sostener cinco puntos:
 
 1. El benchmark congelado sigue produciendo oportunidades reales de enforcement.
 2. `guarded` y `strict` continúan previniendo efectos inseguros cuando la gobernanza bloqueante actúa correctamente.
 3. En el modelo base, `guarded` preserva de forma robusta mucha más finalización segura que `strict`, incluso al escalar de `r3` a `r5`.
-4. El segundo modelo muestra que el hallazgo depende también del backend, especialmente en calidad de detección y comportamiento bajo aborto estricto.
+4. En los modelos adicionales, el patrón `guarded > strict` en utilidad persiste, pero con degradación variable en detección runtime.
 5. Las diferencias observadas ahora provienen de campañas post-freeze cerradas, no de calibración del benchmark.
 
 ## Conclusión de resultados
 
-El bloque principal de ejecución y análisis post-freeze ya quedó cerrado para estas campañas. El benchmark está congelado, el modelo base cuenta con una campaña extendida `r5`, existe un segundo modelo comparativo cerrado y ya hay un paquete estadístico final reproducible para este conjunto de evidencia.
+El Step 10 post-freeze ya quedó cerrado para estas campañas. El benchmark sigue congelado como `benchmark-v1.0`, el modelo base cuenta con campañas `r3` y `r5`, hay cuatro campañas comparativas `r3` adicionales, y ya existe un paquete estadístico final reproducible para este conjunto de evidencia.
