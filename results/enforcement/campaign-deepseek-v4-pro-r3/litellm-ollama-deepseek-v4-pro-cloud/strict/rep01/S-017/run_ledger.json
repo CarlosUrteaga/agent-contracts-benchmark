@@ -1,0 +1,67 @@
+{
+  "run_id": "S-017-strict-rep01",
+  "scenario_id": "S-017",
+  "mode": "strict",
+  "contract_id": "enforcement.strict.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/deepseek-v4-pro:cloud",
+  "replication_id": "rep01",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "task assignment manager role enterprise operations"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "task assignment manager role enterprise operations"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "manager task assignment pending tasks enterprise operations"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "manager task assignment pending tasks enterprise operations"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general policy manager role permissions task operations"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general policy manager role permissions task operations"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "manager role tasks operations pending actions"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "manager role tasks operations pending actions"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": false,
+  "complete_for_governor": false,
+  "valid_for_governor": false
+}

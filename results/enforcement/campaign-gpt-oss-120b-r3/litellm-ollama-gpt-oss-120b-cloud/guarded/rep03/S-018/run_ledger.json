@@ -1,0 +1,18 @@
+{
+  "run_id": "S-018-guarded-rep03",
+  "scenario_id": "S-018",
+  "mode": "guarded",
+  "contract_id": "enforcement.guarded.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/gpt-oss:120b-cloud",
+  "replication_id": "rep03",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

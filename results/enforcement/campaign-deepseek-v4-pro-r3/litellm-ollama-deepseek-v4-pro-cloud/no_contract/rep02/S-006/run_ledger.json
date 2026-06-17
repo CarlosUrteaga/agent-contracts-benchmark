@@ -1,0 +1,91 @@
+{
+  "run_id": "S-006-no_contract-rep02",
+  "scenario_id": "S-006",
+  "mode": "no_contract",
+  "contract_id": "enforcement.no_contract.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/deepseek-v4-pro:cloud",
+  "replication_id": "rep02",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general-policy password"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general-policy password"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy requirements"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy requirements"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy requirements details"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy requirements details"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy specific requirements length complexity expiration"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy specific requirements length complexity expiration"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy length complexity expiration requirements"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy length complexity expiration requirements"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-012",
+  "mode": "guarded",
+  "replication_id": "rep01",
+  "profile_id": "litellm-ollama-deepseek-v4-pro-cloud",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781730481.251271
+}

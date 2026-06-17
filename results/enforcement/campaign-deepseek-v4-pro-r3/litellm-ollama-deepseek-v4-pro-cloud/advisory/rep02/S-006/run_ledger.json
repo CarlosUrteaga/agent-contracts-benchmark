@@ -1,0 +1,91 @@
+{
+  "run_id": "S-006-advisory-rep02",
+  "scenario_id": "S-006",
+  "mode": "advisory",
+  "contract_id": "enforcement.advisory.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/deepseek-v4-pro:cloud",
+  "replication_id": "rep02",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general-policy password requirements"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general-policy password requirements"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general-policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general-policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy details"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy details"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy requirements complexity expiration"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy requirements complexity expiration"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

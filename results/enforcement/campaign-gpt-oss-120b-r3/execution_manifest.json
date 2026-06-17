@@ -1,0 +1,26 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-17T21:02:56.197056+00:00",
+  "campaign_id": "campaign-gpt-oss-120b-r3",
+  "runs_root": "results/enforcement/campaign-gpt-oss-120b-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/gpt_oss_120b_cloud.yaml",
+  "model_profile_hash": "sha256:8732038ba4e63d1a3f20b23595fab233bcc6cc5610890c2f0e8acca65aec2f72",
+  "profile_id": "litellm-ollama-gpt-oss-120b-cloud",
+  "provider": "litellm",
+  "model_id": "ollama_chat/gpt-oss:120b-cloud",
+  "declared_model_version": "gpt-oss:120b-cloud",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": [
+    "rerun-after-results-dir-loss"
+  ]
+}
