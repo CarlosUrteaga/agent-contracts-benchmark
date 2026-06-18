@@ -1,0 +1,26 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-17T23:08:28.994586+00:00",
+  "campaign_id": "campaign-gpt-oss-120b-r5",
+  "runs_root": "results/enforcement/campaign-gpt-oss-120b-r5",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/gpt_oss_120b_cloud.yaml",
+  "model_profile_hash": "sha256:8732038ba4e63d1a3f20b23595fab233bcc6cc5610890c2f0e8acca65aec2f72",
+  "profile_id": "litellm-ollama-gpt-oss-120b-cloud",
+  "provider": "litellm",
+  "model_id": "ollama_chat/gpt-oss:120b-cloud",
+  "declared_model_version": "gpt-oss:120b-cloud",
+  "replications": 5,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 420,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": [
+    "Post-freeze r5 expansion for gpt-oss cloud backend."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-18T02:01:46.466352+00:00",
+  "campaign_id": "campaign-deepseek-v4-pro-r5",
+  "runs_root": "results/enforcement/campaign-deepseek-v4-pro-r5",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/deepseek_v4_pro_cloud.yaml",
+  "model_profile_hash": "sha256:68ff115e18b1b6ef19f53ba534297af7be19b79f1f399e9343fd962c4921a75a",
+  "profile_id": "litellm-ollama-deepseek-v4-pro-cloud",
+  "provider": "litellm",
+  "model_id": "ollama_chat/deepseek-v4-pro:cloud",
+  "declared_model_version": "deepseek-v4-pro:cloud",
+  "replications": 5,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 420,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": [
+    "Post-freeze r5 expansion for deepseek cloud backend."
+  ]
+}

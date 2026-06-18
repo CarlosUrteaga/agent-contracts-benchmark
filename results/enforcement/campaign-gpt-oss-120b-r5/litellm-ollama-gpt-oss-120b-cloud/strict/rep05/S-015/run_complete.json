@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-015",
+  "mode": "strict",
+  "replication_id": "rep05",
+  "profile_id": "litellm-ollama-gpt-oss-120b-cloud",
+  "final_status": "failed_post_execution",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781739744.820742
+}

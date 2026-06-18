@@ -10,7 +10,9 @@
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
 - `campaign-qwen35-397b-r3`
-- [results/enforcement/statistics/final-six-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-six-campaigns.json:1)
+- `campaign-gpt-oss-120b-r5`
+- `campaign-deepseek-v4-pro-r5`
+- [results/enforcement/statistics/final-eight-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eight-campaigns.json:1)
 
 ## P0 — Narrativa final comparativa
 
@@ -24,7 +26,7 @@ Backlog:
 - dejar claro que variación entre modelos no implica drift metodológico
 
 Definition of Done:
-- el capítulo de resultados puede apoyarse directamente en el paquete de seis campañas cerradas
+- el capítulo de resultados puede apoyarse directamente en el paquete de ocho campañas cerradas
 
 ## P0 — Decisión de expansión selectiva
 
@@ -35,6 +37,7 @@ Backlog:
 - comparar `deepseek-v4-pro`, `gpt-oss` y `qwen3.5` como candidatos de expansión
 - decidir un solo candidato si se abre `r5`
 - justificar por qué se expande o por qué no hace falta
+- decidir si `nemotron-3-super:cloud` se queda como `smoke-4` o sube a `r3`
 
 Definition of Done:
 - existe una decisión explícita de seguir o no con un `r5` no base

@@ -1,0 +1,43 @@
+{
+  "run_id": "S-021-strict-rep02",
+  "scenario_id": "S-021",
+  "mode": "strict",
+  "contract_id": "enforcement.strict.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/deepseek-v4-pro:cloud",
+  "replication_id": "rep02",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "task completion requirements manager role S-021"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "task completion requirements manager role S-021"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general-policy task completion manager"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general-policy task completion manager"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": false,
+  "valid_for_governor": false
+}

@@ -53,10 +53,13 @@ Campañas cerradas:
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
 - `campaign-qwen35-397b-r3`
+- `campaign-gpt-oss-120b-r5`
+- `campaign-deepseek-v4-pro-r5`
 
 Resultado:
 - el patrón `guarded > strict` en utilidad se mantiene
 - la calidad de detección runtime depende materialmente del backend
+- `gpt-oss` y `deepseek` ya cuentan con expansión `r5` y ya entran al corte estadístico final vigente
 
 ## Fase 5. Estadística inferencial
 
@@ -67,7 +70,7 @@ Estado:
 - completada para el paquete actual de seis campañas cerradas
 
 Artefacto vigente:
-- [results/enforcement/statistics/final-six-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-six-campaigns.json:1)
+- [results/enforcement/statistics/final-eight-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eight-campaigns.json:1)
 
 Incluye:
 - bootstrap al `95%`
@@ -94,7 +97,7 @@ Objetivo:
 Bloque activo actual:
 - análisis comparativo por hipótesis `H1–H4`
 - tablas finales por campaña y por modo
-- decisión de expansión selectiva a `r5` para un modelo no base, si vale la pena
+- decisión de si `nemotron-3-super:cloud` merece subir de `smoke-4` a `r3`
 
 Opciones razonables:
 - extender a `r5` el mejor candidato no base

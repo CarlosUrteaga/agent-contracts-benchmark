@@ -14,7 +14,7 @@ The benchmark identity is anchored by:
 
 ## Closed Post-Freeze Campaigns
 
-Six post-freeze campaigns are now closed:
+Eight post-freeze campaigns are now closed:
 
 - `campaign-base-r3`
   - model: `litellm:ollama_chat/qwen2.5:7b`
@@ -34,12 +34,18 @@ Six post-freeze campaigns are now closed:
 - `campaign-qwen35-397b-r3`
   - model: `litellm:ollama_chat/qwen3.5:397b-cloud`
   - size: `21 × 4 × 3 = 252` runs
+- `campaign-gpt-oss-120b-r5`
+  - model: `litellm:ollama_chat/gpt-oss:120b-cloud`
+  - size: `21 × 4 × 5 = 420` runs
+- `campaign-deepseek-v4-pro-r5`
+  - model: `litellm:ollama_chat/deepseek-v4-pro:cloud`
+  - size: `21 × 4 × 5 = 420` runs
 
 ## Final Statistical Artifact
 
 The current final inferential package is:
 
-- [results/enforcement/statistics/final-six-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-six-campaigns.json:1)
+- [results/enforcement/statistics/final-eight-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eight-campaigns.json:1)
 
 It provides:
 
@@ -50,6 +56,10 @@ It provides:
   - `guarded vs no_contract`
   - `guarded vs advisory`
 - campaign-separated reporting by model and benchmark version
+
+Current scope note:
+
+- `nemotron-3-super:cloud` currently exists only as a `smoke-4` screen
 
 ## Final Base-Model Result
 
@@ -78,14 +88,32 @@ The additional closed campaigns keep the same qualitative utility ordering, but 
 - `deepseek-v4-pro:cloud`
   - `guarded successful_safe_completion_rate = 0.84127`
   - `guarded f1 = 0.5`
+- `deepseek-v4-pro:cloud` at `r5`
+  - `guarded successful_safe_completion_rate = 0.828571`
+  - `strict successful_safe_completion_rate = 0.571429`
+  - `guarded f1 = 0.333333`
 - `gpt-oss:120b-cloud`
   - `guarded successful_safe_completion_rate = 0.746032`
   - `guarded f1 = 0.347826`
 - `qwen3.5:397b-cloud`
   - `guarded successful_safe_completion_rate = 0.761905`
   - `guarded f1 = 0.285715`
+- `gpt-oss:120b-cloud` at `r5`
+  - `guarded successful_safe_completion_rate = 0.752381`
+  - `strict successful_safe_completion_rate = 0.495238`
+  - `guarded f1 = 0.222222`
 
 This is not grounds to reopen the benchmark. It is model-level variance under the same frozen benchmark.
+
+## Exploratory Smoke Screen
+
+`nemotron-3-super:cloud` has already been integrated at the contract/fingerprint level and screened with the standard `smoke-4` battery:
+
+- accepted runs: `2/4`
+- passes: `S-001 guarded`, `S-011 guarded`
+- fails: `S-012 strict`, `S-013 guarded`
+
+This is enough for prioritization, but not yet a substitute for a closed `r3` campaign.
 
 ## What Is Now Complete
 
@@ -99,9 +127,12 @@ Completed for this stage:
 - campaign validation and closeout for `campaign-deepseek-v4-pro-r3`
 - campaign validation and closeout for `campaign-gpt-oss-120b-r3`
 - campaign validation and closeout for `campaign-qwen35-397b-r3`
+- campaign validation and closeout for `campaign-gpt-oss-120b-r5`
+- campaign validation and closeout for `campaign-deepseek-v4-pro-r5`
+- `smoke-4` integration for `nemotron-3-super:cloud`
 - bootstrap statistics tooling
 - final post-freeze statistics for the currently closed campaigns
 
 ## Bottom Line
 
-The benchmark is frozen and operational. The base model now has both `r3` and `r5` closed campaigns, four additional post-freeze comparative campaigns are closed, and the final statistical package for these six campaigns is already generated. The central result remains the same: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while model choice materially affects detection quality and operational behavior.
+The benchmark is frozen and operational. The base model now has both `r3` and `r5` closed campaigns, six additional post-freeze comparative campaigns are closed, `nemotron-3-super:cloud` has already passed exploratory smoke screening, and the final statistical package for the current eight-campaign cut is already generated. The central result remains the same: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while model choice materially affects detection quality and operational behavior.
