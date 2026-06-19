@@ -9,24 +9,31 @@
 - `campaign-gemma4-r3`
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
+- `campaign-kimi-k26-r3`
+- `campaign-kimi-k26-r5`
+- `campaign-kimi-k27-code-r3`
+- `campaign-kimi-k27-code-r5`
 - `campaign-qwen35-397b-r3`
 - `campaign-gpt-oss-120b-r5`
 - `campaign-deepseek-v4-pro-r5`
-- [results/enforcement/statistics/final-eight-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eight-campaigns.json:1)
+- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
 
 ## P0 — Narrativa final comparativa
 
 Objetivo:
 - convertir el cierre estadístico actual en tablas y argumentos doctorales explícitos
 
-Backlog:
-- redactar comparación por hipótesis `H1–H4`
-- consolidar tabla por campaña y por modo
-- explicitar qué cambia entre utilidad, prevención y detección runtime
-- dejar claro que variación entre modelos no implica drift metodológico
+Estado:
+- completado sobre el corte canónico de doce campañas
+
+Entregables cerrados:
+- comparación por hipótesis `H1–H4`
+- lectura separada de prevención, utilidad, detección runtime y overhead
+- aclaración explícita de que la variación entre modelos no implica drift metodológico
+- exclusión explícita de reruns exploratorios y smoke-only artifacts del paquete canónico
 
 Definition of Done:
-- el capítulo de resultados puede apoyarse directamente en el paquete de ocho campañas cerradas
+- el capítulo de resultados puede apoyarse directamente en el paquete de doce campañas cerradas
 
 ## P0 — Decisión de expansión selectiva
 
@@ -38,6 +45,7 @@ Backlog:
 - decidir un solo candidato si se abre `r5`
 - justificar por qué se expande o por qué no hace falta
 - decidir si `nemotron-3-super:cloud` se queda como `smoke-4` o sube a `r3`
+- mantener fuera del corte canónico cualquier rerun exploratorio no cerrado como campaña
 
 Definition of Done:
 - existe una decisión explícita de seguir o no con un `r5` no base

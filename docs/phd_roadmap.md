@@ -46,12 +46,13 @@ Objetivo:
 - reducir dependencia de un solo backend
 
 Estado actual:
-- comparación inicial completada con cuatro campañas `r3` adicionales
+- comparación inicial completada con cinco campañas `r3` adicionales
 
 Campañas cerradas:
 - `campaign-gemma4-r3`
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
+- `campaign-kimi-k26-r3`
 - `campaign-qwen35-397b-r3`
 - `campaign-gpt-oss-120b-r5`
 - `campaign-deepseek-v4-pro-r5`
@@ -67,16 +68,18 @@ Objetivo:
 - transformar resultados descriptivos en evidencia comparativa formal
 
 Estado:
-- completada para el paquete actual de seis campañas cerradas
+- completada para el corte canónico de doce campañas cerradas
 
 Artefacto vigente:
-- [results/enforcement/statistics/final-eight-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eight-campaigns.json:1)
+- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
 
 Incluye:
 - bootstrap al `95%`
 - métricas por modo
-- comparaciones `guarded vs strict`
+- métricas de recuperación y overhead
+- comparaciones `guarded vs strict`, `guarded vs no_contract`, `guarded vs advisory`, `strict vs no_contract`, `strict vs advisory`
 - campañas reportadas por separado, sin mezcla entre modelos
+- cierre narrativo directo para `H1–H4`
 
 ## Fase 6. Oracle formalizado
 
@@ -95,14 +98,14 @@ Objetivo:
 - decidir cómo ampliar evidencia sin reabrir `benchmark-v1.0`
 
 Bloque activo actual:
-- análisis comparativo por hipótesis `H1–H4`
-- tablas finales por campaña y por modo
 - decisión de si `nemotron-3-super:cloud` merece subir de `smoke-4` a `r3`
+- decidir si hace falta otra expansión `r5` no base o si el paquete actual ya es suficiente
+- pasar a ablations o a redacción doctoral con el paquete canónico actual
 
 Opciones razonables:
 - extender a `r5` el mejor candidato no base
 - abrir un bloque de ablations
-- preparar el capítulo de resultados con el paquete actual
+- preparar el capítulo de resultados con el paquete actual, sin incorporar reruns exploratorios
 
 ## Fase 8. Ablations
 
@@ -130,6 +133,6 @@ Incluye:
 
 La secuencia más eficiente desde aquí es:
 
-1. cerrar narrativa comparativa con el paquete estadístico ya generado
-2. decidir un único candidato no base para expansión `r5`, si se necesita más evidencia
-3. pasar a ablations o redacción, no a reabrir benchmark
+1. decidir si hace falta una única expansión selectiva `r5` fuera del modelo base
+2. pasar a ablations si se necesita explicación causal adicional de `guarded > strict`
+3. consolidar redacción doctoral sobre el paquete canónico ya cerrado

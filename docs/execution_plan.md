@@ -651,6 +651,9 @@ La tesis ya tiene una corrida final separada de la fase de calibración.
 
 ## Fase 6. Paquete de análisis
 
+Estado:
+- completada para el corte canónico de doce campañas cerradas
+
 ### Objetivo
 
 Preparar la evidencia que alimentará el capítulo final.
@@ -671,6 +674,21 @@ Preparar la evidencia que alimentará el capítulo final.
 - análisis por familia de escenario
 - análisis de overhead
 - hipótesis `H1–H4`
+
+### Artefactos vigentes
+
+- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
+- [docs/resultados_experimento.md](/Users/carlos.urteaga/git/agent-contracts-benchmark/docs/resultados_experimento.md:1)
+- [docs/EXECUTIVE_SUMMARY.md](/Users/carlos.urteaga/git/agent-contracts-benchmark/docs/EXECUTIVE_SUMMARY.md:1)
+
+### Cierre metodológico actual
+
+- el artefacto estadístico canónico ya cubre prevención, utilidad, detección runtime y overhead
+- `H1–H4` ya quedaron redactadas directamente sobre campañas cerradas
+- `campaign-kimi-k26-r3` ya está incorporada al corte canónico actual
+- `campaign-kimi-k26-r5`, `campaign-kimi-k27-code-r3` y `campaign-kimi-k27-code-r5` ya quedaron incorporadas al corte canónico actual
+- los reruns exploratorios y smoke-only artifacts no se incorporan al paquete canónico
+- el siguiente trabajo ya no es recalcular este bloque, sino decidir expansión selectiva, ablations o redacción
 
 ### Criterio de salida
 
