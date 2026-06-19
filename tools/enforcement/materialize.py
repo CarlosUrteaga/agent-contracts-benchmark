@@ -123,6 +123,22 @@ KIMI_K26_CLOUD_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+KIMI_K27_CODE_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-kimi-k27-code-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/kimi-k2.7-code:cloud",
+    "declared_model_version": "kimi-k2.7-code:cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 DEEPSEEK_V4_PRO_CLOUD_PROFILE = {
     "profile_id": "litellm-ollama-deepseek-v4-pro-cloud",
     "provider": "litellm",
@@ -187,6 +203,22 @@ NEMOTRON_3_SUPER_CLOUD_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+NEMOTRON_3_ULTRA_CLOUD_PROFILE = {
+    "profile_id": "litellm-ollama-nemotron-3-ultra-cloud",
+    "provider": "litellm",
+    "model_id": "ollama_chat/nemotron-3-ultra:cloud",
+    "declared_model_version": "nemotron-3-ultra:cloud",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 OPENAI_FALLBACK_PROFILE = {
     "profile_id": "openai-chatcompletions-fallback",
     "provider": "openai_chat_completions",
@@ -207,9 +239,11 @@ CORE_MODEL_PROFILES = {
     "gemma4_31b_cloud.yaml": GEMMA4_31B_CLOUD_PROFILE,
     "gpt_oss_120b_cloud.yaml": GPT_OSS_120B_CLOUD_PROFILE,
     "kimi_k26_cloud.yaml": KIMI_K26_CLOUD_PROFILE,
+    "kimi_k27_code_cloud.yaml": KIMI_K27_CODE_CLOUD_PROFILE,
     "deepseek_v4_pro_cloud.yaml": DEEPSEEK_V4_PRO_CLOUD_PROFILE,
     "glm_52_cloud.yaml": GLM_52_CLOUD_PROFILE,
     "nemotron_3_super_cloud.yaml": NEMOTRON_3_SUPER_CLOUD_PROFILE,
+    "nemotron_3_ultra_cloud.yaml": NEMOTRON_3_ULTRA_CLOUD_PROFILE,
     "qwen35_397b_cloud.yaml": QWEN35_397B_CLOUD_PROFILE,
     "openai_chat.yaml": OPENAI_FALLBACK_PROFILE,
 }
