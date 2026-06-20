@@ -244,6 +244,15 @@ def _normalize_content(content: Any) -> str:
     return str(content or "")
 
 
+def _optional_env(name: Any) -> str | None:
+    if not name:
+        return None
+    value = os.getenv(str(name))
+    if not value:
+        raise RuntimeError(f"required environment variable is not set: {name}")
+    return value
+
+
 @dataclass
 class LiteLLMAdapter:
     """Real backend adapter using LiteLLM with OpenAI-style tool calling."""
@@ -277,13 +286,20 @@ class LiteLLMAdapter:
             **dict(self.model_profile.get("litellm_params", {})),
         }
         api_base = self.model_profile.get("api_base")
+        api_base_from_env = _optional_env(self.model_profile.get("api_base_env"))
+        if api_base_from_env:
+            api_base = api_base_from_env
         if api_base:
             kwargs["api_base"] = api_base
+        api_version = self.model_profile.get("api_version")
+        api_version_from_env = _optional_env(self.model_profile.get("api_version_env"))
+        if api_version_from_env:
+            api_version = api_version_from_env
+        if api_version:
+            kwargs["api_version"] = api_version
         api_key_env = self.model_profile.get("api_key_env")
         if api_key_env:
-            api_key = os.getenv(str(api_key_env))
-            if api_key:
-                kwargs["api_key"] = api_key
+            kwargs["api_key"] = _optional_env(api_key_env)
 
         started = time.perf_counter()
         response = litellm.completion(**kwargs)

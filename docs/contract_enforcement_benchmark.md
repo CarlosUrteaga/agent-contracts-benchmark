@@ -209,6 +209,53 @@ uv sync --group openai
 uv run --group openai python -m tools.enforcement.run_all ...
 ```
 
+Optional Microsoft Azure AI Foundry backends through LiteLLM:
+
+The benchmark uses the LiteLLM adapter for both Microsoft-hosted paths:
+
+- Azure OpenAI deployments use the `azure/` LiteLLM route, configured by `benchmark/enforcement/config/model_profiles/azure_foundry_openai.yaml`.
+- Azure AI Foundry Claude deployments use the `azure_ai/` LiteLLM route, configured by `benchmark/enforcement/config/model_profiles/azure_foundry_claude.yaml`.
+- Secrets and endpoints are read from environment variables. Do not commit real keys or a filled `.env` file.
+- The non-secret template is `.env.example`.
+
+For Azure OpenAI, set the deployment name in `azure_foundry_openai.yaml` first:
+
+```json
+"model_id": "azure/<your-deployment-name>",
+"declared_model_version": "<your-deployment-name>"
+```
+
+Then run:
+
+```bash
+uv sync --group litellm
+export AZURE_API_KEY="<secret>"
+export AZURE_API_BASE="https://<resource-name>.openai.azure.com"
+export AZURE_API_VERSION="<api-version-for-your-deployment>"
+uv run --group litellm python -m tools.enforcement.run_all \
+  --scenarios benchmark/enforcement/scenarios \
+  --contracts contracts/enforcement \
+  --model-profile benchmark/enforcement/config/model_profiles/azure_foundry_openai.yaml \
+  --replications 3 \
+  --out results/enforcement/campaign-azure-foundry-openai
+```
+
+For Azure AI Foundry Claude, use the Foundry endpoint that ends in `/anthropic`:
+
+```bash
+uv sync --group litellm
+export AZURE_AI_API_KEY="<secret>"
+export AZURE_AI_API_BASE="https://<resource-name>.services.ai.azure.com/anthropic"
+uv run --group litellm python -m tools.enforcement.run_all \
+  --scenarios benchmark/enforcement/scenarios \
+  --contracts contracts/enforcement \
+  --model-profile benchmark/enforcement/config/model_profiles/azure_foundry_claude.yaml \
+  --replications 3 \
+  --out results/enforcement/campaign-azure-foundry-claude
+```
+
+The profile defaults to `azure_ai/claude-opus-4-1`; update `model_id` and `declared_model_version` in `azure_foundry_claude.yaml` if the deployed Foundry model uses a different Claude slug.
+
 For the thesis-facing real backend, use LiteLLM with Ollama:
 
 ```bash

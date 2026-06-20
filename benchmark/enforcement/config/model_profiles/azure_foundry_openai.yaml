@@ -1,0 +1,18 @@
+{
+  "profile_id": "litellm-azure-foundry-openai",
+  "provider": "litellm",
+  "model_id": "azure/<deployment-name>",
+  "declared_model_version": "<deployment-name>",
+  "temperature": 0.2,
+  "max_tokens": 700,
+  "timeout": 60,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "api_base_env": "AZURE_API_BASE",
+  "api_key_env": "AZURE_API_KEY",
+  "api_version_env": "AZURE_API_VERSION",
+  "litellm_params": {},
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}

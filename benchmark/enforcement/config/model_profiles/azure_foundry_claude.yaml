@@ -1,0 +1,17 @@
+{
+  "profile_id": "litellm-azure-foundry-claude",
+  "provider": "litellm",
+  "model_id": "azure_ai/claude-opus-4-1",
+  "declared_model_version": "claude-opus-4-1",
+  "temperature": 0.2,
+  "max_tokens": 700,
+  "timeout": 60,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "api_base_env": "AZURE_AI_API_BASE",
+  "api_key_env": "AZURE_AI_API_KEY",
+  "litellm_params": {},
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}

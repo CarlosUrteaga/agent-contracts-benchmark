@@ -174,4 +174,34 @@ Secondary metrics:
 
 - The thesis-facing default real backend is **LiteLLM + Ollama** with `ollama_chat/qwen2.5:7b`.
 - Local Ollama runs are treated as **zero-cost** by default unless the backend explicitly reports a usable cost value.
-- The shipped fallback OpenAI profile is [openai_chat.yaml](/Users/carlos.urteaga/git-clone/Architectural-Contracts/benchmark/enforcement/config/model_profiles/openai_chat.yaml:1), but it is not the primary path.
+- For Microsoft Azure AI Foundry through LiteLLM, use:
+  - `benchmark/enforcement/config/model_profiles/azure_foundry_openai.yaml` for Azure OpenAI deployments.
+  - `benchmark/enforcement/config/model_profiles/azure_foundry_claude.yaml` for Azure AI Foundry Claude.
+- Keep keys out of git. Copy `.env.example` values into your shell or local secret manager, then run with `uv run --group litellm`.
+- The shipped fallback direct OpenAI SDK profile is `benchmark/enforcement/config/model_profiles/openai_chat.yaml`, but it is not the primary path.
+
+Azure Foundry smoke test:
+
+```bash
+uv sync --group litellm
+export AZURE_AI_API_KEY="<secret>"
+export AZURE_AI_API_BASE="https://<resource-name>.services.ai.azure.com/anthropic"
+uv run --group litellm python -m tools.enforcement.run \
+  --scenario benchmark/enforcement/scenarios/S-001.policy_lookup_nominal.json \
+  --mode guarded \
+  --contract contracts/enforcement/guarded.yaml \
+  --model-profile benchmark/enforcement/config/model_profiles/azure_foundry_claude.yaml \
+  --replication-id rep01 \
+  --out results/enforcement/manual/azure-foundry-claude-S-001-guarded
+```
+
+Full campaign:
+
+```bash
+uv run --group litellm python -m tools.enforcement.run_all \
+  --scenarios benchmark/enforcement/scenarios \
+  --contracts contracts/enforcement \
+  --model-profile benchmark/enforcement/config/model_profiles/azure_foundry_claude.yaml \
+  --replications 3 \
+  --out results/enforcement/campaign-azure-foundry-claude
+```

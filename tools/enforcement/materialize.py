@@ -232,6 +232,39 @@ OPENAI_FALLBACK_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+AZURE_FOUNDRY_OPENAI_PROFILE = {
+    "profile_id": "litellm-azure-foundry-openai",
+    "provider": "litellm",
+    "model_id": "azure/<deployment-name>",
+    "declared_model_version": "<deployment-name>",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base_env": "AZURE_API_BASE",
+    "api_key_env": "AZURE_API_KEY",
+    "api_version_env": "AZURE_API_VERSION",
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
+AZURE_FOUNDRY_CLAUDE_PROFILE = {
+    "profile_id": "litellm-azure-foundry-claude",
+    "provider": "litellm",
+    "model_id": "azure_ai/claude-opus-4-1",
+    "declared_model_version": "claude-opus-4-1",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base_env": "AZURE_AI_API_BASE",
+    "api_key_env": "AZURE_AI_API_KEY",
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 CORE_MODEL_PROFILES = {
     "mock.yaml": MOCK_PROFILE,
     "default.yaml": DEFAULT_PROFILE,
@@ -246,6 +279,8 @@ CORE_MODEL_PROFILES = {
     "nemotron_3_ultra_cloud.yaml": NEMOTRON_3_ULTRA_CLOUD_PROFILE,
     "qwen35_397b_cloud.yaml": QWEN35_397B_CLOUD_PROFILE,
     "openai_chat.yaml": OPENAI_FALLBACK_PROFILE,
+    "azure_foundry_openai.yaml": AZURE_FOUNDRY_OPENAI_PROFILE,
+    "azure_foundry_claude.yaml": AZURE_FOUNDRY_CLAUDE_PROFILE,
 }
 
 BENCHMARK_VERSION = "benchmark-v1.1"
