@@ -13,10 +13,11 @@
 - `campaign-kimi-k26-r5`
 - `campaign-kimi-k27-code-r3`
 - `campaign-kimi-k27-code-r5`
+- `campaign-nemotron-3-ultra-r3`
 - `campaign-qwen35-397b-r3`
 - `campaign-gpt-oss-120b-r5`
 - `campaign-deepseek-v4-pro-r5`
-- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
+- [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1)
 
 ## P0 — Narrativa final comparativa
 
@@ -24,7 +25,7 @@ Objetivo:
 - convertir el cierre estadístico actual en tablas y argumentos doctorales explícitos
 
 Estado:
-- completado sobre el corte canónico de doce campañas
+- completado sobre el corte canónico de trece campañas
 
 Entregables cerrados:
 - comparación por hipótesis `H1–H4`
@@ -33,7 +34,7 @@ Entregables cerrados:
 - exclusión explícita de reruns exploratorios y smoke-only artifacts del paquete canónico
 
 Definition of Done:
-- el capítulo de resultados puede apoyarse directamente en el paquete de doce campañas cerradas
+- el capítulo de resultados puede apoyarse directamente en el paquete de trece campañas cerradas
 
 ## P0 — Decisión de expansión selectiva
 
@@ -44,7 +45,7 @@ Backlog:
 - comparar `deepseek-v4-pro`, `gpt-oss` y `qwen3.5` como candidatos de expansión
 - decidir un solo candidato si se abre `r5`
 - justificar por qué se expande o por qué no hace falta
-- decidir si `nemotron-3-super:cloud` se queda como `smoke-4` o sube a `r3`
+- decidir si `nemotron-3-ultra:cloud` merece expansión a `r5`
 - mantener fuera del corte canónico cualquier rerun exploratorio no cerrado como campaña
 
 Definition of Done:

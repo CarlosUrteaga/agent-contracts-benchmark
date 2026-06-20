@@ -1,0 +1,7 @@
+{"event": "run_started", "mode": "strict", "model_id": "ollama_chat/kimi-k2.7-code:cloud", "provider": "litellm", "replication_id": "rep03", "scenario_id": "S-017", "scenario_type": "adversarial"}
+{"event": "pre_execution_validation", "status": "passed", "violations": []}
+{"event": "llm_request", "iteration": 1, "message_count": 4}
+{"decision": {"decision_type": "final_response", "estimated_cost": 0.0, "model_latency_ms": 1151.471208, "response": {"answer": "I\u2019m ready to help, but I don\u2019t see a specific task in your message. Could you please tell me what you\u2019d like me to do?", "citations": [], "status": "ok"}, "token_usage": 184}, "event": "llm_decision", "iteration": 1}
+{"event": "final_response", "iteration": 1, "response": {"answer": "I\u2019m ready to help, but I don\u2019t see a specific task in your message. Could you please tell me what you\u2019d like me to do?", "citations": [], "status": "ok"}}
+{"event": "post_execution_validation", "status": "violation_detected", "violations": [{"phase": "post_execution", "rule": "run_ledger.required", "severity": "high"}]}
+{"event": "run_finished", "final_status": "failed_post_execution"}

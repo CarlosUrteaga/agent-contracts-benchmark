@@ -652,7 +652,7 @@ La tesis ya tiene una corrida final separada de la fase de calibración.
 ## Fase 6. Paquete de análisis
 
 Estado:
-- completada para el corte canónico de doce campañas cerradas
+- completada para el corte canónico de trece campañas cerradas
 
 ### Objetivo
 
@@ -677,7 +677,7 @@ Preparar la evidencia que alimentará el capítulo final.
 
 ### Artefactos vigentes
 
-- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
+- [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1)
 - [docs/resultados_experimento.md](/Users/carlos.urteaga/git/agent-contracts-benchmark/docs/resultados_experimento.md:1)
 - [docs/EXECUTIVE_SUMMARY.md](/Users/carlos.urteaga/git/agent-contracts-benchmark/docs/EXECUTIVE_SUMMARY.md:1)
 
@@ -686,7 +686,7 @@ Preparar la evidencia que alimentará el capítulo final.
 - el artefacto estadístico canónico ya cubre prevención, utilidad, detección runtime y overhead
 - `H1–H4` ya quedaron redactadas directamente sobre campañas cerradas
 - `campaign-kimi-k26-r3` ya está incorporada al corte canónico actual
-- `campaign-kimi-k26-r5`, `campaign-kimi-k27-code-r3` y `campaign-kimi-k27-code-r5` ya quedaron incorporadas al corte canónico actual
+- `campaign-kimi-k26-r5`, `campaign-kimi-k27-code-r3`, `campaign-kimi-k27-code-r5` y `campaign-nemotron-3-ultra-r3` ya quedaron incorporadas al corte canónico actual
 - los reruns exploratorios y smoke-only artifacts no se incorporan al paquete canónico
 - el siguiente trabajo ya no es recalcular este bloque, sino decidir expansión selectiva, ablations o redacción
 

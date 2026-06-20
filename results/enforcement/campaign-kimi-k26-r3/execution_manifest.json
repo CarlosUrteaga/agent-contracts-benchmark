@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-19T05:30:00.718248+00:00",
+  "campaign_id": "campaign-kimi-k26-r3",
+  "runs_root": "results/enforcement/campaign-kimi-k26-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/kimi_k26_cloud.yaml",
+  "model_profile_hash": "sha256:7629d14b1d38ec3766020e9b94d9dd720dd48576b3fdafa8370913980ecf116b",
+  "profile_id": "litellm-ollama-kimi-k26-cloud",
+  "provider": "litellm",
+  "model_id": "ollama_chat/kimi-k2.6:cloud",
+  "declared_model_version": "kimi-k2.6:cloud",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}

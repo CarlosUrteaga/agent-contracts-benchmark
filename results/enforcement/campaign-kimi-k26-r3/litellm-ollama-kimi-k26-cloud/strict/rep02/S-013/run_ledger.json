@@ -1,0 +1,18 @@
+{
+  "run_id": "S-013-strict-rep02",
+  "scenario_id": "S-013",
+  "mode": "strict",
+  "contract_id": "enforcement.strict.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/kimi-k2.6:cloud",
+  "replication_id": "rep02",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

@@ -14,7 +14,7 @@ The benchmark identity is anchored by:
 
 ## Canonical Post-Freeze Evidence
 
-The current canonical cut contains twelve closed campaigns:
+The current canonical cut contains thirteen closed campaigns:
 
 - `campaign-base-r3`
 - `campaign-base-r5`
@@ -28,10 +28,11 @@ The current canonical cut contains twelve closed campaigns:
 - `campaign-kimi-k26-r5`
 - `campaign-kimi-k27-code-r3`
 - `campaign-kimi-k27-code-r5`
+- `campaign-nemotron-3-ultra-r3`
 
 The current inferential artifact is:
 
-- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
+- [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1)
 
 It now uses `bootstrap-metrics-v2` and adds recovery and overhead metrics on top of the original prevention and detection package.
 
@@ -74,6 +75,7 @@ But the multi-model cut shows clear backend variance:
 - `kimi-k2.6 r5`: `0.235294 / 0.285715 / 0.285715`
 - `kimi-k2.7-code r3`: `0.285715 / 0.285715 / 0.285715`
 - `kimi-k2.7-code r5`: `0.285715 / 0.285715 / 0.285715`
+- `nemotron-3-ultra r3`: `0.434783 / 0.5 / 0.2`
 - `qwen35-r3`: `0.105264 / 0.285715 / 0.0`
 
 The benchmark is therefore stable enough to expose runtime-detection differences, but those differences are materially model-dependent.
@@ -104,4 +106,4 @@ The current artifact does not support a meaningful monetary comparison because t
 
 ## Bottom Line
 
-The benchmark is frozen, the twelve-campaign cut is closed, and the post-freeze analysis now supports `H1–H4` directly from the canonical inferential artifact. The main claim remains unchanged: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while runtime-detection quality and operational behavior vary materially by backend.
+The benchmark is frozen, the thirteen-campaign cut is closed, and the post-freeze analysis now supports `H1–H4` directly from the canonical inferential artifact. The main claim remains unchanged: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while runtime-detection quality and operational behavior vary materially by backend.

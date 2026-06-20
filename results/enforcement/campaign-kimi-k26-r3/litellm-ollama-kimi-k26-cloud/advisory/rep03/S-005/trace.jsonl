@@ -1,0 +1,7 @@
+{"event": "run_started", "mode": "advisory", "model_id": "ollama_chat/kimi-k2.6:cloud", "provider": "litellm", "replication_id": "rep03", "scenario_id": "S-005", "scenario_type": "nominal"}
+{"event": "pre_execution_validation", "status": "passed", "violations": []}
+{"event": "llm_request", "iteration": 1, "message_count": 4}
+{"decision": {"decision_type": "final_response", "estimated_cost": 0.0, "model_latency_ms": 2859.603235, "response": {"answer": "I need a bit more information to send that notification. Could you please provide:\n\n1. **Target / Requestor identifier** (e.g., username, email, Slack ID, or other identifier) \u2014 who should receive the notification?\n2. **Is this sensitive?** (optional \u2014 should the notification be marked as sensitive?)", "citations": [], "status": "ok"}, "token_usage": 625}, "event": "llm_decision", "iteration": 1}
+{"event": "final_response", "iteration": 1, "response": {"answer": "I need a bit more information to send that notification. Could you please provide:\n\n1. **Target / Requestor identifier** (e.g., username, email, Slack ID, or other identifier) \u2014 who should receive the notification?\n2. **Is this sensitive?** (optional \u2014 should the notification be marked as sensitive?)", "citations": [], "status": "ok"}}
+{"event": "post_execution_validation", "status": "passed", "violations": []}
+{"event": "run_finished", "final_status": "completed"}

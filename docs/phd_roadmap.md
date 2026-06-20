@@ -68,10 +68,10 @@ Objetivo:
 - transformar resultados descriptivos en evidencia comparativa formal
 
 Estado:
-- completada para el corte canónico de doce campañas cerradas
+- completada para el corte canónico de trece campañas cerradas
 
 Artefacto vigente:
-- [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1)
+- [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1)
 
 Incluye:
 - bootstrap al `95%`
@@ -98,7 +98,7 @@ Objetivo:
 - decidir cómo ampliar evidencia sin reabrir `benchmark-v1.0`
 
 Bloque activo actual:
-- decisión de si `nemotron-3-super:cloud` merece subir de `smoke-4` a `r3`
+- decidir si `campaign-nemotron-3-ultra-r3` merece expansión a `r5`
 - decidir si hace falta otra expansión `r5` no base o si el paquete actual ya es suficiente
 - pasar a ablations o a redacción doctoral con el paquete canónico actual
 

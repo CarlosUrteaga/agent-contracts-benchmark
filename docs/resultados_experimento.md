@@ -1,6 +1,6 @@
 # Pruebas, complicaciones, adecuaciones, hallazgos y resultados
 
-Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-19`, el corte canónico vigente se compone de doce campañas cerradas y del artefacto inferencial [results/enforcement/statistics/final-twelve-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-twelve-campaigns.json:1), en esquema `bootstrap-metrics-v2`.
+Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-20`, el corte canónico vigente se compone de trece campañas cerradas y del artefacto inferencial [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1), en esquema `bootstrap-metrics-v2`.
 
 ## Estado metodológico
 
@@ -29,6 +29,7 @@ Las campañas utilizables para análisis final son:
 - `campaign-kimi-k26-r5`
 - `campaign-kimi-k27-code-r3`
 - `campaign-kimi-k27-code-r5`
+- `campaign-nemotron-3-ultra-r3`
 
 El artefacto estadístico canónico:
 
@@ -85,6 +86,7 @@ En backends adicionales la señal ya no es estable:
 - `campaign-kimi-k26-r5`: `advisory f1 = 0.235294`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
 - `campaign-kimi-k27-code-r3`: `advisory f1 = 0.285715`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
 - `campaign-kimi-k27-code-r5`: `advisory f1 = 0.285715`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
+- `campaign-nemotron-3-ultra-r3`: `advisory f1 = 0.434783`, `guarded f1 = 0.5`, `strict f1 = 0.2`
 - `campaign-qwen35-397b-r3`: `advisory f1 = 0.105264`, `guarded f1 = 0.285715`, `strict f1 = 0.0`
 
 La lectura metodológica correcta es:
@@ -114,6 +116,7 @@ En campañas no base el patrón persiste, aunque con distinta magnitud:
 - `campaign-kimi-k26-r5`: `guarded = 0.733333`, `strict = 0.47619`
 - `campaign-kimi-k27-code-r3`: `guarded = 0.777778`, `strict = 0.52381`
 - `campaign-kimi-k27-code-r5`: `guarded = 0.8`, `strict = 0.514286`
+- `campaign-nemotron-3-ultra-r3`: `guarded = 0.809524`, `strict = 0.539683`
 - `campaign-qwen35-397b-r3`: `guarded = 0.761905`, `strict = 0.52381`
 - `campaign-gemma4-r3`: `guarded = 0.730159`, `strict = 0.0`
 
@@ -159,12 +162,15 @@ En campañas cloud el costo adicional sigue presente pero es menor:
 - `campaign-kimi-k27-code-r5`:
   - `mean_latency_ms` diferencia `13.840039`, `ci_95 = [-1993.399371, 1542.934631]`
   - `guarded vs strict successful_safe_completion_rate = 0.285714`, `ci_95 = [0.190476, 0.380953]`
+- `campaign-nemotron-3-ultra-r3`:
+  - `mean_latency_ms` diferencia `22561.97592`, `ci_95 = [5565.841996, 40703.043433]`
+  - `guarded vs strict successful_safe_completion_rate = 0.269841`, `ci_95 = [0.15873, 0.396826]`
 
 La dimensión monetaria no es informativa en este corte porque los adapters actuales normalizan costo faltante a `0.0`; por eso `mean_estimated_cost` no distingue campañas en el artefacto canónico actual. La conclusión válida de `H4` en `benchmark-v1.0` es operativa, no financiera: la recuperación tiene costo en latencia, tokens e iteraciones.
 
 ## Lectura consolidada del corte canónico
 
-Con las doce campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
+Con las trece campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
 
 1. El benchmark congelado sigue produciendo oportunidades reales de enforcement.
 2. `guarded` y `strict` previenen side effects inseguros cuando la oportunidad bloqueante aparece.
@@ -174,4 +180,4 @@ Con las doce campañas cerradas del corte canónico, la evidencia post-freeze pe
 
 ## Conclusión de resultados
 
-El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las doce campañas incluidas en `final-twelve-campaigns.json`. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.
+El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las trece campañas incluidas en `final-thirteen-campaigns.json`. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.

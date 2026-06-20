@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-017",
+  "mode": "advisory",
+  "replication_id": "rep03",
+  "profile_id": "litellm-ollama-kimi-k27-code-cloud",
+  "final_status": "failed_post_execution",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781886335.058267
+}

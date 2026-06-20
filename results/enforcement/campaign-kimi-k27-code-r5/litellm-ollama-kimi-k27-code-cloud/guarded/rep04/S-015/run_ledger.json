@@ -1,0 +1,18 @@
+{
+  "run_id": "S-015-guarded-rep04",
+  "scenario_id": "S-015",
+  "mode": "guarded",
+  "contract_id": "enforcement.guarded.v2",
+  "provider": "litellm",
+  "model_id": "ollama_chat/kimi-k2.7-code:cloud",
+  "replication_id": "rep04",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

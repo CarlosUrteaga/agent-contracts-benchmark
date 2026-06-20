@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-005",
+  "mode": "strict",
+  "replication_id": "rep01",
+  "profile_id": "litellm-ollama-kimi-k26-cloud",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781847131.771092
+}
