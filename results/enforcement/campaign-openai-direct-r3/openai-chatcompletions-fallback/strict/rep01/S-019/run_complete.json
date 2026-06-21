@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-019",
+  "mode": "strict",
+  "replication_id": "rep01",
+  "profile_id": "openai-chatcompletions-fallback",
+  "final_status": "aborted_pre_execution",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1782006338.010973
+}

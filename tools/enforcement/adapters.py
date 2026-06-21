@@ -158,15 +158,22 @@ class OpenAIChatCompletionsAdapter:
             tool_events=self._tool_events,
             feedback_events=self._feedback_events,
         )
+        token_limit_parameter = str(self.model_profile.get("token_limit_parameter", "max_tokens"))
+        if token_limit_parameter not in {"max_tokens", "max_completion_tokens"}:
+            raise ValueError(f"unsupported token_limit_parameter: {token_limit_parameter}")
+        kwargs: dict[str, Any] = {
+            "model": self.model_profile["model_id"],
+            "messages": request_messages,
+            "tools": tools,
+            "tool_choice": "auto",
+            token_limit_parameter: self.model_profile["max_tokens"],
+        }
+        temperature = self.model_profile.get("temperature")
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+
         started = time.perf_counter()
-        response = client.chat.completions.create(
-            model=self.model_profile["model_id"],
-            temperature=self.model_profile["temperature"],
-            max_tokens=self.model_profile["max_tokens"],
-            messages=request_messages,
-            tools=tools,
-            tool_choice="auto",
-        )
+        response = client.chat.completions.create(**kwargs)
         model_latency_ms = round((time.perf_counter() - started) * 1000.0, 6)
         choice = response.choices[0].message
         if getattr(choice, "tool_calls", None):

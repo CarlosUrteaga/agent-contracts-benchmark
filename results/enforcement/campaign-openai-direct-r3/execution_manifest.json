@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-21T01:24:49.411145+00:00",
+  "campaign_id": "campaign-openai-direct-r3",
+  "runs_root": "results/enforcement/campaign-openai-direct-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/openai_chat.yaml",
+  "model_profile_hash": "sha256:8070de0305275c8268432949c4fd17386997231eebd5aaeade3c0bae9e5e5d74",
+  "profile_id": "openai-chatcompletions-fallback",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-5.5-2026-04-23",
+  "declared_model_version": "gpt-5.5-2026-04-23",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}
