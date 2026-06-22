@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-20T04:28:18.948396+00:00",
+  "campaign_id": "campaign-nemotron-3-ultra-r5",
+  "runs_root": "results/enforcement/campaign-nemotron-3-ultra-r5",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/nemotron_3_ultra_cloud.yaml",
+  "model_profile_hash": "sha256:f6bbc6f222636cf11b8ab906b2972237c394df4f3e7407910d8c40b0f71a7b54",
+  "profile_id": "litellm-ollama-nemotron-3-ultra-cloud",
+  "provider": "litellm",
+  "model_id": "ollama_chat/nemotron-3-ultra:cloud",
+  "declared_model_version": "nemotron-3-ultra:cloud",
+  "replications": 5,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 420,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}

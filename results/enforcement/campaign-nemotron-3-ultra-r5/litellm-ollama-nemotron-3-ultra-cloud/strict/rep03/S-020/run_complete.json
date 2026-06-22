@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-020",
+  "mode": "strict",
+  "replication_id": "rep03",
+  "profile_id": "litellm-ollama-nemotron-3-ultra-cloud",
+  "final_status": "aborted_runtime",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1781940810.72794
+}
