@@ -78,6 +78,17 @@ def compute_contract_fingerprint(contract: dict[str, Any]) -> str:
     return json_fingerprint(payload)
 
 
+def normalize_contract_for_semantic_identity(contract: dict[str, Any]) -> dict[str, Any]:
+    payload = dict(contract)
+    payload.pop("approved_agent_configurations", None)
+    payload.pop("contract_fingerprint", None)
+    return payload
+
+
+def compute_contract_semantic_fingerprint(contract: dict[str, Any]) -> str:
+    return json_fingerprint(normalize_contract_for_semantic_identity(contract))
+
+
 def compute_agent_configuration_fingerprint(
     *,
     system_prompt: str,

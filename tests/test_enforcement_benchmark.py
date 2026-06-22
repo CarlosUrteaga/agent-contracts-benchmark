@@ -12,7 +12,15 @@ from unittest.mock import patch
 
 from tools.enforcement.adapters import LiteLLMAdapter, build_model_adapter
 from tools.enforcement.bootstrap_metrics import build_bootstrap_report
-from tools.enforcement.common import MODES, RUN_COMPLETE_FILE, RUN_LEDGER_FILE, SUMMARY_FILE, TOOLS, TRACE_FILE
+from tools.enforcement.common import (
+    MODES,
+    RUN_COMPLETE_FILE,
+    RUN_LEDGER_FILE,
+    SUMMARY_FILE,
+    TOOLS,
+    TRACE_FILE,
+    compute_contract_semantic_fingerprint,
+)
 from tools.enforcement.closeout_campaign import closeout_campaign
 from tools.enforcement.diagnose_f1 import build_report, classify_run
 from tools.enforcement.evaluate import evaluate_runs
@@ -1104,12 +1112,42 @@ class EnforcementBenchmarkTests(unittest.TestCase):
 
     def test_freeze_manifest_contains_required_hashes(self) -> None:
         manifest = build_manifest()
+        self.assertEqual("benchmark-manifest-v2", manifest["manifest_schema_version"])
         self.assertEqual("benchmark-v1.0", manifest["benchmark_version"])
         self.assertIn("freeze_commit", manifest)
         frozen = manifest["frozen_artifacts"]
-        for key in ["scenarios_hash", "contracts_hash", "oracle_hash", "evaluator_hash", "diagnose_f1_hash"]:
+        for key in [
+            "scenarios_hash",
+            "contracts_semantics_hash",
+            "contract_compatibility_hash",
+            "oracle_hash",
+            "evaluator_hash",
+            "diagnose_f1_hash",
+        ]:
             self.assertIn(key, frozen)
             self.assertTrue(str(frozen[key]).startswith("sha256:"))
+
+    def test_contract_semantic_fingerprint_ignores_approved_agent_configurations(self) -> None:
+        contract = {
+            "contract_id": "enforcement.guarded.v2",
+            "mode": "guarded",
+            "approved_agent_configurations": [{"fingerprint": "sha256:one"}],
+            "declared_tools": ["search_policy"],
+            "response_schema": {"required_fields": ["answer", "citations", "status"]},
+            "memory_policy": "allowed-scope-only",
+            "validation_phases": ["pre_execution", "runtime", "post_execution"],
+            "runtime_rules": ["tool.declared_only"],
+            "postconditions": ["response.schema_complete"],
+            "agent_feedback": {"advisory_warning_visibility": False},
+            "contract_fingerprint": "sha256:first",
+        }
+        changed = dict(contract)
+        changed["approved_agent_configurations"] = [{"fingerprint": "sha256:two"}]
+        changed["contract_fingerprint"] = "sha256:second"
+        self.assertEqual(
+            compute_contract_semantic_fingerprint(contract),
+            compute_contract_semantic_fingerprint(changed),
+        )
 
     def test_execution_manifest_contains_required_fields(self) -> None:
         manifest = build_execution_manifest(

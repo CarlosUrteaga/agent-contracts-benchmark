@@ -279,6 +279,14 @@ El benchmark identity sigue estando en:
 
 El execution manifest identifica la campaña, no el benchmark.
 
+Para campañas frontier o cloud, la comprobación canónica del benchmark debe tratar los contratos así:
+
+- `contracts_semantics_hash`
+  - debe permanecer igual al manifest congelado para que la campaña siga perteneciendo a `benchmark-v1.0`
+- `contract_compatibility_hash`
+  - puede cambiar cuando sólo se amplían `approved_agent_configurations` o cambia el `contract_fingerprint` derivado
+  - ese drift debe documentarse, pero no reabre el benchmark si la semántica contractual permanece igual
+
 Antes de correr una campaña, el manifest debe validarse explícitamente contra:
 
 - `--runs-root`

@@ -51,17 +51,39 @@ The frozen benchmark identity is defined by:
 The benchmark manifest must include hashes for the key frozen artifacts:
 
 - scenarios
-- contracts
+- contract semantics
+- contract compatibility metadata
 - oracle specification
 - evaluator
 - diagnosis
+
+For `benchmark-v1.0`, contract identity is split in two layers:
+
+- `contracts_semantics_hash`
+  - covers the declarative benchmark surface that changes methodology:
+  - `contract_id`
+  - `mode`
+  - `declared_tools`
+  - `response_schema`
+  - `memory_policy`
+  - `validation_phases`
+  - `runtime_rules`
+  - `postconditions`
+  - `agent_feedback`
+- `contract_compatibility_hash`
+  - records operational compatibility metadata such as:
+  - `approved_agent_configurations`
+  - the derived `contract_fingerprint`
+
+Changing only compatibility metadata does not, by itself, create a new benchmark version, provided the semantic contract surface above remains unchanged.
 
 ## Post-freeze versioning policy
 
 | Change after freeze | Required action |
 | --- | --- |
 | Scenario changes | Create `benchmark-v1.1` and rerun the full experiment |
-| Contract changes | Create `benchmark-v1.1` and rerun the full experiment |
+| Contract semantic changes | Create `benchmark-v1.1` and rerun the full experiment |
+| Contract compatibility-only changes | Keep the benchmark version, record the change, and ensure `contracts_semantics_hash` remains unchanged |
 | Oracle changes | Create `benchmark-v1.1` and rerun the full experiment |
 | Evaluator changes | Create `benchmark-v1.0.1` if it is a bugfix, but rerun the full experiment |
 | Add a model | Do not change the benchmark version; register the model in the execution manifest |
@@ -113,3 +135,9 @@ The benchmark is therefore:
 - `freeze-ready` for subsequent replicated execution campaigns under documented model profiles
 
 This declaration does **not** freeze model execution profiles. New model profiles remain valid future execution conditions as long as the frozen benchmark artifacts do not change.
+
+This also means that admitting additional model-specific agent configuration fingerprints does not reopen `benchmark-v1.0` if:
+
+- `contracts_semantics_hash` remains unchanged
+- scenarios, oracle, evaluator, and diagnosis remain unchanged
+- the compatibility-only drift is documented in the calibration log

@@ -7,6 +7,7 @@ Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`
 - `benchmark-v1.0` quedó congelado el `2026-06-14`.
 - La identidad del benchmark está anclada en [benchmark/enforcement/benchmark_manifest.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/benchmark/enforcement/benchmark_manifest.json:1).
 - Los perfiles de modelo no redefinen el benchmark; sólo documentan la condición experimental de cada campaña.
+- La identidad contractual canónica se compara por `contracts_semantics_hash`; la expansión de `approved_agent_configurations` se registra aparte como compatibilidad operacional y no reabre `benchmark-v1.0` por sí sola.
 - Resultados débiles pero metodológicamente válidos no reabren el benchmark.
 - Los artefactos exploratorios quedan fuera de la evidencia canónica:
   - `results/enforcement/smoke-gemma4-31b-cloud-rerun/`
