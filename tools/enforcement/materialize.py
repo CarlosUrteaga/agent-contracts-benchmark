@@ -171,6 +171,22 @@ GLM_52_CLOUD_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+QWEN35_9B_PROFILE = {
+    "profile_id": "litellm-ollama-qwen35-9b",
+    "provider": "litellm",
+    "model_id": "ollama_chat/qwen3.5:9b",
+    "declared_model_version": "qwen3.5:9b",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 QWEN35_397B_CLOUD_PROFILE = {
     "profile_id": "litellm-ollama-qwen35-397b-cloud",
     "provider": "litellm",
@@ -276,6 +292,7 @@ CORE_MODEL_PROFILES = {
     "kimi_k27_code_cloud.yaml": KIMI_K27_CODE_CLOUD_PROFILE,
     "deepseek_v4_pro_cloud.yaml": DEEPSEEK_V4_PRO_CLOUD_PROFILE,
     "glm_52_cloud.yaml": GLM_52_CLOUD_PROFILE,
+    "qwen35_9b.yaml": QWEN35_9B_PROFILE,
     "nemotron_3_super_cloud.yaml": NEMOTRON_3_SUPER_CLOUD_PROFILE,
     "nemotron_3_ultra_cloud.yaml": NEMOTRON_3_ULTRA_CLOUD_PROFILE,
     "qwen35_397b_cloud.yaml": QWEN35_397B_CLOUD_PROFILE,
