@@ -165,9 +165,65 @@ class OpenAIChatCompletionsAdapter:
         temperature = self.model_profile.get("temperature")
         if temperature is not None:
             kwargs["temperature"] = temperature
-        reasoning_effort = self.model_profile.get("reasoning_effort")
-        if reasoning_effort:
-            kwargs["reasoning"] = {"effort": reasoning_effort}
+        return kwargs
+
+    def _build_responses_request_kwargs(
+        self,
+        messages: list[dict[str, str]],
+        tools: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        input_items: list[dict[str, Any]] = []
+        for message in _augment_messages_with_agent_events(
+            messages,
+            tool_events=self._tool_events,
+            feedback_events=self._feedback_events,
+        ):
+            input_items.append(
+                {
+                    "type": "message",
+                    "role": message["role"],
+                    "content": message["content"],
+                }
+            )
+        response_tools: list[dict[str, Any]] = []
+        for tool in tools:
+            if tool.get("type") != "function":
+                continue
+            function = dict(tool.get("function", {}))
+            response_tools.append(
+                {
+                    "type": "function",
+                    "name": function["name"],
+                    "description": function.get("description"),
+                    "parameters": function.get("parameters"),
+                    "strict": function.get("strict", False),
+                }
+            )
+        kwargs: dict[str, Any] = {
+            "model": self.model_profile["model_id"],
+            "input": input_items,
+            "text": {
+                "format": {"type": "text"},
+                "verbosity": str(self.model_profile.get("text_verbosity", "medium")),
+            },
+            "reasoning": {
+                "effort": self.model_profile["reasoning_effort"],
+                "summary": str(self.model_profile.get("reasoning_summary", "auto")),
+            },
+            "tools": response_tools,
+            "tool_choice": "auto",
+            "max_output_tokens": self.model_profile["max_tokens"],
+            "store": bool(self.model_profile.get("store", True)),
+            "include": list(
+                self.model_profile.get(
+                    "include",
+                    ["reasoning.encrypted_content", "web_search_call.action.sources"],
+                )
+            ),
+        }
+        temperature = self.model_profile.get("temperature")
+        if temperature is not None:
+            kwargs["temperature"] = temperature
         return kwargs
 
     def generate_next_action(
@@ -181,9 +237,29 @@ class OpenAIChatCompletionsAdapter:
             raise RuntimeError("OpenAI SDK is required for the openai_chat_completions adapter") from exc
 
         client = OpenAI()
-        kwargs = self._build_request_kwargs(messages, tools)
-
         started = time.perf_counter()
+        if self.model_profile.get("reasoning_effort"):
+            kwargs = self._build_responses_request_kwargs(messages, tools)
+            response = client.responses.create(**kwargs)
+            model_latency_ms = round((time.perf_counter() - started) * 1000.0, 6)
+            for output_item in response.output:
+                if output_item.type == "function_call":
+                    return {
+                        "decision_type": "tool_call",
+                        "tool_name": output_item.name,
+                        "arguments": json.loads(output_item.arguments or "{}"),
+                        "token_usage": _response_usage_tokens(response),
+                        "estimated_cost": _response_cost(response),
+                        "model_latency_ms": model_latency_ms,
+                    }
+            return {
+                "decision_type": "final_response",
+                "response": {"answer": response.output_text, "citations": [], "status": "ok"},
+                "token_usage": _response_usage_tokens(response),
+                "estimated_cost": _response_cost(response),
+                "model_latency_ms": model_latency_ms,
+            }
+        kwargs = self._build_request_kwargs(messages, tools)
         response = client.chat.completions.create(**kwargs)
         model_latency_ms = round((time.perf_counter() - started) * 1000.0, 6)
         choice = response.choices[0].message

@@ -1659,7 +1659,6 @@ class EnforcementBenchmarkTests(unittest.TestCase):
             [{"role": "user", "content": "Hello"}],
             [{"type": "function", "function": {"name": "search_policy"}}],
         )
-        self.assertNotIn("reasoning", kwargs)
         self.assertEqual("gpt-5.5-2026-04-23", kwargs["model"])
         self.assertEqual(700, kwargs["max_completion_tokens"])
 
@@ -1675,13 +1674,14 @@ class EnforcementBenchmarkTests(unittest.TestCase):
             ).read_text(encoding="utf-8")
         )
         adapter = OpenAIChatCompletionsAdapter(model_profile=profile, system_prompt="system")
-        kwargs = adapter._build_request_kwargs(
+        kwargs = adapter._build_responses_request_kwargs(
             [{"role": "user", "content": "Hello"}],
-            [{"type": "function", "function": {"name": "search_policy"}}],
+            [{"type": "function", "function": {"name": "search_policy", "parameters": {"type": "object"}}}],
         )
-        self.assertEqual({"effort": "xhigh"}, kwargs["reasoning"])
+        self.assertEqual({"effort": "xhigh", "summary": "auto"}, kwargs["reasoning"])
+        self.assertEqual({"format": {"type": "text"}, "verbosity": "medium"}, kwargs["text"])
         self.assertEqual("gpt-5.5-2026-04-23", kwargs["model"])
-        self.assertEqual(700, kwargs["max_completion_tokens"])
+        self.assertEqual(700, kwargs["max_output_tokens"])
 
     def test_litellm_adapter_normalizes_missing_cost_to_zero(self) -> None:
         profile = json.loads(self.default_profile_path().read_text(encoding="utf-8"))
