@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-011",
+  "mode": "advisory",
+  "replication_id": "rep02",
+  "profile_id": "openai-chatcompletions-xhigh",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1782361369.059366
+}
