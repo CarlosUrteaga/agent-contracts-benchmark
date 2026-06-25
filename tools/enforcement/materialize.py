@@ -187,6 +187,22 @@ QWEN35_9B_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+QWEN35_4B_PROFILE = {
+    "profile_id": "litellm-ollama-qwen35-4b",
+    "provider": "litellm",
+    "model_id": "ollama_chat/qwen3.5:4b",
+    "declared_model_version": "qwen3.5:4b",
+    "temperature": 0.2,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_base": "http://localhost:11434",
+    "api_key_env": None,
+    "litellm_params": {},
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 QWEN35_397B_CLOUD_PROFILE = {
     "profile_id": "litellm-ollama-qwen35-397b-cloud",
     "provider": "litellm",
@@ -249,6 +265,21 @@ OPENAI_FALLBACK_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+OPENAI_XHIGH_PROFILE = {
+    "profile_id": "openai-chatcompletions-xhigh",
+    "provider": "openai_chat_completions",
+    "model_id": "gpt-5.5-2026-04-23",
+    "declared_model_version": "gpt-5.5-2026-04-23",
+    "temperature": None,
+    "max_tokens": 700,
+    "token_limit_parameter": "max_completion_tokens",
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "reasoning_effort": "xhigh",
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 AZURE_FOUNDRY_OPENAI_PROFILE = {
     "profile_id": "litellm-azure-foundry-openai",
     "provider": "litellm",
@@ -269,8 +300,8 @@ AZURE_FOUNDRY_OPENAI_PROFILE = {
 AZURE_FOUNDRY_CLAUDE_PROFILE = {
     "profile_id": "litellm-azure-foundry-claude",
     "provider": "litellm",
-    "model_id": "azure_ai/claude-opus-4-1",
-    "declared_model_version": "claude-opus-4-1",
+    "model_id": "azure_ai/claude-opus-4-8",
+    "declared_model_version": "claude-opus-4-8",
     "temperature": 0.2,
     "max_tokens": 700,
     "timeout": 60,
@@ -292,11 +323,13 @@ CORE_MODEL_PROFILES = {
     "kimi_k27_code_cloud.yaml": KIMI_K27_CODE_CLOUD_PROFILE,
     "deepseek_v4_pro_cloud.yaml": DEEPSEEK_V4_PRO_CLOUD_PROFILE,
     "glm_52_cloud.yaml": GLM_52_CLOUD_PROFILE,
+    "qwen35_4b.yaml": QWEN35_4B_PROFILE,
     "qwen35_9b.yaml": QWEN35_9B_PROFILE,
     "nemotron_3_super_cloud.yaml": NEMOTRON_3_SUPER_CLOUD_PROFILE,
     "nemotron_3_ultra_cloud.yaml": NEMOTRON_3_ULTRA_CLOUD_PROFILE,
     "qwen35_397b_cloud.yaml": QWEN35_397B_CLOUD_PROFILE,
     "openai_chat.yaml": OPENAI_FALLBACK_PROFILE,
+    "openai_chat_xhigh.yaml": OPENAI_XHIGH_PROFILE,
     "azure_foundry_openai.yaml": AZURE_FOUNDRY_OPENAI_PROFILE,
     "azure_foundry_claude.yaml": AZURE_FOUNDRY_CLAUDE_PROFILE,
 }

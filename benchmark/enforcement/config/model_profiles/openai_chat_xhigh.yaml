@@ -1,0 +1,16 @@
+{
+  "profile_id": "openai-chatcompletions-xhigh",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-5.5-2026-04-23",
+  "declared_model_version": "gpt-5.5-2026-04-23",
+  "temperature": null,
+  "max_tokens": 700,
+  "token_limit_parameter": "max_completion_tokens",
+  "timeout": 60,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "reasoning_effort": "xhigh",
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}
