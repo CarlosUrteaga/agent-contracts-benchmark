@@ -1,6 +1,6 @@
 # Pruebas, complicaciones, adecuaciones, hallazgos y resultados
 
-Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-25`, el corte canónico vigente se compone de dieciocho campañas cerradas y del artefacto inferencial [results/enforcement/statistics/final-eighteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eighteen-campaigns.json:1), en esquema `bootstrap-metrics-v2`.
+Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-25`, el corte canónico vigente se compone de diecinueve campañas cerradas y del artefacto inferencial [results/enforcement/statistics/final-nineteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-nineteen-campaigns.json:1), en esquema `bootstrap-metrics-v2`.
 
 ## Estado metodológico
 
@@ -20,6 +20,7 @@ Las campañas utilizables para análisis final son:
 
 - `campaign-base-r3`
 - `campaign-base-r5`
+- `campaign-claude-opus-48-r3`
 - `campaign-gemma4-r3`
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
@@ -93,13 +94,34 @@ En backends adicionales la señal ya no es estable:
 - `campaign-kimi-k27-code-r3`: `advisory f1 = 0.285715`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
 - `campaign-kimi-k27-code-r5`: `advisory f1 = 0.285715`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
 - `campaign-nemotron-3-ultra-r3`: `advisory f1 = 0.434783`, `guarded f1 = 0.5`, `strict f1 = 0.2`
+- `campaign-claude-opus-48-r3`: `advisory f1 = 0.0`, `guarded f1 = 0.0`, `strict f1 = 0.0`
 - `campaign-qwen35-397b-r3`: `advisory f1 = 0.105264`, `guarded f1 = 0.285715`, `strict f1 = 0.0`
+
+`campaign-claude-opus-48-r3` merece una lectura separada. No parece un fallo del evaluator ni del benchmark, sino un patrón de autocontención del backend: Claude completa los nominales con utilidad razonable, pero casi no genera oportunidades runtime observables para `advisory` o `guarded`. En la campaña cerrada:
+
+- `advisory recall = 0.0`, `advisory f1 = 0.0`
+- `guarded recall = 0.0`, `guarded f1 = 0.0`
+- `guarded unsafe_action_opportunity_rate = 0.0`
+- `guarded blocked_unsafe_actions = 0`
+
+El `f1_diagnosis.json` de Claude clasifica los escenarios runtime relevantes (`S-011`, `S-012`, `S-013`, `S-014`, `S-020`) principalmente como `B_conservative_or_divergent_agent`, no como contradicción metodológica. La interpretación correcta es que Claude evita entrar al estado donde el Governor tendría que intervenir. Eso lo hace más conservador en comportamiento propio, pero menos útil como backend para demostrar detección runtime observable del Governor.
+
+Tabla comparativa corta para `guarded`:
+
+| Backend | `guarded successful_safe_completion_rate` | `guarded unsafe_action_opportunity_rate` | `guarded blocked_unsafe_actions` | `guarded recall` | `guarded f1` | Lectura |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `claude-opus-4-8 r3` | `0.714286` | `0.0` | `0` | `0.0` | `0.0` | Conservador; casi no activa enforcement runtime observable |
+| `openai-direct r3` | `0.761905` | `0.031746` | `2` | `0.111111` | `0.2` | Activa algo de señal runtime, pero todavía débil |
+| `openai-xhigh r3` | `0.761905` | `0.015873` | `2` | `0.055556` | `0.100001` | Similar a OpenAI directo, con menor activación runtime |
+| `gpt-oss-120b r3` | `0.746032` | `0.031746` | `3` | `0.222222` | `0.347826` | Mejor evidencia de intervención runtime de `guarded` |
+| `qwen35-397b r3` | `0.761905` | `0.047619` | `3` | `0.166667` | `0.285715` | Más oportunidades runtime y detección moderada |
 
 La lectura metodológica correcta es:
 
 1. el benchmark congelado sigue generando condiciones observables de detección runtime;
 2. `advisory`, `guarded` y `strict` no tienen una relación fija de calidad de detección entre modelos;
-3. la variación observada pertenece al backend y no al benchmark congelado.
+3. la variación observada pertenece al backend y no al benchmark congelado;
+4. `claude-opus-4-8 r3` representa el extremo de autocontención: mantiene utilidad razonable pero aporta muy poca activación runtime para el Governor.
 
 ## H3 — `guarded` preserva más utilidad que `strict` porque permite recuperación
 
@@ -123,6 +145,7 @@ En campañas no base el patrón persiste, aunque con distinta magnitud:
 - `campaign-kimi-k27-code-r3`: `guarded = 0.777778`, `strict = 0.52381`
 - `campaign-kimi-k27-code-r5`: `guarded = 0.8`, `strict = 0.514286`
 - `campaign-nemotron-3-ultra-r3`: `guarded = 0.809524`, `strict = 0.539683`
+- `campaign-claude-opus-48-r3`: `guarded = 0.714286`, `strict = 0.47619`
 - `campaign-qwen35-397b-r3`: `guarded = 0.761905`, `strict = 0.52381`
 - `campaign-gemma4-r3`: `guarded = 0.730159`, `strict = 0.0`
 
@@ -176,7 +199,7 @@ La dimensión monetaria no es informativa en este corte porque los adapters actu
 
 ## Lectura consolidada del corte canónico
 
-Con las dieciocho campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
+Con las diecinueve campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
 
 1. El benchmark congelado sigue produciendo oportunidades reales de enforcement.
 2. `guarded` y `strict` previenen side effects inseguros cuando la oportunidad bloqueante aparece.
@@ -186,4 +209,4 @@ Con las dieciocho campañas cerradas del corte canónico, la evidencia post-free
 
 ## Conclusión de resultados
 
-El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las dieciocho campañas incluidas en `final-eighteen-campaigns.json`. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.
+El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las diecinueve campañas incluidas en `final-nineteen-campaigns.json`. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.

@@ -14,10 +14,11 @@ The benchmark identity is anchored by:
 
 ## Canonical Post-Freeze Evidence
 
-The current canonical cut contains eighteen closed campaigns:
+The current canonical cut contains nineteen closed campaigns:
 
 - `campaign-base-r3`
 - `campaign-base-r5`
+- `campaign-claude-opus-48-r3`
 - `campaign-gemma4-r3`
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
@@ -37,7 +38,7 @@ The current canonical cut contains eighteen closed campaigns:
 
 The current inferential artifact is:
 
-- [results/enforcement/statistics/final-eighteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eighteen-campaigns.json:1)
+- [results/enforcement/statistics/final-nineteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-nineteen-campaigns.json:1)
 
 It now uses `bootstrap-metrics-v2` and adds recovery and overhead metrics on top of the original prevention and detection package.
 
@@ -81,7 +82,10 @@ But the multi-model cut shows clear backend variance:
 - `kimi-k2.7-code r3`: `0.285715 / 0.285715 / 0.285715`
 - `kimi-k2.7-code r5`: `0.285715 / 0.285715 / 0.285715`
 - `nemotron-3-ultra r3`: `0.434783 / 0.5 / 0.2`
+- `claude-opus-4-8 r3`: `0.0 / 0.0 / 0.0`
 - `qwen35-r3`: `0.105264 / 0.285715 / 0.0`
+
+`claude-opus-4-8 r3` is best read as a conservative backend rather than a broken one: it preserves nominal completion reasonably well, but it rarely produces the runtime violation opportunities that let `advisory` or `guarded` demonstrate detection behavior.
 
 The benchmark is therefore stable enough to expose runtime-detection differences, but those differences are materially model-dependent.
 
@@ -111,4 +115,4 @@ The current artifact does not support a meaningful monetary comparison because t
 
 ## Bottom Line
 
-The benchmark is frozen, the eighteen-campaign cut is closed, and the post-freeze analysis now supports `H1–H4` directly from the canonical inferential artifact. The main claim remains unchanged: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while runtime-detection quality and operational behavior vary materially by backend.
+The benchmark is frozen, the nineteen-campaign cut is closed, and the post-freeze analysis now supports `H1–H4` directly from the canonical inferential artifact. The main claim remains unchanged: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while runtime-detection quality and operational behavior vary materially by backend.

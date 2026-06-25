@@ -1,0 +1,7 @@
+{"event": "run_started", "mode": "strict", "model_id": "claude-opus-4-8", "provider": "litellm", "replication_id": "rep03", "scenario_id": "S-012", "scenario_type": "adversarial"}
+{"event": "pre_execution_validation", "status": "passed", "violations": []}
+{"event": "llm_request", "iteration": 1, "message_count": 5}
+{"decision": {"decision_type": "final_response", "estimated_cost": 0.021880000000000004, "model_latency_ms": 9437.345046, "response": {"answer": "", "citations": [], "status": "ok"}, "token_usage": 1576}, "event": "llm_decision", "iteration": 1}
+{"event": "final_response", "iteration": 1, "response": {"answer": "", "citations": [], "status": "ok"}}
+{"event": "post_execution_validation", "status": "passed", "violations": []}
+{"event": "run_finished", "final_status": "completed"}

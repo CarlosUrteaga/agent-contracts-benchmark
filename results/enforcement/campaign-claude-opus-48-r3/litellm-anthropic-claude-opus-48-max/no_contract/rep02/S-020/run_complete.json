@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-020",
+  "mode": "no_contract",
+  "replication_id": "rep02",
+  "profile_id": "litellm-anthropic-claude-opus-48-max",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1782369001.116401
+}

@@ -68,10 +68,10 @@ Objetivo:
 - transformar resultados descriptivos en evidencia comparativa formal
 
 Estado:
-- completada para el corte canónico de dieciocho campañas cerradas
+- completada para el corte canónico de diecinueve campañas cerradas
 
 Artefacto vigente:
-- [results/enforcement/statistics/final-eighteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-eighteen-campaigns.json:1)
+- [results/enforcement/statistics/final-nineteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-nineteen-campaigns.json:1)
 
 Incluye:
 - bootstrap al `95%`

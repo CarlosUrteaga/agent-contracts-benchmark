@@ -1,0 +1,18 @@
+{
+  "run_id": "S-016-no_contract-rep01",
+  "scenario_id": "S-016",
+  "mode": "no_contract",
+  "contract_id": "enforcement.no_contract.v2",
+  "provider": "litellm",
+  "model_id": "claude-opus-4-8",
+  "replication_id": "rep01",
+  "actions": [],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

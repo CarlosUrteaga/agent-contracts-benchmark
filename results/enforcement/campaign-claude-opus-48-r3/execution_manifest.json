@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-25T06:00:59.575035+00:00",
+  "campaign_id": "campaign-claude-opus-48-r3",
+  "runs_root": "results/enforcement/campaign-claude-opus-48-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/anthropic_claude_opus_48_max.yaml",
+  "model_profile_hash": "sha256:770424e9d4a09f40cbbc1419a62b42b79d430f716f8426779228438d9a83843d",
+  "profile_id": "litellm-anthropic-claude-opus-48-max",
+  "provider": "litellm",
+  "model_id": "claude-opus-4-8",
+  "declared_model_version": "claude-opus-4-8",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}
