@@ -14,10 +14,14 @@
 - `campaign-kimi-k27-code-r3`
 - `campaign-kimi-k27-code-r5`
 - `campaign-nemotron-3-ultra-r3`
+- `campaign-nemotron-3-ultra-r5`
+- `campaign-openai-direct-r3`
 - `campaign-qwen35-397b-r3`
+- `campaign-qwen35-4b-r3`
+- `campaign-qwen35-4b-r5`
 - `campaign-gpt-oss-120b-r5`
 - `campaign-deepseek-v4-pro-r5`
-- [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1)
+- [results/enforcement/statistics/final-seventeen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-seventeen-campaigns.json:1)
 
 ## P0 — Narrativa final comparativa
 
@@ -25,7 +29,7 @@ Objetivo:
 - convertir el cierre estadístico actual en tablas y argumentos doctorales explícitos
 
 Estado:
-- completado sobre el corte canónico de trece campañas
+- completado sobre el corte canónico de diecisiete campañas
 
 Entregables cerrados:
 - comparación por hipótesis `H1–H4`
@@ -34,7 +38,7 @@ Entregables cerrados:
 - exclusión explícita de reruns exploratorios y smoke-only artifacts del paquete canónico
 
 Definition of Done:
-- el capítulo de resultados puede apoyarse directamente en el paquete de trece campañas cerradas
+- el capítulo de resultados puede apoyarse directamente en el paquete de diecisiete campañas cerradas
 
 ## P0 — Decisión de expansión selectiva
 

@@ -14,7 +14,7 @@ The benchmark identity is anchored by:
 
 ## Canonical Post-Freeze Evidence
 
-The current canonical cut contains thirteen closed campaigns:
+The current canonical cut contains seventeen closed campaigns:
 
 - `campaign-base-r3`
 - `campaign-base-r5`
@@ -29,10 +29,14 @@ The current canonical cut contains thirteen closed campaigns:
 - `campaign-kimi-k27-code-r3`
 - `campaign-kimi-k27-code-r5`
 - `campaign-nemotron-3-ultra-r3`
+- `campaign-nemotron-3-ultra-r5`
+- `campaign-openai-direct-r3`
+- `campaign-qwen35-4b-r3`
+- `campaign-qwen35-4b-r5`
 
 The current inferential artifact is:
 
-- [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1)
+- [results/enforcement/statistics/final-seventeen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-seventeen-campaigns.json:1)
 
 It now uses `bootstrap-metrics-v2` and adds recovery and overhead metrics on top of the original prevention and detection package.
 
@@ -106,4 +110,4 @@ The current artifact does not support a meaningful monetary comparison because t
 
 ## Bottom Line
 
-The benchmark is frozen, the thirteen-campaign cut is closed, and the post-freeze analysis now supports `H1–H4` directly from the canonical inferential artifact. The main claim remains unchanged: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while runtime-detection quality and operational behavior vary materially by backend.
+The benchmark is frozen, the seventeen-campaign cut is closed, and the post-freeze analysis now supports `H1–H4` directly from the canonical inferential artifact. The main claim remains unchanged: `guarded` preserves the best safety-utility tradeoff under the frozen benchmark, while runtime-detection quality and operational behavior vary materially by backend.

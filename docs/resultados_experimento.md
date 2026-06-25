@@ -1,6 +1,6 @@
 # Pruebas, complicaciones, adecuaciones, hallazgos y resultados
 
-Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-20`, el corte canónico vigente se compone de trece campañas cerradas y del artefacto inferencial [results/enforcement/statistics/final-thirteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-thirteen-campaigns.json:1), en esquema `bootstrap-metrics-v2`.
+Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-06-24`, el corte canónico vigente se compone de diecisiete campañas cerradas y del artefacto inferencial [results/enforcement/statistics/final-seventeen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-seventeen-campaigns.json:1), en esquema `bootstrap-metrics-v2`.
 
 ## Estado metodológico
 
@@ -31,6 +31,10 @@ Las campañas utilizables para análisis final son:
 - `campaign-kimi-k27-code-r3`
 - `campaign-kimi-k27-code-r5`
 - `campaign-nemotron-3-ultra-r3`
+- `campaign-nemotron-3-ultra-r5`
+- `campaign-openai-direct-r3`
+- `campaign-qwen35-4b-r3`
+- `campaign-qwen35-4b-r5`
 
 El artefacto estadístico canónico:
 
@@ -171,7 +175,7 @@ La dimensión monetaria no es informativa en este corte porque los adapters actu
 
 ## Lectura consolidada del corte canónico
 
-Con las trece campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
+Con las diecisiete campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
 
 1. El benchmark congelado sigue produciendo oportunidades reales de enforcement.
 2. `guarded` y `strict` previenen side effects inseguros cuando la oportunidad bloqueante aparece.
@@ -181,4 +185,4 @@ Con las trece campañas cerradas del corte canónico, la evidencia post-freeze p
 
 ## Conclusión de resultados
 
-El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las trece campañas incluidas en `final-thirteen-campaigns.json`. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.
+El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las diecisiete campañas incluidas en `final-seventeen-campaigns.json`. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.
