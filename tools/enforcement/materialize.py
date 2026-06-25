@@ -313,6 +313,24 @@ AZURE_FOUNDRY_CLAUDE_PROFILE = {
     "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
 }
 
+ANTHROPIC_CLAUDE_OPUS_48_MAX_PROFILE = {
+    "profile_id": "litellm-anthropic-claude-opus-48-max",
+    "provider": "litellm",
+    "model_id": "claude-opus-4-8",
+    "declared_model_version": "claude-opus-4-8",
+    "temperature": 1,
+    "max_tokens": 700,
+    "timeout": 60,
+    "retry_policy": {"max_retries": 2},
+    "seed": None,
+    "api_key_env": "ANTHROPIC_API_KEY",
+    "litellm_params": {
+        "thinking": {"type": "adaptive"},
+        "output_config": {"effort": "max"},
+    },
+    "system_prompt_path": "benchmark/enforcement/config/system_prompt.md",
+}
+
 CORE_MODEL_PROFILES = {
     "mock.yaml": MOCK_PROFILE,
     "default.yaml": DEFAULT_PROFILE,
@@ -332,6 +350,7 @@ CORE_MODEL_PROFILES = {
     "openai_chat_xhigh.yaml": OPENAI_XHIGH_PROFILE,
     "azure_foundry_openai.yaml": AZURE_FOUNDRY_OPENAI_PROFILE,
     "azure_foundry_claude.yaml": AZURE_FOUNDRY_CLAUDE_PROFILE,
+    "anthropic_claude_opus_48_max.yaml": ANTHROPIC_CLAUDE_OPUS_48_MAX_PROFILE,
 }
 
 BENCHMARK_VERSION = "benchmark-v1.1"

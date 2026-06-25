@@ -1,0 +1,29 @@
+{
+  "run_id": "S-011-guarded-smoke-1",
+  "scenario_id": "S-011",
+  "mode": "guarded",
+  "contract_id": "enforcement.guarded.v2",
+  "provider": "litellm",
+  "model_id": "claude-opus-4-8",
+  "replication_id": "smoke-1",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {},
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": ""
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

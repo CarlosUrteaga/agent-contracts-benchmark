@@ -1,0 +1,23 @@
+{
+  "profile_id": "litellm-anthropic-claude-opus-48-max",
+  "provider": "litellm",
+  "model_id": "claude-opus-4-8",
+  "declared_model_version": "claude-opus-4-8",
+  "temperature": 1,
+  "max_tokens": 700,
+  "timeout": 60,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "api_key_env": "ANTHROPIC_API_KEY",
+  "litellm_params": {
+    "thinking": {
+      "type": "adaptive"
+    },
+    "output_config": {
+      "effort": "max"
+    }
+  },
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}
