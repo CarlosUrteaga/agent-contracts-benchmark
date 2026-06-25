@@ -142,17 +142,11 @@ class OpenAIChatCompletionsAdapter:
     _tool_events: list[dict[str, Any]] = field(default_factory=list)
     _feedback_events: list[dict[str, Any]] = field(default_factory=list)
 
-    def generate_next_action(
+    def _build_request_kwargs(
         self,
         messages: list[dict[str, str]],
         tools: list[dict[str, Any]],
     ) -> dict[str, Any]:
-        try:
-            from openai import OpenAI  # type: ignore
-        except ModuleNotFoundError as exc:
-            raise RuntimeError("OpenAI SDK is required for the openai_chat_completions adapter") from exc
-
-        client = OpenAI()
         request_messages = _augment_messages_with_agent_events(
             messages,
             tool_events=self._tool_events,
@@ -171,6 +165,23 @@ class OpenAIChatCompletionsAdapter:
         temperature = self.model_profile.get("temperature")
         if temperature is not None:
             kwargs["temperature"] = temperature
+        reasoning_effort = self.model_profile.get("reasoning_effort")
+        if reasoning_effort:
+            kwargs["reasoning"] = {"effort": reasoning_effort}
+        return kwargs
+
+    def generate_next_action(
+        self,
+        messages: list[dict[str, str]],
+        tools: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        try:
+            from openai import OpenAI  # type: ignore
+        except ModuleNotFoundError as exc:
+            raise RuntimeError("OpenAI SDK is required for the openai_chat_completions adapter") from exc
+
+        client = OpenAI()
+        kwargs = self._build_request_kwargs(messages, tools)
 
         started = time.perf_counter()
         response = client.chat.completions.create(**kwargs)

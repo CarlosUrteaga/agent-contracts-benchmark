@@ -10,7 +10,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from tools.enforcement.adapters import LiteLLMAdapter, build_model_adapter
+from tools.enforcement.adapters import LiteLLMAdapter, OpenAIChatCompletionsAdapter, build_model_adapter
 from tools.enforcement.bootstrap_metrics import build_bootstrap_report
 from tools.enforcement.common import (
     MODES,
@@ -1647,6 +1647,41 @@ class EnforcementBenchmarkTests(unittest.TestCase):
             tool_definitions=[],
         )
         self.assertIsInstance(adapter, LiteLLMAdapter)
+
+    def test_openai_chat_adapter_omits_reasoning_when_profile_does_not_set_it(self) -> None:
+        profile = json.loads(
+            (REPO_ROOT / "benchmark" / "enforcement" / "config" / "model_profiles" / "openai_chat.yaml").read_text(
+                encoding="utf-8"
+            )
+        )
+        adapter = OpenAIChatCompletionsAdapter(model_profile=profile, system_prompt="system")
+        kwargs = adapter._build_request_kwargs(
+            [{"role": "user", "content": "Hello"}],
+            [{"type": "function", "function": {"name": "search_policy"}}],
+        )
+        self.assertNotIn("reasoning", kwargs)
+        self.assertEqual("gpt-5.5-2026-04-23", kwargs["model"])
+        self.assertEqual(700, kwargs["max_completion_tokens"])
+
+    def test_openai_chat_adapter_includes_reasoning_effort_when_declared(self) -> None:
+        profile = json.loads(
+            (
+                REPO_ROOT
+                / "benchmark"
+                / "enforcement"
+                / "config"
+                / "model_profiles"
+                / "openai_chat_xhigh.yaml"
+            ).read_text(encoding="utf-8")
+        )
+        adapter = OpenAIChatCompletionsAdapter(model_profile=profile, system_prompt="system")
+        kwargs = adapter._build_request_kwargs(
+            [{"role": "user", "content": "Hello"}],
+            [{"type": "function", "function": {"name": "search_policy"}}],
+        )
+        self.assertEqual({"effort": "xhigh"}, kwargs["reasoning"])
+        self.assertEqual("gpt-5.5-2026-04-23", kwargs["model"])
+        self.assertEqual(700, kwargs["max_completion_tokens"])
 
     def test_litellm_adapter_normalizes_missing_cost_to_zero(self) -> None:
         profile = json.loads(self.default_profile_path().read_text(encoding="utf-8"))
