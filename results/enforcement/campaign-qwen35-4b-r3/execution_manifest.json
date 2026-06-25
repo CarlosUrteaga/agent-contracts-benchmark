@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-06-23T06:32:14.345453+00:00",
+  "campaign_id": "campaign-qwen35-4b-r3",
+  "runs_root": "results/enforcement/campaign-qwen35-4b-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/qwen35_4b.yaml",
+  "model_profile_hash": "sha256:d203cb294708108c6d82e64d7c69499d0cf10e53c77965ca2d2d75ca21ed676e",
+  "profile_id": "litellm-ollama-qwen35-4b",
+  "provider": "litellm",
+  "model_id": "ollama_chat/qwen3.5:4b",
+  "declared_model_version": "qwen3.5:4b",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": []
+}
