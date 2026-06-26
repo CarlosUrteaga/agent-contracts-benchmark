@@ -4,15 +4,16 @@ project:
 
 website:
   title: "Agent Contracts Benchmark"
+  site-url: https://carlosurteaga.github.io/agent-contracts-benchmark/
   navbar:
     right:
-      - href: index.qmd
+      - href: index.html
         text: Overview
-      - href: methodology.qmd
+      - href: methodology.html
         text: Methodology
-      - href: results.qmd
+      - href: results.html
         text: Results
-      - href: artifacts.qmd
+      - href: artifacts.html
         text: Artifacts
       - href: https://github.com/carlosurteaga/agent-contracts-benchmark
         text: Repository

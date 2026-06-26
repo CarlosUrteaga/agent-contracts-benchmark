@@ -40,4 +40,4 @@ The benchmark fixes a controlled environment with stochastic model decisions, de
 
 ## Reading Path
 
-Start with [Methodology](methodology.qmd) for the frozen design, move to [Results](results.qmd) for the canonical findings, and use [Artifacts](artifacts.qmd) when you need the benchmark manifest, freeze statement, or the statistics JSON behind the site.
+Start with [Methodology](methodology.html) for the frozen design, move to [Results](results.html) for the canonical findings, and use [Artifacts](artifacts.html) when you need the benchmark manifest, freeze statement, or the statistics JSON behind the site.
