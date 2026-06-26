@@ -28,7 +28,7 @@ const artifactCards = siteData.artifacts.map((artifact) => ({
     <SectionBlock
       id="artifact-set"
       eyebrow="Public artifact set"
-      title="Readers should be able to verify the benchmark, the narrative, and the canonical statistics package quickly."
+      title="Public materials required to verify benchmark identity and canonical results."
     >
       <ArtifactGrid items={artifactCards} />
     </SectionBlock>
@@ -36,7 +36,7 @@ const artifactCards = siteData.artifacts.map((artifact) => ({
     <SectionBlock
       id="repro"
       eyebrow="Reproducibility"
-      title="The public site is static, but the benchmark remains reproducible from the repository."
+      title="Public site build and artifact-generation commands."
     >
       <div class="code-panel">
         <pre><code>uv sync --group dev --group site
@@ -52,7 +52,7 @@ npm run build --prefix site</code></pre>
     <SectionBlock
       id="exclusions"
       eyebrow="Explicit exclusions"
-      title="The public navigation stays narrow on purpose."
+      title="Materials excluded from the public navigation."
     >
       <div class="content-grid">
         <article class="story-card story-card-accent">

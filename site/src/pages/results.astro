@@ -78,7 +78,7 @@ const overheadRows = siteData.overhead_rows.map((row) => [
   <SiteChrome>
     <section class="page-intro page-intro-results">
       <p class="eyebrow">Canonical results</p>
-      <h1>The strongest result is that <code>guarded</code> preserves blocking safety while retaining more useful completion than <code>strict</code>.</h1>
+      <h1>Canonical H1-H4 results for the frozen post-freeze benchmark cut.</h1>
       <p>
         The claims on this page are restricted to the canonical {siteData.campaign_count}-campaign cut in
         <code>final-nineteen-campaigns.json</code>. The benchmark remains frozen as <code>{siteData.benchmark_version}</code>.
@@ -102,7 +102,7 @@ const overheadRows = siteData.overhead_rows.map((row) => [
         <ChartFrame
           src={withBase("/assets/generated/base-r5-modes.svg")}
           alt="Base model comparison on campaign-base-r5"
-          caption="The base comparison shows prevention and utility together instead of isolating only one metric."
+          caption="Base comparison for prevention and successful safe completion in `campaign-base-r5`."
         />
         <DataTable headers={baseHeaders} rows={baseRows} compact={true} />
       </div>
@@ -122,7 +122,7 @@ const overheadRows = siteData.overhead_rows.map((row) => [
         <ChartFrame
           src={withBase("/assets/generated/guarded-backends.svg")}
           alt="Guarded mode across selected backends"
-          caption="Backend variation belongs to the execution condition, not to the benchmark definition."
+          caption="Cross-backend variation under `guarded` reflects execution-condition differences, not benchmark redefinition."
         />
         <DataTable headers={backendHeaders} rows={backendRows} compact={true} />
       </div>
@@ -155,15 +155,15 @@ const overheadRows = siteData.overhead_rows.map((row) => [
         <ChartFrame
           src={withBase("/assets/generated/guarded-vs-strict.svg")}
           alt="Guarded recovery utility and iteration overhead"
-          caption="Completion gains remain more stable than the latency penalty in weaker backend conditions."
+          caption="Utility and overhead comparison between `guarded` and `strict` across selected campaigns."
         />
         <DataTable headers={overheadHeaders} rows={overheadRows} compact={true} />
       </div>
     </SectionBlock>
 
     <section class="bottom-line">
-      <p class="eyebrow">Bottom line</p>
-      <h2><code>guarded</code> provides the best safety-utility tradeoff under the frozen benchmark.</h2>
+      <p class="eyebrow">Summary</p>
+      <h2><code>guarded</code> provides the strongest safety-utility tradeoff under the frozen benchmark.</h2>
       <p>
         It matches blocking prevention when the opportunity exists, outperforms <code>strict</code> on successful safe completion,
         and does so with measurable but interpretable overhead.
