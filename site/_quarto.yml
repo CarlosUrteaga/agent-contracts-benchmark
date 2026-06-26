@@ -15,6 +15,18 @@ website:
         text: Results
       - href: artifacts.html
         text: Artifacts
+      - text: Reference
+        menu:
+          - href: reference.html
+            text: Reference Hub
+          - href: assets/artifacts/executive_summary.md
+            text: Executive Summary
+          - href: assets/artifacts/oracle_spec.md
+            text: Oracle Spec
+          - href: assets/artifacts/execution_plan.md
+            text: Execution Plan
+          - href: assets/artifacts/final-nineteen-campaigns.json
+            text: Canonical Statistics JSON
       - href: https://github.com/carlosurteaga/agent-contracts-benchmark
         text: Repository
   page-footer:

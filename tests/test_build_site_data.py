@@ -54,7 +54,7 @@ class BuildSiteDataTests(unittest.TestCase):
             json_path = out_dir / "data/canonical_results.json"
             payload = json.loads(json_path.read_text())
             self.assertEqual(payload["campaign_count"], 19)
-            self.assertEqual(len(payload["artifacts"]), 6)
+            self.assertEqual(len(payload["artifacts"]), 16)
 
             for rel_path in [
                 "_includes/generated/overview_metrics.md",
@@ -62,6 +62,7 @@ class BuildSiteDataTests(unittest.TestCase):
                 "_includes/generated/table_guarded_backends.md",
                 "_includes/generated/table_overhead.md",
                 "_includes/generated/artifact_links.md",
+                "_includes/generated/reference_sections.md",
                 "assets/generated/base-r5-modes.svg",
                 "assets/generated/guarded-backends.svg",
                 "assets/generated/guarded-vs-strict.svg",

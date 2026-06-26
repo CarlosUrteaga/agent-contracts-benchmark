@@ -1,0 +1,17 @@
+---
+title: "Reference"
+---
+
+## Companion Documents
+
+This section exposes the additional Markdown documents that support the benchmark narrative, audit framing, oracle semantics, and operational planning. They are published as companion references, not as primary navigation pages.
+
+{{< include _includes/generated/reference_sections.md >}}
+
+## Notes
+
+::: {.note-block}
+- The published reference set stays English-first.
+- TeX sources and thesis-draft Spanish materials remain out of the public site navigation.
+- The reference links point to copied public artifacts inside the rendered site, so they work without browsing the repository directly.
+:::

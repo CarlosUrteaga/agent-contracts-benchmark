@@ -25,9 +25,19 @@ MODE_DESCRIPTIONS = {
 ARTIFACTS = [
     ("benchmark/enforcement/benchmark_manifest.json", "benchmark_manifest.json"),
     ("docs/benchmark_freeze_statement.md", "benchmark_freeze_statement.md"),
+    ("docs/calibration_log.md", "calibration_log.md"),
+    ("docs/contract_audit_matrix.md", "contract_audit_matrix.md"),
     ("docs/contract_enforcement_benchmark.md", "contract_enforcement_benchmark.md"),
+    ("docs/contract_experiment.md", "contract_experiment.md"),
     ("docs/EXECUTIVE_SUMMARY.md", "executive_summary.md"),
+    ("docs/execution_plan.md", "execution_plan.md"),
+    ("docs/future_platform_roadmap.md", "future_platform_roadmap.md"),
+    ("docs/oracle_spec.md", "oracle_spec.md"),
+    ("docs/oracle_traceability_matrix.md", "oracle_traceability_matrix.md"),
+    ("docs/pilot_calibration_statement.md", "pilot_calibration_statement.md"),
+    ("docs/pre_freeze_audit.md", "pre_freeze_audit.md"),
     ("docs/resultados_experimento.md", "results.md"),
+    ("docs/scenario_audit_matrix.md", "scenario_audit_matrix.md"),
     ("results/enforcement/statistics/final-nineteen-campaigns.json", "final-nineteen-campaigns.json"),
 ]
 GUARDED_BACKEND_CAMPAIGNS = [
@@ -416,6 +426,44 @@ On the base five-replication campaign, `guarded` reaches `successful_safe_comple
     (include_root / "artifact_links.md").write_text(
         md_table(["Public artifact", "Repo source"], artifact_rows) + "\n"
     )
+
+    artifact_groups = {
+        "Core benchmark": [
+            "benchmark_manifest.json",
+            "benchmark_freeze_statement.md",
+            "contract_enforcement_benchmark.md",
+            "contract_experiment.md",
+            "oracle_spec.md",
+        ],
+        "Results and validation": [
+            "executive_summary.md",
+            "results.md",
+            "pre_freeze_audit.md",
+            "calibration_log.md",
+            "pilot_calibration_statement.md",
+        ],
+        "Matrices and traceability": [
+            "contract_audit_matrix.md",
+            "oracle_traceability_matrix.md",
+            "scenario_audit_matrix.md",
+        ],
+        "Operational planning": [
+            "execution_plan.md",
+            "future_platform_roadmap.md",
+            "final-nineteen-campaigns.json",
+        ],
+    }
+    artifact_lookup = {artifact["label"]: artifact for artifact in data["artifacts"]}
+    reference_sections: list[str] = []
+    for heading, labels in artifact_groups.items():
+        reference_sections.append(f"### {heading}")
+        rows = []
+        for label in labels:
+            artifact = artifact_lookup[label]
+            rows.append([f"[`{label}`]({artifact['site_path']})", f"`{artifact['source']}`"])
+        reference_sections.append(md_table(["Document", "Repo source"], rows))
+        reference_sections.append("")
+    (include_root / "reference_sections.md").write_text("\n".join(reference_sections).rstrip() + "\n")
 
 
 def chart_svg(title: str, groups: list[dict[str, Any]], palette: list[str], max_value: float, lower_better: set[str] | None = None) -> str:
