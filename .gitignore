@@ -168,6 +168,13 @@ venv.bak/
 
 # mkdocs documentation
 /site
+!/site/
+/site/_site/
+/site/.quarto/
+/site/data/canonical_results.json
+/site/_includes/generated/*.md
+/site/assets/generated/*.svg
+/site/assets/artifacts/*
 
 # mypy
 .mypy_cache/

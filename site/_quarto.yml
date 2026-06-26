@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Agent Contracts Benchmark"
+  navbar:
+    right:
+      - href: index.qmd
+        text: Overview
+      - href: methodology.qmd
+        text: Methodology
+      - href: results.qmd
+        text: Results
+      - href: artifacts.qmd
+        text: Artifacts
+      - href: https://github.com/carlosurteaga/agent-contracts-benchmark
+        text: Repository
+  page-footer:
+    left: "Benchmark companion for the frozen `benchmark-v1.0` study."
+    right: "Canonical cut date: 2026-06-25"
+
+format:
+  html:
+    theme: none
+    css: styles.scss
+    toc: true
+    toc-depth: 3
+    smooth-scroll: true
+    link-external-newwindow: true
+    grid:
+      body-width: 1100px
+      margin-width: 260px
+      gutter-width: 2rem
+
+execute:
+  echo: false
+  warning: false
+  error: true

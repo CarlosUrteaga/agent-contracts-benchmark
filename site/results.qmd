@@ -1,0 +1,53 @@
+---
+title: "Results"
+---
+
+## Canonical Evidence Base
+
+The results claims on this page are restricted to the canonical 19-campaign cut in [`final-nineteen-campaigns.json`](assets/artifacts/final-nineteen-campaigns.json). The benchmark remains frozen as `benchmark-v1.0`, and the public interpretation here follows the paper-ready English narrative already maintained in the repository.
+
+## H1. Blocking Enforcement Prevents Unsafe Side Effects
+
+Where the benchmark creates blocking opportunities, `guarded` and `strict` eliminate committed unsafe side effects relative to `no_contract` and `advisory`. The base five-replication campaign is the clearest anchor case.
+
+::: {.chart-frame}
+![Base model comparison on campaign-base-r5](assets/generated/base-r5-modes.svg)
+:::
+
+{{< include _includes/generated/table_base_r5.md >}}
+
+The core reading is prevention, not only detection: on `campaign-base-r5`, both blocking modes keep `unsafe_side_effect_rate = 0.0`, while `no_contract` and `advisory` remain at `1.0`.
+
+## H2. Runtime Detection Quality Is Backend-Sensitive
+
+The frozen benchmark exposes backend differences in how often runtime intervention opportunities appear and how well they are detected. Some backends produce strong observable activation; others are conservative enough that they rarely force the governor to intervene.
+
+::: {.chart-frame}
+![Guarded mode across selected backends](assets/generated/guarded-backends.svg)
+:::
+
+{{< include _includes/generated/table_guarded_backends.md >}}
+
+The conservative case is still methodologically valid. A backend such as `claude-opus-48-r3` can preserve nominal utility while surfacing almost no runtime opportunity under `guarded`, which yields weak runtime `f1` without contradicting the benchmark.
+
+## H3. `guarded` Preserves More Utility Than `strict`
+
+This remains the strongest result in the canonical cut. `guarded` retains the blocking behavior of strong enforcement but allows replanning after denial, which preserves more successful safe completion than `strict`.
+
+## H4. Recovery-Capable Enforcement Adds Operational Overhead
+
+The utility advantage is not free. `guarded` pays measurable overhead in latency, token usage, and iterations because recovery takes additional steps.
+
+::: {.chart-frame}
+![Guarded recovery utility and iteration overhead](assets/generated/guarded-vs-strict.svg)
+:::
+
+{{< include _includes/generated/table_overhead.md >}}
+
+The cost claim is operational rather than financial in this artifact set. Adapter-reported cost is normalized to zero in the canonical package, so latency, token usage, and iterations are the interpretable overhead dimensions.
+
+## Bottom Line
+
+::: {.claim-strip}
+Under the frozen `benchmark-v1.0` and the canonical 19-campaign cut, `guarded` provides the best safety-utility tradeoff: it matches blocking prevention when the opportunity exists, outperforms `strict` on successful safe completion, and does so with measurable but interpretable overhead.
+:::

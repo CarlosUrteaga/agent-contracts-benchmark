@@ -21,6 +21,7 @@ packages = ["app", "tools", "tools.enforcement", "tools.governor", "tools.violat
 dev = [
   "pytest>=8.0",
 ]
+site = []
 litellm = [
   "litellm>=1.74.9",
 ]

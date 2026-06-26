@@ -1,0 +1,43 @@
+---
+title: "Research Companion"
+---
+
+::: {.hero-lead}
+Static companion site for the frozen `benchmark-v1.0` benchmark on Agent Contracts and runtime governance of tool-using LLM agents.
+:::
+
+{{< include _includes/generated/overview_metrics.md >}}
+
+::: {.claim-strip}
+The headline result is stable across the canonical evidence base: `guarded` preserves blocking safety while outperforming `strict` on successful safe completion, with measurable latency and token overhead.
+:::
+
+## Research Question
+
+Can Agent Contracts and an Agent Governor govern the runtime behavior of a tool-using LLM agent without collapsing useful completion?
+
+The benchmark fixes a controlled environment with stochastic model decisions, deterministic local tools, runtime interception before side effects, and oracle-based offline scoring. The site is intentionally narrower than a product page: it is a research companion for a frozen benchmark artifact.
+
+## Enforcement Modes
+
+{{< include _includes/generated/mode_cards.md >}}
+
+## What The Site Covers
+
+- The frozen benchmark definition and its methodological boundaries.
+- The canonical 19-campaign post-freeze cut dated `2026-06-25`.
+- The paper-ready English results narrative centered on H1-H4.
+- Curated artifact downloads for traceability and reproducibility.
+
+## What The Site Does Not Claim
+
+::: {.note-block}
+- This is not a production deployment evaluation.
+- The tools are deterministic local mocks, not real enterprise systems.
+- The benchmark does not claim broad platform integration or universal external validity.
+- Exploratory reruns, smoke-only runs, raw traces, and TeX sources are intentionally kept out of the public navigation.
+:::
+
+## Reading Path
+
+Start with [Methodology](methodology.qmd) for the frozen design, move to [Results](results.qmd) for the canonical findings, and use [Artifacts](artifacts.qmd) when you need the benchmark manifest, freeze statement, or the statistics JSON behind the site.
