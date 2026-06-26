@@ -26,6 +26,8 @@ jobs:
       - uses: astral-sh/setup-uv@v3
       - uses: quarto-dev/quarto-actions/setup@v2
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Install dependencies
         run: uv sync --group dev --group site
       - name: Build site data
