@@ -51,25 +51,25 @@ class BuildSiteDataTests(unittest.TestCase):
             self.module.write_markdown_fragments(data, out_dir)
             self.module.write_svgs(data, out_dir)
 
-            json_path = out_dir / "data/canonical_results.json"
+            json_path = out_dir / "src/data/canonical_results.json"
             payload = json.loads(json_path.read_text())
             self.assertEqual(payload["campaign_count"], 19)
             self.assertEqual(len(payload["artifacts"]), 16)
 
             for rel_path in [
-                "_includes/generated/overview_metrics.md",
-                "_includes/generated/table_base_r5.md",
-                "_includes/generated/table_guarded_backends.md",
-                "_includes/generated/table_overhead.md",
-                "_includes/generated/artifact_links.md",
-                "_includes/generated/reference_sections.md",
-                "assets/generated/base-r5-modes.svg",
-                "assets/generated/guarded-backends.svg",
-                "assets/generated/guarded-vs-strict.svg",
+                "_generated/legacy_markdown/overview_metrics.md",
+                "_generated/legacy_markdown/table_base_r5.md",
+                "_generated/legacy_markdown/table_guarded_backends.md",
+                "_generated/legacy_markdown/table_overhead.md",
+                "_generated/legacy_markdown/artifact_links.md",
+                "_generated/legacy_markdown/reference_sections.md",
+                "public/assets/generated/base-r5-modes.svg",
+                "public/assets/generated/guarded-backends.svg",
+                "public/assets/generated/guarded-vs-strict.svg",
             ]:
                 self.assertTrue((out_dir / rel_path).exists(), rel_path)
 
-            artifact_names = sorted(path.name for path in (out_dir / "assets/artifacts").iterdir())
+            artifact_names = sorted(path.name for path in (out_dir / "public/assets/artifacts").iterdir())
             self.assertNotIn("114.tex", artifact_names)
             self.assertFalse(any("smoke-" in name for name in artifact_names))
 
