@@ -1,0 +1,193 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteChrome from "../components/SiteChrome.astro";
+import SectionBlock from "../components/SectionBlock.astro";
+import ChartFrame from "../components/ChartFrame.astro";
+import DataTable from "../components/DataTable.astro";
+import { metric, siteData, withBase } from "../lib/site-data";
+
+const baseHeaders = [
+  "Mode",
+  "unsafe_side_effect_rate",
+  "governance_effectiveness",
+  "successful_safe_completion_rate",
+  "precision",
+  "recall",
+  "f1",
+];
+const baseRows = ["no_contract", "advisory", "guarded", "strict"].map((mode) => {
+  const stats = siteData.base_r5_table[mode];
+  return [
+    `<code>${mode}</code>`,
+    metric(stats.unsafe_side_effect_rate.estimate),
+    metric(stats.governance_effectiveness.estimate),
+    metric(stats.successful_safe_completion_rate.estimate),
+    metric(stats.precision.estimate),
+    metric(stats.recall.estimate),
+    metric(stats.f1.estimate),
+  ];
+});
+
+const backendHeaders = [
+  "Backend",
+  "guarded successful_safe_completion_rate",
+  "guarded unsafe_action_opportunity_rate",
+  "guarded blocked_unsafe_actions",
+  "guarded recall",
+  "guarded f1",
+];
+const backendInterpretations = {
+  "campaign-claude-opus-48-r3": "Conservative backend with low runtime activation",
+  "campaign-openai-direct-r3": "Weak but valid enforcement evidence",
+  "campaign-openai-xhigh-r3": "Conservative backend with low runtime activation",
+  "campaign-gpt-oss-120b-r3": "Weak but valid enforcement evidence",
+  "campaign-qwen35-397b-r3": "Weak but valid enforcement evidence",
+};
+const backendRows = siteData.guarded_backend_rows.map((row) => [
+  `<code>${row.campaign_id.replace("campaign-", "")}</code>`,
+  metric(row.successful_safe_completion_rate.estimate),
+  metric(row.unsafe_action_opportunity_rate.estimate),
+  metric(row.blocked_unsafe_actions.estimate),
+  metric(row.recall.estimate),
+  `${metric(row.f1.estimate)}<br /><span class="cell-note">${backendInterpretations[row.campaign_id]}</span>`,
+]);
+
+const overheadHeaders = [
+  "Campaign",
+  "guarded mean_latency_ms",
+  "strict mean_latency_ms",
+  "guarded mean_token_usage",
+  "strict mean_token_usage",
+  "guarded mean_iterations_per_run",
+  "strict mean_iterations_per_run",
+  "guarded - strict successful_safe_completion_rate",
+];
+const overheadRows = siteData.overhead_rows.map((row) => [
+  `<code>${row.campaign_id}</code>`,
+  metric(row.guarded_mean_latency_ms.estimate, 3),
+  metric(row.strict_mean_latency_ms.estimate, 3),
+  metric(row.guarded_mean_token_usage.estimate, 3),
+  metric(row.strict_mean_token_usage.estimate, 3),
+  metric(row.guarded_mean_iterations_per_run.estimate, 3),
+  metric(row.strict_mean_iterations_per_run.estimate, 3),
+  metric(row.successful_safe_completion_rate_delta),
+]);
+---
+
+<BaseLayout title="Results | Agent Contracts Benchmark" description="Canonical H1-H4 results for the frozen benchmark-v1.0 evidence base.">
+  <SiteChrome>
+    <section class="page-intro page-intro-results">
+      <p class="eyebrow">Canonical results</p>
+      <h1>The strongest result is not just that blocking works. It is that <code>guarded</code> keeps blocking safety while preserving more useful completion.</h1>
+      <p>
+        The claims on this page are restricted to the canonical {siteData.campaign_count}-campaign cut in
+        <code>final-nineteen-campaigns.json</code>. The benchmark remains frozen as <code>{siteData.benchmark_version}</code>.
+      </p>
+      <div class="results-navigator" data-results-nav>
+        <button class="nav-chip is-selected" data-target="all" type="button">All evidence</button>
+        <button class="nav-chip" data-target="h1" type="button">H1 Safety</button>
+        <button class="nav-chip" data-target="h2" type="button">H2 Runtime</button>
+        <button class="nav-chip" data-target="h3" type="button">H3 Utility</button>
+        <button class="nav-chip" data-target="h4" type="button">H4 Overhead</button>
+      </div>
+    </section>
+
+    <SectionBlock
+      id="h1"
+      eyebrow="H1"
+      title="Blocking enforcement prevents committed unsafe side effects when the benchmark presents a real enforcement opportunity."
+      body="The base five-replication campaign is the clearest anchor case: `no_contract` and `advisory` remain at `1.0`, while `guarded` and `strict` both reach `0.0` with `governance_effectiveness = 1.0`."
+    >
+      <div class="results-layout">
+        <ChartFrame
+          src={withBase("/assets/generated/base-r5-modes.svg")}
+          alt="Base model comparison on campaign-base-r5"
+          caption="The base comparison shows prevention and utility together instead of isolating only one metric."
+        />
+        <DataTable headers={baseHeaders} rows={baseRows} compact={true} />
+      </div>
+      <p class="section-note">
+        Across the canonical cut, the same strong enforcement evidence appears whenever the contrast is defined, including
+        <code>campaign-deepseek-v4-pro-r5</code>. The result is prevention, not only detection.
+      </p>
+    </SectionBlock>
+
+    <SectionBlock
+      id="h2"
+      eyebrow="H2"
+      title="Runtime detection quality is backend-sensitive even when the benchmark stays fixed."
+      body="The benchmark exposes backend differences in how often runtime intervention opportunities appear and how cleanly they are detected under `guarded`."
+    >
+      <div class="results-layout">
+        <ChartFrame
+          src={withBase("/assets/generated/guarded-backends.svg")}
+          alt="Guarded mode across selected backends"
+          caption="Backend variation belongs to the execution condition, not to the benchmark definition."
+        />
+        <DataTable headers={backendHeaders} rows={backendRows} compact={true} />
+      </div>
+      <p class="section-note">
+        The conservative case is still methodologically valid. A backend such as <code>claude-opus-48-r3</code> can preserve nominal utility while surfacing almost no runtime opportunity under
+        <code>guarded</code>, which yields weak runtime <code>f1</code> without contradicting the benchmark.
+      </p>
+    </SectionBlock>
+
+    <SectionBlock
+      id="h3"
+      eyebrow="H3"
+      title="`guarded` preserves more utility than `strict` because denial can trigger recovery instead of terminal failure."
+      body={`On campaign-base-r5, guarded reaches ${metric(siteData.headline_metrics.successful_safe_completion_rate.guarded.estimate)} versus ${metric(siteData.headline_metrics.successful_safe_completion_rate.strict.estimate)} for strict.`}
+    >
+      <div class="callout-panel">
+        <p>
+          The utility gain is not a relaxation of safety. When prevention is defined, <code>guarded</code> and <code>strict</code> keep the same blocking outcome, while <code>guarded</code> recovers more often after denial.
+        </p>
+      </div>
+    </SectionBlock>
+
+    <SectionBlock
+      id="h4"
+      eyebrow="H4"
+      title="Recovery-capable enforcement adds measurable operational overhead."
+      body="The cost claim is operational rather than financial in this public artifact set: latency, token usage, and iteration count are the interpretable dimensions."
+    >
+      <div class="results-layout">
+        <ChartFrame
+          src={withBase("/assets/generated/guarded-vs-strict.svg")}
+          alt="Guarded recovery utility and iteration overhead"
+          caption="Completion gains remain more stable than the latency penalty in weaker backend conditions."
+        />
+        <DataTable headers={overheadHeaders} rows={overheadRows} compact={true} />
+      </div>
+    </SectionBlock>
+
+    <section class="bottom-line">
+      <p class="eyebrow">Bottom line</p>
+      <h2><code>guarded</code> provides the best safety-utility tradeoff under the frozen benchmark.</h2>
+      <p>
+        It matches blocking prevention when the opportunity exists, outperforms <code>strict</code> on successful safe completion,
+        and does so with measurable but interpretable overhead.
+      </p>
+    </section>
+
+    <script>
+      const nav = document.querySelector("[data-results-nav]");
+      if (nav) {
+        const buttons = Array.from(nav.querySelectorAll("[data-target]"));
+        const sections = Array.from(document.querySelectorAll(".section-block[id^='h']"));
+        const selectTarget = (target) => {
+          buttons.forEach((button) => {
+            button.classList.toggle("is-selected", button.dataset.target === target);
+          });
+          sections.forEach((section) => {
+            const show = target === "all" || section.id === target;
+            section.toggleAttribute("hidden", !show);
+          });
+        };
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => selectTarget(button.dataset.target));
+        });
+      }
+    </script>
+  </SiteChrome>
+</BaseLayout>

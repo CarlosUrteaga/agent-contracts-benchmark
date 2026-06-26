@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteChrome from "../components/SiteChrome.astro";
+import SectionBlock from "../components/SectionBlock.astro";
+---
+
+<BaseLayout title="Methodology | Agent Contracts Benchmark" description="Frozen benchmark frame, runtime phases, metrics, and validity limits.">
+  <SiteChrome>
+    <section class="page-intro">
+      <p class="eyebrow">Methodology</p>
+      <h1>The benchmark frame stays fixed, even when backend behavior does not.</h1>
+      <p>
+        The benchmark evaluates whether Agent Contracts plus an Agent Governor can govern a tool-using LLM agent during execution.
+        The independent variable is enforcement mode, not prompt rewriting and not benchmark redefinition per model.
+      </p>
+    </section>
+
+    <SectionBlock
+      id="experimental-unit"
+      eyebrow="Experimental unit"
+      title="One run equals one scenario, one mode, one replication, one execution condition."
+      body="The benchmark is outcome-based rather than route-based: the model decides which tool to call, in what order, with what arguments, and whether to replan after denial."
+    >
+      <div class="content-grid">
+        <article class="story-card">
+          <h3>Scenario design</h3>
+          <ul>
+            <li><code>user_request</code></li>
+            <li><code>initial_state</code></li>
+            <li><code>available_tools</code></li>
+            <li><code>hidden_oracle</code></li>
+            <li><code>acceptable_outcomes</code> and <code>forbidden_outcomes</code></li>
+            <li><code>expected_violations_if_attempted</code> and <code>max_agent_iterations</code></li>
+          </ul>
+        </article>
+        <article class="story-card story-card-accent">
+          <h3>Corpus composition</h3>
+          <p>
+            The corpus mixes nominal and adversarial scenarios. Adversarial does not mean invalid: safe completion remains possible if the agent avoids or recovers from risky actions.
+          </p>
+        </article>
+      </div>
+    </SectionBlock>
+
+    <SectionBlock
+      id="runtime-phases"
+      eyebrow="Runtime phases"
+      title="The governor checks different properties before, during, and after execution."
+    >
+      <div class="phase-grid">
+        <article class="phase-card">
+          <p class="eyebrow">Pre-execution</p>
+          <h3>Identity and compatibility</h3>
+          <p>Fingerprint checks, tool-set compatibility, role constraints, and contract identity validation before the run starts.</p>
+        </article>
+        <article class="phase-card">
+          <p class="eyebrow">Runtime</p>
+          <h3>Interception before side effects</h3>
+          <p>Each proposed tool action is intercepted before it executes: tool membership, authorization, evidence, approvals, schema, budgets, and memory scope are checked here.</p>
+        </article>
+        <article class="phase-card">
+          <p class="eyebrow">Post-execution</p>
+          <h3>Outcome and ledger validation</h3>
+          <p>Final response schema, run-ledger presence, outcome properties, and absence of unauthorized committed side effects are evaluated after the run.</p>
+        </article>
+      </div>
+    </SectionBlock>
+
+    <SectionBlock
+      id="metrics"
+      eyebrow="Metrics"
+      title="Primary metrics track prevention and utility; secondary metrics track runtime signal and overhead."
+    >
+      <div class="content-grid">
+        <article class="story-card">
+          <h3>Primary</h3>
+          <ul>
+            <li><code>unsafe_side_effect_rate</code></li>
+            <li><code>governance_effectiveness</code></li>
+            <li><code>successful_safe_completion_rate</code></li>
+          </ul>
+        </article>
+        <article class="story-card">
+          <h3>Secondary</h3>
+          <ul>
+            <li><code>precision</code>, <code>recall</code>, <code>f1</code></li>
+            <li><code>unsafe_action_opportunity_rate</code> and <code>blocked_unsafe_actions</code></li>
+            <li><code>recovery_rate_after_block</code> and <code>mean_replans_per_run</code></li>
+            <li><code>mean_latency_ms</code>, <code>mean_token_usage</code>, <code>mean_iterations_per_run</code></li>
+          </ul>
+        </article>
+      </div>
+    </SectionBlock>
+
+    <SectionBlock
+      id="freeze"
+      eyebrow="Freeze semantics"
+      title="Weak runtime signal in a backend does not reopen the benchmark."
+      body="`benchmark-v1.0` was frozen on `2026-06-14`. Scenarios, contracts, oracle logic, evaluator rules, and exclusions define benchmark identity. Model profiles document execution conditions, but do not redefine the benchmark."
+    >
+      <div class="callout-panel">
+        <p>
+          This matters because a conservative backend can surface fewer runtime intervention opportunities under the same frozen task set. That changes the observed behavior, not the benchmark definition.
+        </p>
+      </div>
+    </SectionBlock>
+
+    <SectionBlock
+      id="validity"
+      eyebrow="Threats to validity"
+      title="The site is explicit about what this benchmark does and does not claim."
+    >
+      <div class="phase-grid">
+        <article class="phase-card">
+          <h3>Internal validity</h3>
+          <p>Synthetic but controlled scenarios and deterministic mock tools improve comparability, while reducing ecological complexity.</p>
+        </article>
+        <article class="phase-card">
+          <h3>External validity</h3>
+          <p>The benchmark targets one task family and one tool-using agent loop at a time. It is not a stand-in for every production deployment.</p>
+        </article>
+        <article class="phase-card">
+          <h3>Signal risk</h3>
+          <p>Some backends may be conservative enough that runtime opportunities are sparse. Runtime detection metrics remain valid, but more weakly exercised.</p>
+        </article>
+      </div>
+    </SectionBlock>
+  </SiteChrome>
+</BaseLayout>

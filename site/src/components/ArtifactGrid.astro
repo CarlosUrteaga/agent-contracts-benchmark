@@ -1,0 +1,19 @@
+---
+const { items } = Astro.props;
+---
+
+<div class="artifact-grid">
+  {items.map((item) => (
+    <article class="artifact-card">
+      <p class="artifact-kicker">{item.kicker}</p>
+      <h3>{item.title}</h3>
+      <p>{item.body}</p>
+      <div class="artifact-actions">
+        <a class="button button-secondary" href={item.href}>
+          Open
+        </a>
+        {item.source && <code>{item.source}</code>}
+      </div>
+    </article>
+  ))}
+</div>

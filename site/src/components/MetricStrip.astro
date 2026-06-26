@@ -1,0 +1,13 @@
+---
+const { items } = Astro.props;
+---
+
+<section class="metric-strip">
+  {items.map((item) => (
+    <article class="metric-tile">
+      <p class="metric-label">{item.label}</p>
+      <strong>{item.value}</strong>
+      <p class="metric-detail">{item.detail}</p>
+    </article>
+  ))}
+</section>

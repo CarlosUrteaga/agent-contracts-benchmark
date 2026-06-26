@@ -1,2 +1,11 @@
-/.quarto/
-**/*.quarto_ipynb
+/.astro/
+/dist/
+/node_modules/
+/src/env.d.ts
+/assets/
+/data/
+/_includes/
+/src/data/canonical_results.json
+/public/assets/generated/
+/public/assets/artifacts/
+/_generated/

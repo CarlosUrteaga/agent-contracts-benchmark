@@ -171,10 +171,15 @@ venv.bak/
 !/site/
 /site/_site/
 /site/.quarto/
-/site/data/canonical_results.json
-/site/_includes/generated/*.md
-/site/assets/generated/*.svg
-/site/assets/artifacts/*
+/site/dist/
+/site/node_modules/
+/site/_includes/
+/site/assets/
+/site/data/
+/site/src/data/canonical_results.json
+/site/_generated/
+/site/public/assets/generated/*.svg
+/site/public/assets/artifacts/*
 
 # mypy
 .mypy_cache/

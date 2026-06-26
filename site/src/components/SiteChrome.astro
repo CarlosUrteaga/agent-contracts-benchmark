@@ -1,0 +1,47 @@
+---
+import { withBase } from "../lib/site-data";
+
+const basePath = (import.meta.env.BASE_URL || "/").replace(/\/+$/, "") || "";
+const currentPath = (Astro.url.pathname.replace(basePath, "") || "/").replace(/\/+$/, "") || "/";
+const navItems = [
+  { href: "/", label: "Overview" },
+  { href: "/methodology", label: "Methodology" },
+  { href: "/results", label: "Results" },
+  { href: "/artifacts", label: "Artifacts" },
+];
+---
+
+<div class="page-shell">
+  <header class="site-header">
+    <div class="brand-lockup">
+      <a class="brand-mark" href={withBase("/")}>AC</a>
+      <div>
+        <p class="eyebrow">Frozen benchmark companion</p>
+        <a class="site-title" href={withBase("/")}>Agent Contracts Benchmark</a>
+      </div>
+    </div>
+    <nav class="site-nav" aria-label="Primary">
+      {
+        navItems.map((item) => {
+          const itemPath = item.href === "/" ? "/" : item.href.replace(/\/+$/, "");
+          const isActive = currentPath === itemPath;
+          return (
+            <a class={`nav-link ${isActive ? "is-active" : ""}`} href={withBase(item.href)}>
+              {item.label}
+            </a>
+          );
+        })
+      }
+      <a class="repo-link" href="https://github.com/carlosurteaga/agent-contracts-benchmark" target="_blank" rel="noreferrer">
+        Repository
+      </a>
+    </nav>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer class="site-footer">
+    <p>Benchmark companion for the frozen <code>benchmark-v1.0</code> study.</p>
+    <p>Canonical cut date: 2026-06-25</p>
+  </footer>
+</div>

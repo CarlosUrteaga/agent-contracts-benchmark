@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteChrome from "../components/SiteChrome.astro";
+import SectionBlock from "../components/SectionBlock.astro";
+import ArtifactGrid from "../components/ArtifactGrid.astro";
+import { siteData, withBase } from "../lib/site-data";
+
+const artifactCards = siteData.artifacts.map((artifact) => ({
+  kicker: artifact.label.endsWith(".json") ? "Data artifact" : "Public document",
+  title: artifact.label,
+  body: `Public copy of ${artifact.source}.`,
+  href: withBase(`/${artifact.site_path}`),
+  source: artifact.source,
+}));
+---
+
+<BaseLayout title="Artifacts | Agent Contracts Benchmark" description="Curated public artifacts for benchmark identity, results, and reproducibility.">
+  <SiteChrome>
+    <section class="page-intro">
+      <p class="eyebrow">Artifacts</p>
+      <h1>The site exposes a curated traceability layer, not a raw run browser.</h1>
+      <p>
+        The goal is to link the public narrative back to the frozen benchmark definition and the canonical statistics artifact
+        without turning the site into an unfiltered execution dump.
+      </p>
+    </section>
+
+    <SectionBlock
+      id="artifact-set"
+      eyebrow="Public artifact set"
+      title="Readers should be able to verify the benchmark, the narrative, and the canonical statistics package quickly."
+    >
+      <ArtifactGrid items={artifactCards} />
+    </SectionBlock>
+
+    <SectionBlock
+      id="repro"
+      eyebrow="Reproducibility"
+      title="The public site is static, but the benchmark remains reproducible from the repository."
+    >
+      <div class="code-panel">
+        <pre><code>uv sync --group dev --group site
+uv run python scripts/build_site_data.py
+npm ci --prefix site
+npm run build --prefix site</code></pre>
+      </div>
+      <p class="section-note">
+        The benchmark execution workflow itself remains in the repository docs and CLI entrypoints; this site only packages the public-facing benchmark companion.
+      </p>
+    </SectionBlock>
+
+    <SectionBlock
+      id="exclusions"
+      eyebrow="Explicit exclusions"
+      title="The public navigation stays narrow on purpose."
+    >
+      <div class="content-grid">
+        <article class="story-card story-card-accent">
+          <ul>
+            <li>No <code>.tex</code> sources are linked from this site.</li>
+            <li>Smoke-only directories are excluded from navigation.</li>
+            <li>Exploratory reruns are excluded from navigation.</li>
+            <li>Raw <code>trace.jsonl</code> execution dumps are excluded from navigation.</li>
+          </ul>
+        </article>
+      </div>
+    </SectionBlock>
+  </SiteChrome>
+</BaseLayout>

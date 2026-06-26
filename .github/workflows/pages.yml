@@ -23,21 +23,29 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
       - uses: astral-sh/setup-uv@v3
-      - uses: quarto-dev/quarto-actions/setup@v2
       - uses: actions/configure-pages@v5
         with:
           enablement: true
       - name: Install dependencies
         run: uv sync --group dev --group site
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
       - name: Build site data
         run: uv run python scripts/build_site_data.py
-      - name: Render site
-        run: quarto render site
+      - name: Build site
+        run: npm run build
+        working-directory: site
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site/_site
+          path: site/dist
 
   deploy:
     needs: build

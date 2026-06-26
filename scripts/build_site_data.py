@@ -251,13 +251,13 @@ def build_site_data(stats_path: Path) -> dict[str, Any]:
 
 
 def write_json(data: dict[str, Any], out_dir: Path) -> None:
-    path = out_dir / "data/canonical_results.json"
+    path = out_dir / "src/data/canonical_results.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2) + "\n")
 
 
 def copy_public_artifacts(out_dir: Path) -> list[dict[str, str]]:
-    artifact_root = out_dir / "assets/artifacts"
+    artifact_root = out_dir / "public/assets/artifacts"
     artifact_root.mkdir(parents=True, exist_ok=True)
     copied: list[dict[str, str]] = []
     for source, target_name in ARTIFACTS:
@@ -285,7 +285,7 @@ def md_table(headers: list[str], rows: list[list[str]]) -> str:
 
 
 def write_markdown_fragments(data: dict[str, Any], out_dir: Path) -> None:
-    include_root = out_dir / "_includes/generated"
+    include_root = out_dir / "_generated/legacy_markdown"
     include_root.mkdir(parents=True, exist_ok=True)
 
     headline = data["headline_metrics"]
@@ -528,7 +528,7 @@ def clamp_zero(value: float | None) -> float:
 
 
 def write_svgs(data: dict[str, Any], out_dir: Path) -> None:
-    svg_root = out_dir / "assets/generated"
+    svg_root = out_dir / "public/assets/generated"
     svg_root.mkdir(parents=True, exist_ok=True)
     palette = ["#8c6c3f", "#c58e39", "#3e6b63", "#1f3f39"]
     base_groups = []

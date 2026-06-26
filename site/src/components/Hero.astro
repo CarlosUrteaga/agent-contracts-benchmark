@@ -1,0 +1,23 @@
+---
+const { eyebrow, title, body, actions = [] } = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p class="hero-body">{body}</p>
+    {actions.length > 0 && (
+      <div class="hero-actions">
+        {actions.map((action) => (
+          <a class={`button ${action.variant === "secondary" ? "button-secondary" : "button-primary"}`} href={action.href}>
+            {action.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+  <div class="hero-panel">
+    <slot />
+  </div>
+</section>

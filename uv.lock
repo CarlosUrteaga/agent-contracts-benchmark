@@ -195,6 +195,7 @@ openai = [
 dev = [{ name = "pytest", specifier = ">=8.0" }]
 litellm = [{ name = "litellm", specifier = ">=1.74.9" }]
 openai = [{ name = "openai", specifier = ">=1.55.0" }]
+site = []
 
 [[package]]
 name = "attrs"

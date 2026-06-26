@@ -1,0 +1,132 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteChrome from "../components/SiteChrome.astro";
+import Hero from "../components/Hero.astro";
+import MetricStrip from "../components/MetricStrip.astro";
+import SectionBlock from "../components/SectionBlock.astro";
+import ModeCards from "../components/ModeCards.astro";
+import ArtifactGrid from "../components/ArtifactGrid.astro";
+import { artifactByLabel, metric, siteData, withBase } from "../lib/site-data";
+
+const overviewMetrics = [
+  {
+    label: "Benchmark freeze",
+    value: siteData.benchmark_version,
+    detail: `Frozen on ${siteData.freeze_date}`,
+  },
+  {
+    label: "Canonical cut",
+    value: `${siteData.campaign_count} campaigns`,
+    detail: `Closed on ${siteData.canonical_cut_date}`,
+  },
+  {
+    label: "Safety-utility lead",
+    value: `${metric(siteData.headline_metrics.successful_safe_completion_rate.delta_guarded_minus_strict)} uplift`,
+    detail: "`guarded - strict` safe completion on `campaign-base-r5`",
+  },
+  {
+    label: "Operational cost",
+    value: `${metric(siteData.headline_metrics.operational_overhead.mean_latency_ms_delta_guarded_minus_strict, 3)} ms`,
+    detail: `With +${metric(siteData.headline_metrics.operational_overhead.mean_token_usage_delta_guarded_minus_strict, 3)} mean tokens`,
+  },
+];
+
+const artifactCards = [
+  {
+    kicker: "Canonical package",
+    title: "Statistical artifact",
+    body: "The public JSON behind the site, the paper-ready tables, and the frozen post-freeze campaign cut.",
+    href: withBase(`/${artifactByLabel("final-nineteen-campaigns.json").site_path}`),
+    source: artifactByLabel("final-nineteen-campaigns.json").source,
+  },
+  {
+    kicker: "Freeze identity",
+    title: "Benchmark manifest",
+    body: "The artifact readers need to understand what belongs to benchmark identity and what is only an execution condition.",
+    href: withBase(`/${artifactByLabel("benchmark_manifest.json").site_path}`),
+    source: artifactByLabel("benchmark_manifest.json").source,
+  },
+  {
+    kicker: "Narrative bridge",
+    title: "Paper-ready results",
+    body: "The compact English results narrative aligned with the public-facing interpretation on this site.",
+    href: withBase(`/${artifactByLabel("results.md").site_path}`),
+    source: artifactByLabel("results.md").source,
+  },
+];
+---
+
+<BaseLayout title="Agent Contracts Benchmark" description="Project companion for the frozen benchmark-v1.0 study on agent contracts and runtime governance.">
+  <SiteChrome>
+    <Hero
+      eyebrow="Research companion"
+      title="A benchmark site that looks like a benchmark, not a 1995 document dump."
+      body="This public companion packages the frozen benchmark, the canonical 19-campaign evidence cut, and the headline safety-utility result into a project page that paper readers can actually navigate."
+      actions={[
+        { href: withBase("/results"), label: "See the results" },
+        { href: withBase("/artifacts"), label: "Browse artifacts", variant: "secondary" },
+      ]}
+    >
+      <div class="hero-card-stack">
+        <article class="focus-card">
+          <p class="eyebrow">Headline claim</p>
+          <h2>`guarded` keeps blocking safety and beats `strict` on safe completion.</h2>
+          <p>
+            The strongest anchor case remains <code>campaign-base-r5</code>, where both blocking modes keep
+            <code>unsafe_side_effect_rate = 0.0</code>, but <code>guarded</code> preserves much more successful safe completion.
+          </p>
+        </article>
+        <article class="mini-proof">
+          <span>Canonical cut</span>
+          <strong>{siteData.campaign_count} closed campaigns</strong>
+          <small>Post-freeze evidence only</small>
+        </article>
+      </div>
+    </Hero>
+
+    <MetricStrip items={overviewMetrics} />
+
+    <SectionBlock
+      id="question"
+      eyebrow="Research question"
+      title="Can runtime governance control a tool-using LLM agent without collapsing utility?"
+      body="The benchmark fixes the environment, the scenario set, and the evaluation rules, then compares enforcement modes rather than rewriting the task for each model."
+    >
+      <div class="content-grid">
+        <div class="story-card">
+          <p>
+            The site is intentionally narrower than a general product page. It is a research companion for a frozen benchmark artifact:
+            evidence-forward, reproducibility-aware, and explicit about what is canonical versus exploratory.
+          </p>
+        </div>
+        <div class="story-card story-card-accent">
+          <p class="eyebrow">What it covers</p>
+          <ul>
+            <li>The frozen benchmark definition and its methodological limits.</li>
+            <li>The canonical 19-campaign post-freeze cut dated <code>2026-06-25</code>.</li>
+            <li>The public English narrative for H1-H4.</li>
+            <li>Curated artifact links for auditability and reproducibility.</li>
+          </ul>
+        </div>
+      </div>
+    </SectionBlock>
+
+    <SectionBlock
+      id="modes"
+      eyebrow="Enforcement modes"
+      title="Four execution conditions, one frozen benchmark."
+      body="Model profiles vary by campaign, but the benchmark identity remains fixed. These modes define the behavioral contrast that the site tracks across methodology and results."
+    >
+      <ModeCards modes={siteData.modes} />
+    </SectionBlock>
+
+    <SectionBlock
+      id="evidence"
+      eyebrow="Evidence path"
+      title="Start with the project story, then go straight to the evidence."
+      body="Readers usually need three things quickly: the benchmark frame, the canonical result, and the exact artifact bundle behind it."
+    >
+      <ArtifactGrid items={artifactCards} />
+    </SectionBlock>
+  </SiteChrome>
+</BaseLayout>

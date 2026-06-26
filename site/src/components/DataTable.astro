@@ -1,0 +1,20 @@
+---
+const { headers, rows, compact = false } = Astro.props;
+---
+
+<div class={`table-shell ${compact ? "table-shell-compact" : ""}`}>
+  <table>
+    <thead>
+      <tr>
+        {headers.map((header) => <th>{header}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          {row.map((cell) => <td set:html={cell} />)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
