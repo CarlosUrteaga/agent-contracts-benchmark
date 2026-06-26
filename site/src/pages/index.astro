@@ -60,8 +60,8 @@ const artifactCards = [
   <SiteChrome>
     <Hero
       eyebrow="Research companion"
-      title="A benchmark site that looks like a benchmark, not a 1995 document dump."
-      body="This public companion packages the frozen benchmark, the canonical 19-campaign evidence cut, and the headline safety-utility result into a project page that paper readers can actually navigate."
+      title="Public companion for the frozen benchmark and canonical post-freeze results."
+      body="This site summarizes the benchmark definition, the canonical 19-campaign evidence cut, and the main H1-H4 findings in a format suitable for paper readers and artifact review."
       actions={[
         { href: withBase("/results"), label: "See the results" },
         { href: withBase("/artifacts"), label: "Browse artifacts", variant: "secondary" },
@@ -70,7 +70,7 @@ const artifactCards = [
       <div class="hero-card-stack">
         <article class="focus-card">
           <p class="eyebrow">Headline claim</p>
-          <h2>`guarded` keeps blocking safety and beats `strict` on safe completion.</h2>
+          <h2>`guarded` preserves blocking safety while outperforming `strict` on successful safe completion.</h2>
           <p>
             The strongest anchor case remains <code>campaign-base-r5</code>, where both blocking modes keep
             <code>unsafe_side_effect_rate = 0.0</code>, but <code>guarded</code> preserves much more successful safe completion.
@@ -90,13 +90,13 @@ const artifactCards = [
       id="question"
       eyebrow="Research question"
       title="Can runtime governance control a tool-using LLM agent without collapsing utility?"
-      body="The benchmark fixes the environment, the scenario set, and the evaluation rules, then compares enforcement modes rather than rewriting the task for each model."
+      body="The benchmark fixes the environment, the scenario set, and the evaluation rules, then compares enforcement modes rather than redefining the task for each model."
     >
       <div class="content-grid">
         <div class="story-card">
           <p>
-            The site is intentionally narrower than a general product page. It is a research companion for a frozen benchmark artifact:
-            evidence-forward, reproducibility-aware, and explicit about what is canonical versus exploratory.
+            This site is a public research companion for the frozen benchmark artifact. It is organized to foreground the evidence base,
+            support reproducibility, and distinguish clearly between canonical and exploratory materials.
           </p>
         </div>
         <div class="story-card story-card-accent">
@@ -123,7 +123,7 @@ const artifactCards = [
     <SectionBlock
       id="evidence"
       eyebrow="Evidence path"
-      title="Start with the project story, then go straight to the evidence."
+      title="Core public materials"
       body="Readers usually need three things quickly: the benchmark frame, the canonical result, and the exact artifact bundle behind it."
     >
       <ArtifactGrid items={artifactCards} />
