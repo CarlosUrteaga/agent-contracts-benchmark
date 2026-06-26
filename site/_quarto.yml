@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Agent Contracts Benchmark"
-  site-url: https://carlosurteaga.github.io/agent-contracts-benchmark/
+  site-url: https://urteaga.tech/
   navbar:
     right:
       - href: index.html
