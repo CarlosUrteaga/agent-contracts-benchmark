@@ -1661,6 +1661,7 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         )
         self.assertEqual("gpt-5.5-2026-04-23", kwargs["model"])
         self.assertEqual(700, kwargs["max_completion_tokens"])
+        self.assertEqual(60, kwargs["timeout"])
 
     def test_openai_chat_adapter_includes_reasoning_effort_when_declared(self) -> None:
         profile = json.loads(
@@ -1682,6 +1683,27 @@ class EnforcementBenchmarkTests(unittest.TestCase):
         self.assertEqual({"format": {"type": "text"}, "verbosity": "medium"}, kwargs["text"])
         self.assertEqual("gpt-5.5-2026-04-23", kwargs["model"])
         self.assertEqual(700, kwargs["max_output_tokens"])
+        self.assertEqual(60, kwargs["timeout"])
+
+    def test_openai_chat_adapter_includes_reasoning_mode_when_declared(self) -> None:
+        profile = json.loads(
+            (
+                REPO_ROOT
+                / "benchmark"
+                / "enforcement"
+                / "config"
+                / "model_profiles"
+                / "openai_gpt56_luna_low.yaml"
+            ).read_text(encoding="utf-8")
+        )
+        adapter = OpenAIChatCompletionsAdapter(model_profile=profile, system_prompt="system")
+        kwargs = adapter._build_responses_request_kwargs(
+            [{"role": "user", "content": "Hello"}],
+            [{"type": "function", "function": {"name": "search_policy", "parameters": {"type": "object"}}}],
+        )
+        self.assertEqual({"effort": "low", "summary": "auto", "mode": "standard"}, kwargs["reasoning"])
+        self.assertEqual("gpt-5.6-luna", kwargs["model"])
+        self.assertEqual(120, kwargs["timeout"])
 
     def test_litellm_adapter_normalizes_missing_cost_to_zero(self) -> None:
         profile = json.loads(self.default_profile_path().read_text(encoding="utf-8"))

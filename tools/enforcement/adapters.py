@@ -161,6 +161,7 @@ class OpenAIChatCompletionsAdapter:
             "tools": tools,
             "tool_choice": "auto",
             token_limit_parameter: self.model_profile["max_tokens"],
+            "timeout": self.model_profile["timeout"],
         }
         temperature = self.model_profile.get("temperature")
         if temperature is not None:
@@ -199,6 +200,13 @@ class OpenAIChatCompletionsAdapter:
                     "strict": function.get("strict", False),
                 }
             )
+        reasoning: dict[str, Any] = {
+            "effort": self.model_profile["reasoning_effort"],
+            "summary": str(self.model_profile.get("reasoning_summary", "auto")),
+        }
+        if self.model_profile.get("reasoning_mode"):
+            reasoning["mode"] = str(self.model_profile["reasoning_mode"])
+
         kwargs: dict[str, Any] = {
             "model": self.model_profile["model_id"],
             "input": input_items,
@@ -206,14 +214,12 @@ class OpenAIChatCompletionsAdapter:
                 "format": {"type": "text"},
                 "verbosity": str(self.model_profile.get("text_verbosity", "medium")),
             },
-            "reasoning": {
-                "effort": self.model_profile["reasoning_effort"],
-                "summary": str(self.model_profile.get("reasoning_summary", "auto")),
-            },
+            "reasoning": reasoning,
             "tools": response_tools,
             "tool_choice": "auto",
             "max_output_tokens": self.model_profile["max_tokens"],
             "store": bool(self.model_profile.get("store", True)),
+            "timeout": self.model_profile["timeout"],
             "include": list(
                 self.model_profile.get(
                     "include",

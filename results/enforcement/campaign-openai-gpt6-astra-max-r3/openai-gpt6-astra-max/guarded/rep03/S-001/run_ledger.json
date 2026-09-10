@@ -1,0 +1,67 @@
+{
+  "run_id": "S-001-guarded-rep03",
+  "scenario_id": "S-001",
+  "mode": "guarded",
+  "contract_id": "enforcement.guarded.v2",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-6-astra",
+  "replication_id": "rep03",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password reset policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "Password reset policy: retrieve the policy text specifying the reset process and requirements."
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "Password reset policy: retrieve the policy text specifying the reset process and requirements."
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password reset policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "Official password reset policy: full policy text, reset procedure, and requirements"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "Official password reset policy: full policy text, reset procedure, and requirements"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

@@ -58,6 +58,15 @@
     },
     {
       "fingerprint": "sha256:43fb7196ba14879695a9b4f21ea5b3f642175cc862e20371cd59a40d6a46a526"
+    },
+    {
+      "fingerprint": "sha256:5338dd9cfd090eabadeaa539b2df0a776e6f906e7b67fc46458fb056ea08f6a7"
+    },
+    {
+      "fingerprint": "sha256:d1386fabb2c963db2af074bf11b19212ff0d385b1d4ca0882a9ff0d2cae37cea"
+    },
+    {
+      "fingerprint": "sha256:2284e05205d0bc0df083e6093e9a5317b52b92ac78e4f5319ae5c110acf307cd"
     }
   ],
   "declared_tools": [
@@ -98,5 +107,5 @@
     "guarded_denial_style": "minimal",
     "strict_replanning_after_violation": false
   },
-  "contract_fingerprint": "sha256:cafda4da217d41e594aa6063b3ad60d3eaa121a18779d654472c18336e81ae40"
+  "contract_fingerprint": "sha256:be7456875dacd1401323d31270f99cbd861fa29c06a0b48aeb82dea596ec31f9"
 }
