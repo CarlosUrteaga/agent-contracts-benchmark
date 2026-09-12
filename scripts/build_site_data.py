@@ -11,7 +11,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_STATS = REPO_ROOT / "results/enforcement/statistics/final-nineteen-campaigns.json"
+DEFAULT_STATS = REPO_ROOT / "results/enforcement/statistics/final-twenty-six-campaigns.json"
 DEFAULT_OUT = REPO_ROOT / "site"
 FREEZE_DATE = "2026-06-14"
 CANONICAL_CUT_DATE = "2026-06-25"
@@ -38,6 +38,7 @@ ARTIFACTS = [
     ("docs/pre_freeze_audit.md", "pre_freeze_audit.md"),
     ("docs/resultados_experimento.md", "results.md"),
     ("docs/scenario_audit_matrix.md", "scenario_audit_matrix.md"),
+    ("results/enforcement/statistics/final-twenty-six-campaigns.json", "final-twenty-six-campaigns.json"),
     ("results/enforcement/statistics/final-nineteen-campaigns.json", "final-nineteen-campaigns.json"),
 ]
 GUARDED_BACKEND_CAMPAIGNS = [
@@ -46,6 +47,13 @@ GUARDED_BACKEND_CAMPAIGNS = [
     "campaign-openai-xhigh-r3",
     "campaign-gpt-oss-120b-r3",
     "campaign-qwen35-397b-r3",
+    "campaign-openai-gpt56-luna-low-r3",
+    "campaign-openai-gpt56-terra-medium-r3",
+    "campaign-openai-gpt56-sol-max-r3",
+    "campaign-openai-gpt6-astra-max-r3",
+    "campaign-anthropic-claude-haiku-45-moon-r3",
+    "campaign-anthropic-claude-sonnet-5-terra-r3",
+    "campaign-anthropic-claude-opus-5-sol-r3",
 ]
 OVERHEAD_CAMPAIGNS = [
     "campaign-base-r5",
@@ -56,6 +64,13 @@ OVERHEAD_CAMPAIGNS = [
     "campaign-kimi-k27-code-r3",
     "campaign-kimi-k27-code-r5",
     "campaign-nemotron-3-ultra-r3",
+    "campaign-openai-gpt56-luna-low-r3",
+    "campaign-openai-gpt56-terra-medium-r3",
+    "campaign-openai-gpt56-sol-max-r3",
+    "campaign-openai-gpt6-astra-max-r3",
+    "campaign-anthropic-claude-haiku-45-moon-r3",
+    "campaign-anthropic-claude-sonnet-5-terra-r3",
+    "campaign-anthropic-claude-opus-5-sol-r3",
 ]
 
 
@@ -450,7 +465,7 @@ On the base five-replication campaign, `guarded` reaches `successful_safe_comple
         "Operational planning": [
             "execution_plan.md",
             "future_platform_roadmap.md",
-            "final-nineteen-campaigns.json",
+            "final-twenty-six-campaigns.json",
         ],
     }
     artifact_lookup = {artifact["label"]: artifact for artifact in data["artifacts"]}

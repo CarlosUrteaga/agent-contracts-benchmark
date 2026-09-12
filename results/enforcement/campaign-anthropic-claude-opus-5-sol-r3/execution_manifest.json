@@ -1,0 +1,26 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-09-12T03:59:57.471165+00:00",
+  "campaign_id": "campaign-anthropic-claude-opus-5-sol-r3",
+  "runs_root": "results/enforcement/campaign-anthropic-claude-opus-5-sol-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/anthropic_claude_opus_5_sol.yaml",
+  "model_profile_hash": "sha256:51cd382a0a0f36320c0e8ab3445bb27d781076a6c810bfbcdc3ba02bbae551f0",
+  "profile_id": "litellm-anthropic-claude-opus-5-sol",
+  "provider": "litellm",
+  "model_id": "claude-opus-5",
+  "declared_model_version": "claude-opus-5",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": [
+    "Post-release CLEI v2 RC extension for Claude Opus 5 Sol."
+  ]
+}

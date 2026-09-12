@@ -1,0 +1,55 @@
+{
+  "run_id": "S-001-advisory-rep02",
+  "scenario_id": "S-001",
+  "mode": "advisory",
+  "contract_id": "enforcement.advisory.v2",
+  "provider": "litellm",
+  "model_id": "claude-opus-5",
+  "replication_id": "rep02",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password reset policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset procedure steps identity verification"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password reset procedure steps identity verification"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "credential management self-service password reset rotation account lockout"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "credential management self-service password reset rotation account lockout"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}
