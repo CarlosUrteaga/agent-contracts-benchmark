@@ -26,12 +26,12 @@ class BuildSiteDataTests(unittest.TestCase):
 
     def test_build_site_data_uses_canonical_artifact(self):
         data = self.module.build_site_data(self.module.DEFAULT_STATS)
-        self.assertEqual(data["campaign_count"], 19)
+        self.assertEqual(data["campaign_count"], 26)
         self.assertEqual(len(data["modes"]), 4)
         self.assertEqual(data["benchmark_version"], "benchmark-v1.0")
 
         rows = data["campaign_rows"]
-        self.assertEqual(len(rows), 19 * 4)
+        self.assertEqual(len(rows), 26 * 4)
 
         base_guarded = next(
             row for row in rows if row["campaign_id"] == "campaign-base-r5" and row["mode"] == "guarded"
@@ -53,8 +53,8 @@ class BuildSiteDataTests(unittest.TestCase):
 
             json_path = out_dir / "src/data/canonical_results.json"
             payload = json.loads(json_path.read_text())
-            self.assertEqual(payload["campaign_count"], 19)
-            self.assertEqual(len(payload["artifacts"]), 16)
+            self.assertEqual(payload["campaign_count"], 26)
+            self.assertEqual(len(payload["artifacts"]), 17)
 
             for rel_path in [
                 "_generated/legacy_markdown/overview_metrics.md",
