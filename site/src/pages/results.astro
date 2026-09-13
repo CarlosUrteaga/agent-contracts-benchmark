@@ -2,20 +2,53 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteChrome from "../components/SiteChrome.astro";
 import SectionBlock from "../components/SectionBlock.astro";
-import ChartFrame from "../components/ChartFrame.astro";
 import DataTable from "../components/DataTable.astro";
-import { metric, siteData, withBase } from "../utils/site-data";
+import RankedBarPlot from "../components/RankedBarPlot.astro";
+import { metric, siteData } from "../utils/site-data";
+
+const percent = (value) => `${(Number(value) * 100).toFixed(1).replace(/\.0$/, "")}%`;
+const shortCampaignName = (campaignId) => {
+  const names = {
+    "campaign-base-r5": "Base model (r5)",
+    "campaign-claude-opus-48-r3": "Claude Opus 4.8",
+    "campaign-openai-direct-r3": "OpenAI direct",
+    "campaign-openai-xhigh-r3": "OpenAI xhigh",
+    "campaign-gpt-oss-120b-r3": "GPT-OSS 120B",
+    "campaign-qwen35-397b-r3": "Qwen 3.5 397B",
+    "campaign-openai-gpt56-luna-low-r3": "GPT-5.6 Luna / low",
+    "campaign-openai-gpt56-terra-medium-r3": "GPT-5.6 Terra / medium",
+    "campaign-openai-gpt56-sol-max-r3": "GPT-5.6 Sol / max",
+    "campaign-openai-gpt6-astra-max-r3": "GPT-6 Astra / max",
+    "campaign-anthropic-claude-haiku-45-moon-r3": "Claude Haiku 4.5 / moon",
+    "campaign-anthropic-claude-sonnet-5-terra-r3": "Claude Sonnet 5 / terra",
+    "campaign-anthropic-claude-opus-5-sol-r3": "Claude Opus 5 / sol",
+    "campaign-deepseek-v4-pro-r5": "DeepSeek V4 Pro (r5)",
+    "campaign-gpt-oss-120b-r5": "GPT-OSS 120B (r5)",
+    "campaign-kimi-k26-r3": "Kimi K2.6 (r3)",
+    "campaign-kimi-k26-r5": "Kimi K2.6 (r5)",
+    "campaign-kimi-k27-code-r3": "Kimi K2.7 Code (r3)",
+    "campaign-kimi-k27-code-r5": "Kimi K2.7 Code (r5)",
+    "campaign-nemotron-3-ultra-r3": "Nemotron 3 Ultra",
+  };
+  return names[campaignId] || campaignId.replace("campaign-", "");
+};
 
 const baseHeaders = [
   "Mode",
-  "unsafe_side_effect_rate",
-  "governance_effectiveness",
-  "successful_safe_completion_rate",
-  "precision",
-  "recall",
-  "f1",
+  "Unsafe effects",
+  "Governance effectiveness",
+  "Safe completion",
+  "Precision",
+  "Recall",
+  "F1",
 ];
-const baseRows = ["no_contract", "advisory", "guarded", "strict"].map((mode) => {
+const rankedBaseModes = ["no_contract", "advisory", "guarded", "strict"].sort((left, right) => {
+  const a = siteData.base_r5_table[left];
+  const b = siteData.base_r5_table[right];
+  return a.unsafe_side_effect_rate.estimate - b.unsafe_side_effect_rate.estimate
+    || b.successful_safe_completion_rate.estimate - a.successful_safe_completion_rate.estimate;
+});
+const baseRows = rankedBaseModes.map((mode) => {
   const stats = siteData.base_r5_table[mode];
   return [
     `<code>${mode}</code>`,
@@ -27,43 +60,71 @@ const baseRows = ["no_contract", "advisory", "guarded", "strict"].map((mode) => 
     metric(stats.f1.estimate),
   ];
 });
+const basePlotRows = rankedBaseModes.map((mode) => {
+  const stats = siteData.base_r5_table[mode];
+  return {
+    label: mode.replace("_", " "),
+    note: stats.unsafe_side_effect_rate.estimate === 0 ? "No committed unsafe effects" : "Unsafe effects observed",
+    metrics: [
+      { label: "Safe completion", width: stats.successful_safe_completion_rate.estimate * 100, display: percent(stats.successful_safe_completion_rate.estimate), tone: "green" },
+      { label: "Governance", width: stats.governance_effectiveness.estimate * 100, display: percent(stats.governance_effectiveness.estimate), tone: "blue" },
+      { label: "Unsafe effects", width: stats.unsafe_side_effect_rate.estimate * 100, display: percent(stats.unsafe_side_effect_rate.estimate), tone: "red" },
+    ],
+  };
+});
 
 const backendHeaders = [
   "Backend",
-  "guarded successful_safe_completion_rate",
-  "guarded unsafe_action_opportunity_rate",
-  "guarded blocked_unsafe_actions",
-  "guarded recall",
-  "guarded f1",
+  "Safe completion",
+  "Unsafe-action opportunity",
+  "Blocked unsafe actions",
+  "Recall",
+  "F1",
 ];
-const backendInterpretations = {
-  "campaign-claude-opus-48-r3": "Conservative backend with low runtime activation",
-  "campaign-openai-direct-r3": "Weak but valid enforcement evidence",
-  "campaign-openai-xhigh-r3": "Conservative backend with low runtime activation",
-  "campaign-gpt-oss-120b-r3": "Weak but valid enforcement evidence",
-  "campaign-qwen35-397b-r3": "Weak but valid enforcement evidence",
+const rankedBackendRows = [...siteData.guarded_backend_rows].sort((a, b) =>
+  b.successful_safe_completion_rate.estimate - a.successful_safe_completion_rate.estimate
+  || (b.f1.estimate ?? -1) - (a.f1.estimate ?? -1)
+  || a.campaign_id.localeCompare(b.campaign_id)
+);
+const runtimeInterpretation = (row) => {
+  if (row.unsafe_action_opportunity_rate.estimate === 0) return "No observed runtime opportunity";
+  if ((row.f1.estimate ?? 0) >= 0.25) return "Strongest runtime signal in this cut";
+  return "Sparse runtime signal";
 };
-const backendRows = siteData.guarded_backend_rows.map((row) => [
-  `<code>${row.campaign_id.replace("campaign-", "")}</code>`,
+const backendRows = rankedBackendRows.map((row) => [
+  `<strong>${shortCampaignName(row.campaign_id)}</strong><br /><span class="cell-note">${row.campaign_id}</span>`,
   metric(row.successful_safe_completion_rate.estimate),
   metric(row.unsafe_action_opportunity_rate.estimate),
   metric(row.blocked_unsafe_actions.estimate),
   metric(row.recall.estimate),
-  `${metric(row.f1.estimate)}<br /><span class="cell-note">${backendInterpretations[row.campaign_id]}</span>`,
+  `${metric(row.f1.estimate)}<br /><span class="cell-note">${runtimeInterpretation(row)}</span>`,
 ]);
+const backendPlotRows = rankedBackendRows.map((row) => ({
+  label: shortCampaignName(row.campaign_id),
+  note: runtimeInterpretation(row),
+  metrics: [
+    { label: "Safe completion", width: row.successful_safe_completion_rate.estimate * 100, display: percent(row.successful_safe_completion_rate.estimate), tone: "green" },
+    { label: "F1", width: (row.f1.estimate ?? 0) * 100, display: metric(row.f1.estimate, 3), tone: "blue" },
+    { label: "Opportunity", width: row.unsafe_action_opportunity_rate.estimate * 100, display: percent(row.unsafe_action_opportunity_rate.estimate), tone: "amber" },
+  ],
+}));
 
 const overheadHeaders = [
   "Campaign",
-  "guarded mean_latency_ms",
-  "strict mean_latency_ms",
-  "guarded mean_token_usage",
-  "strict mean_token_usage",
-  "guarded mean_iterations_per_run",
-  "strict mean_iterations_per_run",
-  "guarded - strict successful_safe_completion_rate",
+  "Guarded latency (ms)",
+  "Strict latency (ms)",
+  "Guarded tokens",
+  "Strict tokens",
+  "Guarded iterations",
+  "Strict iterations",
+  "Safe-completion lift",
 ];
-const overheadRows = siteData.overhead_rows.map((row) => [
-  `<code>${row.campaign_id}</code>`,
+const rankedOverheadRows = [...siteData.overhead_rows].sort((a, b) =>
+  b.successful_safe_completion_rate_delta - a.successful_safe_completion_rate_delta
+  || a.campaign_id.localeCompare(b.campaign_id)
+);
+const overheadRows = rankedOverheadRows.map((row) => [
+  `<strong>${shortCampaignName(row.campaign_id)}</strong><br /><span class="cell-note">${row.campaign_id}</span>`,
   metric(row.guarded_mean_latency_ms.estimate, 3),
   metric(row.strict_mean_latency_ms.estimate, 3),
   metric(row.guarded_mean_token_usage.estimate, 3),
@@ -72,6 +133,17 @@ const overheadRows = siteData.overhead_rows.map((row) => [
   metric(row.strict_mean_iterations_per_run.estimate, 3),
   metric(row.successful_safe_completion_rate_delta),
 ]);
+const overheadPlotRows = rankedOverheadRows.slice(0, 8).map((row) => {
+  const iterationDelta = row.guarded_mean_iterations_per_run.estimate - row.strict_mean_iterations_per_run.estimate;
+  return {
+    label: shortCampaignName(row.campaign_id),
+    note: "Ranked by guarded safe-completion lift",
+    metrics: [
+      { label: "Utility lift", width: row.successful_safe_completion_rate_delta * 100, display: `+${percent(row.successful_safe_completion_rate_delta)}`, tone: "green" },
+      { label: "Added iterations", width: Math.min(Math.abs(iterationDelta) / 2 * 100, 100), display: `${iterationDelta >= 0 ? "+" : ""}${metric(iterationDelta, 2)}`, tone: iterationDelta >= 0 ? "amber" : "blue" },
+    ],
+  };
+});
 ---
 
 <BaseLayout title="Results | Agent Contracts Benchmark" description="Canonical H1-H4 results for the frozen benchmark-v1.0 evidence base.">
@@ -98,14 +170,12 @@ const overheadRows = siteData.overhead_rows.map((row) => [
       title="Blocking enforcement prevents committed unsafe side effects when the benchmark presents a real enforcement opportunity."
       body="The base five-replication campaign is the clearest anchor case: `no_contract` and `advisory` remain at `1.0`, while `guarded` and `strict` both reach `0.0` with `governance_effectiveness = 1.0`."
     >
-      <div class="results-layout">
-        <ChartFrame
-          src={withBase("/assets/generated/base-r5-modes.svg")}
-          alt="Base model comparison on campaign-base-r5"
-          caption="Base comparison for prevention and successful safe completion in `campaign-base-r5`."
-        />
-        <DataTable headers={baseHeaders} rows={baseRows} compact={true} />
-      </div>
+      <RankedBarPlot
+        rows={basePlotRows}
+        ariaLabel="Enforcement modes ranked by safety and successful safe completion"
+        caption="Ordered first by absence of committed unsafe effects, then by successful safe completion. All bars use a 0-100% scale."
+      />
+      <DataTable headers={baseHeaders} rows={baseRows} compact={true} />
       <p class="section-note">
         Across the canonical cut, the same strong enforcement evidence appears whenever the contrast is defined, including
         <code>campaign-deepseek-v4-pro-r5</code>. The principal effect is prevention, not runtime detection alone.
@@ -118,14 +188,12 @@ const overheadRows = siteData.overhead_rows.map((row) => [
       title="Runtime detection quality is backend-sensitive even when the benchmark stays fixed."
       body="The benchmark exposes backend differences in how often runtime intervention opportunities appear and how cleanly they are detected under `guarded`."
     >
-      <div class="results-layout">
-        <ChartFrame
-          src={withBase("/assets/generated/guarded-backends.svg")}
-          alt="Guarded mode across selected backends"
-          caption="Cross-backend variation under `guarded` reflects execution-condition differences, not benchmark redefinition."
-        />
-        <DataTable headers={backendHeaders} rows={backendRows} compact={true} />
-      </div>
+      <RankedBarPlot
+        rows={backendPlotRows}
+        ariaLabel="Guarded backends ranked by successful safe completion"
+        caption="Ordered by successful safe completion, then F1. Opportunity rate is shown because F1 is difficult to interpret when the agent rarely proposes an unsafe action."
+      />
+      <DataTable headers={backendHeaders} rows={backendRows} compact={true} />
       <p class="section-note">
         The conservative case is still methodologically valid. A backend such as <code>claude-opus-48-r3</code> can preserve nominal utility while surfacing almost no runtime opportunity under
         <code>guarded</code>, which yields weak runtime <code>f1</code> without contradicting the benchmark.
@@ -151,14 +219,12 @@ const overheadRows = siteData.overhead_rows.map((row) => [
       title="Recovery-capable enforcement adds measurable operational overhead."
       body="The cost claim is operational rather than financial in this public artifact set: latency, token usage, and iteration count are the interpretable dimensions."
     >
-      <div class="results-layout">
-        <ChartFrame
-          src={withBase("/assets/generated/guarded-vs-strict.svg")}
-          alt="Guarded recovery utility and iteration overhead"
-          caption="Utility and overhead comparison between `guarded` and `strict` across selected campaigns."
-        />
-        <DataTable headers={overheadHeaders} rows={overheadRows} compact={true} />
-      </div>
+      <RankedBarPlot
+        rows={overheadPlotRows}
+        ariaLabel="Campaigns ranked by guarded safe-completion lift over strict"
+        caption="Top eight campaigns by guarded safe-completion lift. Added iterations use a separate 0-2 iteration scale; the table below contains every campaign and the unabridged measurements."
+      />
+      <DataTable headers={overheadHeaders} rows={overheadRows} compact={true} />
     </SectionBlock>
 
     <section class="bottom-line">
