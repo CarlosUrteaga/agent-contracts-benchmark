@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-007",
+  "mode": "strict",
+  "replication_id": "rep01",
+  "profile_id": "openai-gpt56-terra-medium",
+  "final_status": "aborted_pre_execution",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1788884554.728746
+}

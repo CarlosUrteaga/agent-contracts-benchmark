@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-004",
+  "mode": "strict",
+  "replication_id": "rep01",
+  "profile_id": "openai-gpt56-sol-max",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1788891137.12749
+}

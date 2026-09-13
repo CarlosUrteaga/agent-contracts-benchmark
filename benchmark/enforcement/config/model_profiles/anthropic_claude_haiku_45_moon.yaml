@@ -1,0 +1,21 @@
+{
+  "profile_id": "litellm-anthropic-claude-haiku-45-moon",
+  "provider": "litellm",
+  "model_id": "claude-haiku-4-5-20251001",
+  "declared_model_version": "claude-haiku-4-5-20251001",
+  "temperature": 1,
+  "max_tokens": 4000,
+  "timeout": 120,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "api_key_env": "ANTHROPIC_API_KEY",
+  "litellm_params": {
+    "thinking": {
+      "type": "enabled",
+      "budget_tokens": 3000
+    }
+  },
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}

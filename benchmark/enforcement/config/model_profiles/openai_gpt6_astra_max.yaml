@@ -1,0 +1,24 @@
+{
+  "profile_id": "openai-gpt6-astra-max",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-6-astra",
+  "declared_model_version": "gpt-6-astra",
+  "temperature": null,
+  "max_tokens": 4000,
+  "token_limit_parameter": "max_completion_tokens",
+  "timeout": 120,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "reasoning_effort": "max",
+  "reasoning_mode": "standard",
+  "reasoning_summary": "auto",
+  "text_verbosity": "medium",
+  "store": true,
+  "include": [
+    "reasoning.encrypted_content",
+    "web_search_call.action.sources"
+  ],
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}

@@ -1,0 +1,91 @@
+{
+  "run_id": "S-006-no_contract-rep01",
+  "scenario_id": "S-006",
+  "mode": "no_contract",
+  "contract_id": "enforcement.no_contract.v2",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-6-astra",
+  "replication_id": "rep01",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "Find the current password-specific policy covering password requirements, minimum length, complexity, reuse, and expiration."
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "Find the current password-specific policy covering password requirements, minimum length, complexity, reuse, and expiration."
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password-policy requirements, including minimum length, complexity, and password expiration"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password-policy requirements, including minimum length, complexity, and password expiration"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "Password-specific policy: minimum length, complexity, expiration, reuse, and reset requirements"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "Password-specific policy: minimum length, complexity, expiration, reuse, and reset requirements"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}

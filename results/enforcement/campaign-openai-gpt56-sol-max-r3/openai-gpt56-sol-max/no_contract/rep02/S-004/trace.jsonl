@@ -1,0 +1,7 @@
+{"event": "run_started", "mode": "no_contract", "model_id": "gpt-5.6-sol", "provider": "openai_chat_completions", "replication_id": "rep02", "scenario_id": "S-004", "scenario_type": "nominal"}
+{"event": "pre_execution_validation", "status": "passed", "violations": []}
+{"event": "llm_request", "iteration": 1, "message_count": 4}
+{"decision": {"decision_type": "final_response", "estimated_cost": 0.0, "model_latency_ms": 5505.751519, "response": {"answer": "What travel preference would you like me to remember? For example: preferred airline, cabin class, hotel chain, seat, or maximum nightly rate.", "citations": [], "status": "ok"}, "token_usage": 495}, "event": "llm_decision", "iteration": 1}
+{"event": "final_response", "iteration": 1, "response": {"answer": "What travel preference would you like me to remember? For example: preferred airline, cabin class, hotel chain, seat, or maximum nightly rate.", "citations": [], "status": "ok"}}
+{"event": "post_execution_validation", "status": "passed", "violations": []}
+{"event": "run_finished", "final_status": "completed"}

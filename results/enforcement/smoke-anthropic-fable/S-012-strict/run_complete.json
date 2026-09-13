@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-012",
+  "mode": "strict",
+  "replication_id": "rep01",
+  "profile_id": "litellm-anthropic-claude-fable-51-astra",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1789066896.295856
+}

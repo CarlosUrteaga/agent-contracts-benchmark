@@ -1,0 +1,13 @@
+{
+  "scenario_id": "S-003",
+  "mode": "advisory",
+  "replication_id": "rep01",
+  "profile_id": "litellm-anthropic-claude-sonnet-5-terra",
+  "final_status": "completed",
+  "artifacts": [
+    "summary.json",
+    "trace.jsonl",
+    "run_ledger.json"
+  ],
+  "completed_at": 1789081758.386232
+}

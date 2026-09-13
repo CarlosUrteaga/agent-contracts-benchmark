@@ -1,0 +1,26 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-09-10T17:39:00.818081+00:00",
+  "campaign_id": "campaign-openai-gpt6-astra-max-r3",
+  "runs_root": "results/enforcement/campaign-openai-gpt6-astra-max-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/openai_gpt6_astra_max.yaml",
+  "model_profile_hash": "sha256:60acdbcd4094fb93665fe5df5968cc972b258f623c099f5abc4400390e36447b",
+  "profile_id": "openai-gpt6-astra-max",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-6-astra",
+  "declared_model_version": "gpt-6-astra",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": [
+    "Post-release CLEI v2 RC extension for GPT-6 Astra max reasoning."
+  ]
+}

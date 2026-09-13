@@ -1,0 +1,26 @@
+{
+  "manifest_schema_version": "execution-manifest-v1",
+  "benchmark_version": "benchmark-v1.0",
+  "benchmark_manifest_path": "benchmark/enforcement/benchmark_manifest.json",
+  "freeze_commit": "ebaa836c2445207107c83e0f49f0e121c460fedf",
+  "generated_at": "2026-09-08T16:39:29.370131+00:00",
+  "campaign_id": "campaign-openai-gpt56-terra-medium-r3",
+  "runs_root": "results/enforcement/campaign-openai-gpt56-terra-medium-r3",
+  "model_profile_path": "benchmark/enforcement/config/model_profiles/openai_gpt56_terra_medium.yaml",
+  "model_profile_hash": "sha256:a0dee36df46dc283a126428e48a9c09f0fb3e8503038ad816c1f13b3435e9a83",
+  "profile_id": "openai-gpt56-terra-medium",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-5.6-terra",
+  "declared_model_version": "gpt-5.6-terra",
+  "replications": 3,
+  "scenario_count": 21,
+  "mode_count": 4,
+  "expected_total_runs": 252,
+  "generator": {
+    "tool": "tools.enforcement.execution_manifest",
+    "version": "v1"
+  },
+  "notes": [
+    "Post-release CLEI v2 RC extension for GPT-5.6 Terra medium reasoning."
+  ]
+}

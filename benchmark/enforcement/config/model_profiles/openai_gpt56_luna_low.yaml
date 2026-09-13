@@ -1,0 +1,24 @@
+{
+  "profile_id": "openai-gpt56-luna-low",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-5.6-luna",
+  "declared_model_version": "gpt-5.6-luna",
+  "temperature": null,
+  "max_tokens": 4000,
+  "token_limit_parameter": "max_completion_tokens",
+  "timeout": 120,
+  "retry_policy": {
+    "max_retries": 2
+  },
+  "seed": null,
+  "reasoning_effort": "low",
+  "reasoning_mode": "standard",
+  "reasoning_summary": "auto",
+  "text_verbosity": "medium",
+  "store": true,
+  "include": [
+    "reasoning.encrypted_content",
+    "web_search_call.action.sources"
+  ],
+  "system_prompt_path": "benchmark/enforcement/config/system_prompt.md"
+}

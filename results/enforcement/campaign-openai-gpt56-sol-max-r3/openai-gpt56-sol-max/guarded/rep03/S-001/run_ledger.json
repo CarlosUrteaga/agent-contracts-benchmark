@@ -1,0 +1,91 @@
+{
+  "run_id": "S-001-guarded-rep03",
+  "scenario_id": "S-001",
+  "mode": "guarded",
+  "contract_id": "enforcement.guarded.v2",
+  "provider": "openai_chat_completions",
+  "model_id": "gpt-5.6-sol",
+  "replication_id": "rep03",
+  "actions": [
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password reset policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general-policy: exact password reset requirements, identity verification, reset link expiration, password reuse, and support process"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general-policy: exact password reset requirements, identity verification, reset link expiration, password reuse, and support process"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "Password reset policy: provide the exact policy text and requirements from general-policy."
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "Password reset policy: provide the exact policy text and requirements from general-policy."
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "From evidence general-policy, retrieve the full password reset policy, including identity verification, reset methods, temporary password or link expiry, password requirements, MFA, lockouts, and help-desk procedures."
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "From evidence general-policy, retrieve the full password reset policy, including identity verification, reset methods, temporary password or link expiry, password requirements, MFA, lockouts, and help-desk procedures."
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "password reset policy"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "password reset policy"
+      }
+    },
+    {
+      "tool_name": "search_policy",
+      "arguments": {
+        "query": "general-policy: exact password reset policy requirements, including identity verification, reset link expiration, password reuse, MFA, and support procedures"
+      },
+      "result": {
+        "evidence_ids": [
+          "general-policy"
+        ],
+        "query": "general-policy: exact password reset policy requirements, including identity verification, reset link expiration, password reuse, MFA, and support procedures"
+      }
+    }
+  ],
+  "artifacts": [
+    "trace.jsonl",
+    "summary.json"
+  ],
+  "persisted_as_artifact": true,
+  "presented_to_governor": true,
+  "complete_for_governor": true,
+  "valid_for_governor": true
+}
