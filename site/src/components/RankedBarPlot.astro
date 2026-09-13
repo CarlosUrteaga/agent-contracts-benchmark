@@ -1,0 +1,29 @@
+---
+const { rows, caption, ariaLabel } = Astro.props;
+---
+
+<figure class="ranked-plot" aria-label={ariaLabel}>
+  <ol class="ranked-plot-list">
+    {rows.map((row, index) => (
+      <li class="ranked-plot-row">
+        <div class="ranked-plot-label">
+          <span class="rank-number">{String(index + 1).padStart(2, "0")}</span>
+          <strong>{row.label}</strong>
+          {row.note && <small>{row.note}</small>}
+        </div>
+        <div class="ranked-plot-bars">
+          {row.metrics.map((item) => (
+            <div class="ranked-bar-line">
+              <span>{item.label}</span>
+              <div class="ranked-bar-track" aria-hidden="true">
+                <i class={`ranked-bar-fill tone-${item.tone}`} style={`width:${item.width}%`}></i>
+              </div>
+              <strong>{item.display}</strong>
+            </div>
+          ))}
+        </div>
+      </li>
+    ))}
+  </ol>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
