@@ -12,12 +12,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
       - name: Validate scaffold
         run: python3 scripts/validate_protocol.py
       - name: Materialize benchmark
         run: python3 -m tools.governor.materialize_benchmark --out .
       - name: Run tests
-        run: python3 -m unittest discover -s tests -p 'test*.py'
+        run: uv run --locked --no-dev python -m unittest discover -s tests -p 'test*.py'
       - name: Validate contracts
         run: python3 -m tools.governor.validate_all --runs benchmark/manifests --contracts contracts --out results/governor_results.jsonl
       - name: Generate reconstruction cases
