@@ -27,6 +27,7 @@ class BuildSiteDataTests(unittest.TestCase):
     def test_build_site_data_uses_canonical_artifact(self):
         data = self.module.build_site_data(self.module.DEFAULT_STATS)
         self.assertEqual(data["campaign_count"], 26)
+        self.assertEqual(data["canonical_cut_date"], "2026-09-12")
         self.assertEqual(len(data["modes"]), 4)
         self.assertEqual(data["benchmark_version"], "benchmark-v1.0")
 
@@ -54,7 +55,8 @@ class BuildSiteDataTests(unittest.TestCase):
             json_path = out_dir / "src/data/canonical_results.json"
             payload = json.loads(json_path.read_text())
             self.assertEqual(payload["campaign_count"], 26)
-            self.assertEqual(len(payload["artifacts"]), 17)
+            self.assertEqual(len(payload["artifacts"]), 18)
+            self.assertTrue(any(x["label"] == "benchmark_identity_audit.md" for x in payload["artifacts"]))
 
             for rel_path in [
                 "_generated/legacy_markdown/overview_metrics.md",

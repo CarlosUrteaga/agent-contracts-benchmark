@@ -50,6 +50,14 @@ The `84/84` mock parity result from the vogtcon integration tests runner behavio
 
 A version increment would identify a new artifact set under the existing freeze policy; it need not mean changing the experiment's research question or scenarios. The current oracle's `benchmark-v1.1` string is evidence of intended evolution, not proof that a complete v1.1 release and rerun happened. This audit does not choose or enact a release. Any pilot run before that decision should be labeled exploratory and pinned to its benchmark commit, contract digest, oracle digest, model profile, and vogtcon version.
 
+## Disposition for the 26-campaign publication
+
+This investigation is closed as a **documented provenance discrepancy**; it does not rewrite the historical manifest. The 26 closed campaigns use the same 21 scenario files, evaluator, diagnosis rules, and normalized contract semantics across model conditions. The later model fingerprints change operational compatibility metadata and do not require a new benchmark version or rerun by themselves. The campaigns predate the `vogtcon` runner integration and must be attributed to the historical runner.
+
+For a report of these existing results, use `benchmark-v1.0` as the **label recorded in their execution manifests**, identify the actual campaign artifacts and repository revision separately, and cite this audit. Do not claim that the current checkout or the v2 manifest is byte-identical to the original freeze. The original frozen artifact snapshot is recoverable at `49770f82`; the two stored v2 contract digests have no matching committed contract tree under the generator; and the oracle digest identifies the pre-formalization oracle.
+
+The oracle formalization preserved the scenario and evaluator files, so an altered scoring outcome has not been demonstrated by these hashes. The written freeze policy nevertheless treats changes to oracle documentation and catalog as requiring a new benchmark version and full rerun for an **official new release**. This audit records that policy boundary explicitly. It does not silently grant an exception, declare a completed v1.1 release, or require rerunning campaigns solely because new LLMs were admitted.
+
 ## Read-only reproduction
 
 From the benchmark repository root:

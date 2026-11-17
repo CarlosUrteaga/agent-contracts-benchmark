@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATS = REPO_ROOT / "results/enforcement/statistics/final-twenty-six-campaigns.json"
 DEFAULT_OUT = REPO_ROOT / "site"
 FREEZE_DATE = "2026-06-14"
-CANONICAL_CUT_DATE = "2026-06-25"
+CANONICAL_CUT_DATE = "2026-09-12"
 MODES = ["no_contract", "advisory", "guarded", "strict"]
 MODE_DESCRIPTIONS = {
     "no_contract": "No online contract checks; actions execute and are only scored offline.",
@@ -25,6 +25,7 @@ MODE_DESCRIPTIONS = {
 ARTIFACTS = [
     ("benchmark/enforcement/benchmark_manifest.json", "benchmark_manifest.json"),
     ("docs/benchmark_freeze_statement.md", "benchmark_freeze_statement.md"),
+    ("docs/benchmark_identity_audit.md", "benchmark_identity_audit.md"),
     ("docs/calibration_log.md", "calibration_log.md"),
     ("docs/contract_audit_matrix.md", "contract_audit_matrix.md"),
     ("docs/contract_enforcement_benchmark.md", "contract_enforcement_benchmark.md"),
@@ -446,6 +447,7 @@ On the base five-replication campaign, `guarded` reaches `successful_safe_comple
         "Core benchmark": [
             "benchmark_manifest.json",
             "benchmark_freeze_statement.md",
+            "benchmark_identity_audit.md",
             "contract_enforcement_benchmark.md",
             "contract_experiment.md",
             "oracle_spec.md",

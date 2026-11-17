@@ -23,7 +23,16 @@
 - `campaign-qwen35-4b-r5`
 - `campaign-gpt-oss-120b-r5`
 - `campaign-deepseek-v4-pro-r5`
-- [results/enforcement/statistics/final-nineteen-campaigns.json](/Users/carlos.urteaga/git/agent-contracts-benchmark/results/enforcement/statistics/final-nineteen-campaigns.json:1)
+- `campaign-openai-gpt56-luna-low-r3`
+- `campaign-openai-gpt56-terra-medium-r3`
+- `campaign-openai-gpt56-sol-max-r3`
+- `campaign-openai-gpt6-astra-max-r3`
+- `campaign-anthropic-claude-haiku-45-moon-r3`
+- `campaign-anthropic-claude-sonnet-5-terra-r3`
+- `campaign-anthropic-claude-opus-5-sol-r3`
+- [results/enforcement/statistics/final-twenty-six-campaigns.json](../results/enforcement/statistics/final-twenty-six-campaigns.json)
+
+Las 26 campañas pertenecen al runner histórico; la [auditoría de identidad](benchmark_identity_audit.md) documenta las diferencias del manifest sin redefinir el benchmark por modelo.
 
 ## P0 — Narrativa final comparativa
 
@@ -31,7 +40,7 @@ Objetivo:
 - convertir el cierre estadístico actual en tablas y argumentos doctorales explícitos
 
 Estado:
-- completado sobre el corte canónico de diecinueve campañas
+- completado sobre el corte canónico de 26 campañas
 
 Entregables cerrados:
 - comparación por hipótesis `H1–H4`
@@ -40,7 +49,7 @@ Entregables cerrados:
 - exclusión explícita de reruns exploratorios y smoke-only artifacts del paquete canónico
 
 Definition of Done:
-- el capítulo de resultados puede apoyarse directamente en el paquete de diecinueve campañas cerradas
+- el capítulo de resultados puede apoyarse directamente en el paquete de 26 campañas cerradas
 
 ## P0 — Decisión de expansión selectiva
 

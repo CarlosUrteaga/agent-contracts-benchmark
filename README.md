@@ -57,6 +57,10 @@ Core benchmark artifacts:
 
 The legacy Drift benchmark is not part of the main execution path of this repository.
 
+## Published benchmark results
+
+The current canonical historical cut contains [26 closed campaigns](results/enforcement/statistics/final-twenty-six-campaigns.json) over 21 scenarios and four enforcement modes. These campaigns were run before the `vogtcon` integration; the new runner has separate deterministic parity evidence. The [benchmark identity audit](docs/benchmark_identity_audit.md) documents the manifest discrepancies and the distinction between model compatibility metadata and benchmark methodology. The earlier 19-campaign cut remains available as a historical intermediate analysis.
+
 The enforcement runner installs `vogtcon==0.1.0` from PyPI through `uv.lock`.
 `vogtcon` loads the contract and makes pre-execution, tool-gate, and post-execution
 decisions. The benchmark still owns the agent, tools, feedback, `strict` pending

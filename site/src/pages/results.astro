@@ -4,7 +4,7 @@ import SiteChrome from "../components/SiteChrome.astro";
 import SectionBlock from "../components/SectionBlock.astro";
 import DataTable from "../components/DataTable.astro";
 import RankedBarPlot from "../components/RankedBarPlot.astro";
-import { metric, siteData } from "../utils/site-data";
+import { metric, siteData, withBase } from "../utils/site-data";
 
 const percent = (value) => `${(Number(value) * 100).toFixed(1).replace(/\.0$/, "")}%`;
 const shortCampaignName = (campaignId) => {
@@ -153,7 +153,7 @@ const overheadPlotRows = rankedOverheadRows.slice(0, 8).map((row) => {
       <h1>Canonical H1-H4 results for the frozen post-freeze benchmark cut.</h1>
       <p>
         The claims on this page are restricted to the canonical {siteData.campaign_count}-campaign cut in
-        <code>final-twenty-six-campaigns.json</code>. The benchmark remains frozen as <code>{siteData.benchmark_version}</code>.
+        <code>final-twenty-six-campaigns.json</code>. The 26 campaigns use the historical runner and share a 21-scenario protocol across model conditions. The <a href={withBase("/assets/artifacts/benchmark_identity_audit.md")}>identity audit</a> explains the limits of the stored freeze hashes and the later oracle documentation.
       </p>
       <div class="results-navigator" data-results-nav>
         <button class="nav-chip is-selected" data-target="all" type="button">All evidence</button>
