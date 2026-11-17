@@ -25,6 +25,7 @@ from .common import (
     write_jsonl,
 )
 from .validate_campaign import validate_run_dir
+from .vogtcon_adapter import VogtconRunAdapter
 from .tools_runtime import (
     TOOL_REGISTRY,
     ToolExecutionContext,
@@ -411,7 +412,8 @@ def run_scenario(
         system_prompt=system_prompt,
         tool_definitions=tool_definitions,
     )
-    governor = GovernorRuntime(contract, mode)
+    run_id = f"{scenario['scenario_id']}-{mode}-{replication_id}"
+    vogtcon_adapter = VogtconRunAdapter(contract_path=contract_path, mode=mode, run_id=run_id)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     state = dict(scenario["initial_state"])
@@ -472,9 +474,10 @@ def run_scenario(
         )
     )
 
-    pre_started = time.perf_counter()
-    pre_violations = governor.validate_pre(observed_agent_fingerprint, observed_contract_fingerprint)
-    governor_latency += time.perf_counter() - pre_started
+    pre_violations, pre_latency = vogtcon_adapter.validate_pre(
+        observed_agent_fingerprint, observed_contract_fingerprint
+    )
+    governor_latency += pre_latency
     all_violations.extend(pre_violations)
     pre_status = _phase_status(pre_violations)
     trace_rows.append(_event("pre_execution_validation", status=pre_status, violations=pre_violations))
@@ -570,9 +573,20 @@ def run_scenario(
         proposed_actions.append(action)
         trace_rows.append(_event("action_proposed", iteration=iteration, action=action))
 
-        runtime_started = time.perf_counter()
-        violations = governor.validate_runtime(action, state, available_tool_names)
-        governor_latency += time.perf_counter() - runtime_started
+        execution_outcome = vogtcon_adapter.execute_tool(
+            action=action,
+            state=state,
+            available_tools=available_tool_names,
+            tool_fn=lambda args: _execute_or_simulate_unknown_tool(
+                tool_name=action["tool_name"],
+                arguments=args,
+                mode=mode,
+                state=state,
+            ),
+            action_index=len(proposed_actions) - 1,
+        )
+        governor_latency += execution_outcome.governor_latency
+        violations = execution_outcome.violations
         if violations:
             runtime_status = "violation_detected"
             for item in violations:
@@ -586,7 +600,7 @@ def run_scenario(
         else:
             last_block_signature = None
             repeated_block_count = 0
-        decision_label = _governor_decision(mode, violations)
+        decision_label = execution_outcome.decision
         trace_rows.append(
             _event(
                 "action_validated",
@@ -624,12 +638,7 @@ def run_scenario(
             trace_rows.append(_event("action_blocked", iteration=iteration, action=action))
             break
 
-        tool_result = _execute_or_simulate_unknown_tool(
-            tool_name=action["tool_name"],
-            arguments=action["arguments"],
-            mode=mode,
-            state=state,
-        )
+        tool_result = execution_outcome.result
         executed_actions.append(
             {
                 "tool_name": action["tool_name"],
@@ -743,9 +752,13 @@ def run_scenario(
         valid_for_governor=run_ledger_valid,
     )
 
-    post_started = time.perf_counter()
-    post_violations = governor.validate_post(final_response, run_ledger_payload, final_properties, forbidden_outcomes_triggered)
-    governor_latency += time.perf_counter() - post_started
+    post_violations, post_latency = vogtcon_adapter.validate_post(
+        final_response,
+        run_ledger_payload,
+        final_properties,
+        forbidden_outcomes_triggered,
+    )
+    governor_latency += post_latency
     all_violations.extend(post_violations)
     post_status = _phase_status(post_violations)
     trace_rows.append(_event("post_execution_validation", status=post_status, violations=post_violations))

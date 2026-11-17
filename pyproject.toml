@@ -12,7 +12,9 @@ license = { text = "Apache-2.0" }
 authors = [
   { name = "Carlos Urteaga" }
 ]
-dependencies = []
+dependencies = [
+  "vogtcon==0.1.0",
+]
 
 [tool.setuptools]
 packages = ["app", "tools", "tools.enforcement", "tools.governor", "tools.violation_injection"]
