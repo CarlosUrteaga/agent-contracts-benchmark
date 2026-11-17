@@ -57,6 +57,12 @@ Core benchmark artifacts:
 
 The legacy Drift benchmark is not part of the main execution path of this repository.
 
+The enforcement runner installs `vogtcon==0.1.0` from PyPI through `uv.lock`.
+`vogtcon` loads the contract and makes pre-execution, tool-gate, and post-execution
+decisions. The benchmark still owns the agent, tools, feedback, `strict` pending
+effects, traces, and result artifacts. `run.py` and `run_all.py` use that runner;
+there is no separate implementation selector.
+
 ## Benchmark Flow
 
 1. Materialize the benchmark scaffold:
@@ -105,6 +111,19 @@ uv run python -m tools.enforcement.evaluate \
 ```bash
 uv run python -m unittest discover -s tests -p 'test*.py'
 ```
+
+To verify a deterministic runner migration, run the same mock campaign before
+and after the change in separate output directories. Compare them with:
+
+```bash
+uv run --locked python -m tools.enforcement.compare_migration \
+  --baseline /tmp/benchmark-before --candidate /tmp/benchmark-after \
+  --baseline-metrics /tmp/benchmark-before-metrics.json \
+  --candidate-metrics /tmp/benchmark-after-metrics.json
+```
+
+The comparison checks each summary, trace, ledger, completion marker, and
+non-latency metric. It ignores only run timing and completion timestamps.
 
 ## Scenarios
 
