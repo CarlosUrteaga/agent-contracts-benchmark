@@ -1,0 +1,159 @@
+---
+import { siteData, withBase } from "../utils/site-data";
+import { formatScore, latestCampaigns, metricOptions } from "../utils/dashboard.js";
+const campaigns = siteData.dashboard_campaigns;
+const latest = latestCampaigns(campaigns);
+const metric = "successful_safe_completion_rate";
+const initialIds = new Set(latest.map((campaign) => campaign.campaign_id));
+const date = (value) => new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(value));
+---
+<section class="narrative-section dashboard-section" id="models" aria-labelledby="models-title" data-dashboard>
+  <div class="dashboard-heading">
+    <div class="section-heading"><h2 id="models-title">Model comparison</h2></div>
+    <p class="comparison-snapshot">Historical snapshot · <time datetime={siteData.canonical_cut_date}>{date(siteData.canonical_cut_date)}</time></p>
+  </div>
+  <p class="comparison-intro">Select evaluations to compare on the same 21 tasks. Enforcement mode sets how violations are handled; metric chooses the measured outcome. The latest three without admission issues are selected, using campaign closure dates in UTC.</p>
+  <div class="dashboard-panel">
+    <form class="dashboard-filters" aria-label="Filter model evaluations">
+      <div class="evaluation-field">
+        <div class="filter-label"><span id="evaluation-label">Evaluations to compare</span><details class="filter-help"><summary aria-label="What is an evaluation?">?</summary><p>One evaluation, called a campaign in the artifacts, runs one model configuration across 21 scenarios, four enforcement modes, and repeated trials. A model can have several evaluations. <a href={withBase("/methodology#experimental-unit")}>Read the design ↗</a></p></details></div>
+        <details class="evaluation-picker" data-evaluation-picker>
+          <summary aria-labelledby="evaluation-label evaluation-selection"><span id="evaluation-selection" data-selection-label>3 evaluations · latest first</span></summary>
+          <div class="evaluation-options">
+            <label class="evaluation-search">Find evaluations<input type="search" data-evaluation-query placeholder="Model, profile, or date…" /></label>
+            <div class="selection-presets"><button type="button" data-select-preset="latest">Latest 3</button><button type="button" data-select-preset="featured">GPT-5.5 + Opus</button><button type="button" data-select-preset="all">All</button><button type="button" data-select-preset="none">Clear</button></div>
+            <fieldset><legend class="visually-hidden">Choose evaluations; most recent first</legend>
+              {campaigns.map((campaign) => <label class="evaluation-option" data-option-search={`${campaign.label} ${campaign.profile_id} ${date(campaign.closed_at)} ${campaign.closed_at}`.toLowerCase()}><input type="checkbox" data-evaluation-id={campaign.campaign_id} checked={initialIds.has(campaign.campaign_id)} /><span><strong>{campaign.label}</strong><small><time datetime={campaign.closed_at}>{date(campaign.closed_at)}</time> · {campaign.replications} replications · {campaign.runs_total} runs{campaign.admission_issue ? " · Admission issue" : ""}</small></span></label>)}
+            </fieldset>
+            <p data-selection-empty hidden>No evaluations match this search.</p>
+            <button class="selection-done" type="button" data-selection-done>Done</button>
+          </div>
+        </details>
+      </div>
+      <div class="filter-field"><div class="filter-label"><label for="enforcement-mode">Enforcement mode</label><details class="filter-help"><summary aria-label="What is an enforcement mode?">?</summary><p>No contract executes without online checks. Advisory logs violations but lets actions execute. Guarded blocks invalid calls and permits replanning. Strict aborts on blocking violations. <a href="#proposal">See the four policies ↓</a></p></details></div><select id="enforcement-mode" name="mode">{siteData.modes.map((mode) => <option value={mode.id} selected={mode.id === "guarded"}>{mode.id === "no_contract" ? "No contract" : mode.id[0].toUpperCase() + mode.id.slice(1)}</option>)}</select></div>
+      <div class="filter-field"><div class="filter-label"><label for="comparison-metric">Metric</label><details class="filter-help"><summary aria-label="What does the selected metric measure?">?</summary><p><span data-metric-help>{metricOptions[metric].description}</span> <a href={withBase("/methodology#metrics")}>Metric definitions ↗</a></p></details></div><select id="comparison-metric" name="metric">{Object.entries(metricOptions).map(([id, option]) => <option value={id}>{option.label}</option>)}</select></div>
+      <details class="dashboard-advanced"><summary data-more-filters>More filters</summary><div class="dashboard-advanced-grid">
+      <label>Execution backend<select name="provider"><option value="all">All backends</option><option>OpenAI</option><option>Anthropic</option><option>Ollama</option></select></label>
+      <label>Admission status<select name="status"><option value="all">Include selected flagged evaluations</option><option value="checked">Hide admission issues</option><option value="issues">Admission issues only</option></select></label>
+      <label>Order<select name="sort"><option value="recent">Most recent first</option><option value="score">Metric · best first</option><option value="name">Model name</option></select></label>
+      <label class="dashboard-search">Filter selected evaluations<input name="search" type="search" placeholder="Search within your selection…" /></label>
+      <div class="dashboard-filter-actions"><button type="reset">Reset to latest evaluations</button></div>
+      </div></details>
+    </form>
+    <div class="dashboard-reading"><p data-plot-context>Guarded blocks invalid tool calls and permits replanning. Safe completion measures acceptable outcomes without forbidden effects; higher is better.</p><span class="dashboard-count" role="status" aria-live="polite" data-dashboard-count>3 evaluations shown</span></div>
+    <div class="dashboard-axis" aria-hidden="true"><span>0%</span><span data-scale-max>100%</span></div>
+    <div class="dashboard-rows" data-dashboard-rows>
+      {campaigns.map((campaign) => {
+        const score = campaign.statistics.guarded[metric];
+        return <article class={`dashboard-row ${campaign.featured ? "is-featured" : ""}`} data-campaign={campaign.campaign_id} hidden={!initialIds.has(campaign.campaign_id)}>
+          <div class="dashboard-model"><div><strong>{campaign.label}</strong>{campaign.admission_issue && <span class="issue-tag">Admission issue</span>}</div><p><time datetime={campaign.closed_at}>{date(campaign.closed_at)}</time> · {campaign.replications} replications · {campaign.scenario_count * campaign.replications} runs / mode</p><details><summary>Evaluation details</summary><code>{campaign.campaign_id}</code><p>Profile: <code>{campaign.profile_id}</code></p><a href={`https://github.com/carlosurteaga/agent-contracts-benchmark/blob/main/${campaign.evidence_path}`}>Inspect evaluation closeout ↗</a>{campaign.admission_issue && <p>{campaign.unexpected_pre_execution_runs} runs have unexpected pre-execution violations; {campaign.nominal_pre_execution_aborts} nominal runs aborted before model execution. Values are excluded from this comparison.</p>}</details></div>
+          <div class="dashboard-measure"><div class="comparison-track" aria-hidden="true" hidden={campaign.admission_issue || score.estimate === null}><span class="comparison-fill" style={`width:${(score.estimate ?? 0) * 100}%`}></span><span class="comparison-interval" style={`left:${(score.ci_95?.[0] ?? 0) * 100}%;width:${((score.ci_95?.[1] ?? 0) - (score.ci_95?.[0] ?? 0)) * 100}%`}></span></div><div class="comparison-value"><strong data-score>{campaign.admission_issue ? "Excluded" : formatScore(score.estimate, metric)}</strong><small data-ci>{campaign.admission_issue ? "Unexpected admission violations" : score.ci_95 ? `95% CI ${formatScore(score.ci_95[0], metric)}–${formatScore(score.ci_95[1], metric)}` : "Not defined"}</small></div></div>
+        </article>;
+      })}
+    </div>
+    <p class="dashboard-empty" data-dashboard-empty hidden>No evaluations selected or matching these filters. Choose evaluations or reset to the latest three.</p>
+    <div class="dashboard-footnote"><p>Bars show estimates; capped lines show 95% bootstrap intervals ({siteData.bootstrap_samples.toLocaleString("en")} samples). N/A means the metric is undefined. Campaigns are execution conditions, including replication counts and model profiles; these results do not establish a general model ranking.</p><a href={withBase("/methodology")}>How we measure →</a></div>
+    <noscript><p class="example-note">Showing the three latest evaluations without admission issues in guarded mode. Enable JavaScript to select others.</p></noscript>
+  </div>
+  <details class="admission-disclosure"><summary>Why are some campaigns flagged?</summary><p>The admission audit found unexpected pre-execution violations in Astra, Gemma4, and GPT-5.6 Terra campaigns. They remain visible through the admission-status filter, with values excluded from comparisons. The historical artifacts are retained. A complete run directory does not establish experimental comparability.</p><p>The default selection uses the three latest closures without these unexpected violations. This is an admission check, not a certification of every aspect of the experiment. The historical campaigns predate the vogtcon integration; <a href={withBase("/assets/artifacts/benchmark_identity_audit.md")}>the identity audit</a> documents additional provenance limits.</p></details>
+  <script type="application/json" data-dashboard-data set:html={JSON.stringify(campaigns).replace(/</g, "\\u003c")} />
+</section>
+<script>
+  import { formatScore, metricOptions, selectCampaigns } from "../utils/dashboard.js";
+  const dashboard = document.querySelector<HTMLElement>("[data-dashboard]");
+  if (dashboard) {
+    const campaigns = JSON.parse(dashboard.querySelector("[data-dashboard-data]")!.textContent!);
+    const form = dashboard.querySelector<HTMLFormElement>("form")!;
+    const controls = Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[name]"));
+    const rows = new Map(Array.from(dashboard.querySelectorAll<HTMLElement>("[data-campaign]")).map((row) => [row.dataset.campaign, row]));
+    const defaults = { mode: "guarded", metric: "successful_safe_completion_rate", provider: "all", status: "all", sort: "recent", search: "" };
+    const initial = campaigns.filter((campaign) => !campaign.admission_issue).slice(0, 3).map((campaign) => campaign.campaign_id);
+    const boxes = Array.from(dashboard.querySelectorAll<HTMLInputElement>("[data-evaluation-id]"));
+    const picker = dashboard.querySelector<HTMLDetailsElement>("[data-evaluation-picker]")!;
+    const setSelection = (ids) => boxes.forEach((box) => box.checked = ids.includes(box.dataset.evaluationId));
+    const advanced = dashboard.querySelector<HTMLDetailsElement>(".dashboard-advanced")!;
+    const extraNames = ["provider", "status", "sort", "search"];
+    const readUrl = () => {
+      const params = new URLSearchParams(location.search);
+      controls.forEach((control) => {
+        const value = params.get(control.name) ?? defaults[control.name];
+        control.value = value;
+        if (control instanceof HTMLSelectElement && control.selectedIndex < 0) control.value = defaults[control.name];
+      });
+      const requested = params.has("evaluations") ? params.get("evaluations")!.split(",") : params.get("scope") === "all" ? campaigns.map((campaign) => campaign.campaign_id) : params.get("scope") === "featured" ? campaigns.filter((campaign) => campaign.featured).map((campaign) => campaign.campaign_id) : initial;
+      setSelection(requested);
+      advanced.open = controls.some((control) => extraNames.includes(control.name) && control.value !== defaults[control.name]);
+    };
+    const render = (save = true) => {
+      const filters = Object.fromEntries(controls.map((control) => [control.name, control.value]));
+      const evaluationIds = boxes.filter((box) => box.checked).map((box) => box.dataset.evaluationId!);
+      filters.evaluationIds = evaluationIds;
+      const spec = metricOptions[filters.metric];
+      dashboard.querySelector("[data-selection-label]")!.textContent = `${evaluationIds.length} evaluations selected`;
+      dashboard.querySelector("[data-metric-help]")!.textContent = spec.description;
+      const extras = extraNames.filter((name) => filters[name] !== defaults[name]).length;
+      dashboard.querySelector("[data-more-filters]")!.textContent = extras ? `More filters · ${extras} active` : "More filters";
+      const selected = selectCampaigns(campaigns, filters);
+      const container = dashboard.querySelector("[data-dashboard-rows]")!;
+      rows.forEach((row) => row.hidden = true);
+      let maximum = spec.percent ? 1 : spec.seconds ? 10_000 : 1;
+      if (spec.seconds) {
+        const values = selected.filter((c) => !c.admission_issue).map((c) => c.statistics[filters.mode][filters.metric]).flatMap((s) => [s.estimate ?? 0, ...(s.ci_95 ?? [])]);
+        maximum = Math.max(10_000, Math.ceil(Math.max(0, ...values) / 10_000) * 10_000);
+      }
+      selected.forEach((campaign) => {
+        const row = rows.get(campaign.campaign_id)!;
+        const stat = campaign.statistics[filters.mode][filters.metric];
+        const available = !campaign.admission_issue && stat.estimate !== null;
+        row.hidden = false;
+        row.querySelector("[data-score]")!.textContent = campaign.admission_issue ? "Excluded" : formatScore(stat.estimate, filters.metric);
+        row.querySelector("[data-ci]")!.textContent = campaign.admission_issue ? "Unexpected admission violations" : stat.ci_95 ? `95% CI ${formatScore(stat.ci_95[0], filters.metric)}–${formatScore(stat.ci_95[1], filters.metric)}` : "Not defined for this condition";
+        const track = row.querySelector<HTMLElement>(".comparison-track")!;
+        track.hidden = !available;
+        row.querySelector<HTMLElement>(".comparison-fill")!.style.width = `${Math.max(0, Math.min(100, (stat.estimate ?? 0) / maximum * 100))}%`;
+        const interval = row.querySelector<HTMLElement>(".comparison-interval")!;
+        interval.hidden = !stat.ci_95;
+        if (stat.ci_95) {
+          interval.style.left = `${Math.max(0, stat.ci_95[0] / maximum * 100)}%`;
+          interval.style.width = `${Math.max(0, (stat.ci_95[1] - stat.ci_95[0]) / maximum * 100)}%`;
+        }
+        container.append(row);
+      });
+      const modeDescription = { no_contract: "No contract executes without online checks.", advisory: "Advisory logs violations and lets actions execute.", guarded: "Guarded blocks invalid tool calls and permits replanning.", strict: "Strict aborts on blocking violations and commits protected effects only on success." };
+      dashboard.querySelector("[data-plot-context]")!.textContent = `${modeDescription[filters.mode]} ${spec.description}`;
+      dashboard.querySelector("[data-scale-max]")!.textContent = formatScore(maximum, filters.metric);
+      dashboard.querySelector(".dashboard-axis > span")!.textContent = formatScore(0, filters.metric);
+      dashboard.querySelector("[data-dashboard-count]")!.textContent = `${selected.length} evaluations shown`;
+      dashboard.querySelector("[data-dashboard-empty]")!.toggleAttribute("hidden", selected.length > 0);
+      if (save) {
+        const url = new URL(location.href);
+        controls.forEach((control) => control.value === defaults[control.name] ? url.searchParams.delete(control.name) : url.searchParams.set(control.name, control.value));
+        url.searchParams.delete("scope");
+        const isInitial = evaluationIds.length === initial.length && initial.every((id) => evaluationIds.includes(id));
+        if (isInitial) url.searchParams.delete("evaluations");
+        else url.searchParams.set("evaluations", evaluationIds.join(","));
+        history.replaceState(null, "", url);
+      }
+    };
+    const query = dashboard.querySelector<HTMLInputElement>("[data-evaluation-query]")!;
+    const clearPickerSearch = () => { query.value = ""; query.dispatchEvent(new Event("input")); };
+    form.addEventListener("submit", (event) => event.preventDefault());
+    form.addEventListener("input", (event) => { if ((event.target as HTMLElement).matches("[name], [data-evaluation-id]")) render(); });
+    form.addEventListener("reset", (event) => { event.preventDefault(); controls.forEach((control) => control.value = defaults[control.name]); setSelection(initial); clearPickerSearch(); render(); });
+    dashboard.querySelectorAll<HTMLButtonElement>("[data-select-preset]").forEach((button) => button.addEventListener("click", () => {
+      const preset = button.dataset.selectPreset;
+      clearPickerSearch();
+      setSelection(preset === "latest" ? initial : preset === "featured" ? campaigns.filter((campaign) => campaign.featured).map((campaign) => campaign.campaign_id) : preset === "all" ? campaigns.map((campaign) => campaign.campaign_id) : []);
+      render();
+    }));
+    dashboard.querySelector("[data-selection-done]")!.addEventListener("click", () => { picker.open = false; picker.querySelector("summary")!.focus(); });
+    picker.addEventListener("keydown", (event) => { if (event.key === "Escape") { picker.open = false; picker.querySelector("summary")!.focus(); } });
+    query.addEventListener("input", () => {
+      let visible = 0;
+      dashboard.querySelectorAll<HTMLElement>("[data-option-search]").forEach((option) => { option.hidden = !option.dataset.optionSearch!.includes(query.value.trim().toLowerCase()); if (!option.hidden) visible++; });
+      dashboard.querySelector("[data-selection-empty]")!.toggleAttribute("hidden", visible > 0);
+    });
+    window.addEventListener("popstate", () => { readUrl(); render(false); });
+    readUrl(); render(false);
+  }
+</script>

@@ -4,38 +4,42 @@ import { siteData, withBase } from "../utils/site-data";
 const basePath = (import.meta.env.BASE_URL || "/").replace(/\/+$/, "") || "";
 const currentPath = (Astro.url.pathname.replace(basePath, "") || "/").replace(/\/+$/, "") || "/";
 const navItems = [
-  { href: "/", label: "Overview" },
+  { href: "/", label: "Dashboard" },
   { href: "/methodology", label: "Methodology" },
   { href: "/results", label: "Results" },
   { href: "/artifacts", label: "Artifacts" },
 ];
 ---
 
+<a class="skip-link" href="#main-content">Skip to content</a>
 <div class="page-shell">
   <header class="site-header">
-    <a class="site-title" href={withBase("/")}>Agent Contracts Benchmark</a>
+    <a class="site-title" href={withBase("/")} aria-label="Agent Contracts Benchmark home">
+      <span class="brand-mark" aria-hidden="true">ac<span>↗</span></span>
+      <span>Agent Contracts<span class="brand-subtitle">BENCHMARK / RESEARCH COMPANION</span></span>
+    </a>
     <nav class="site-nav" aria-label="Primary">
       {
         navItems.map((item) => {
           const itemPath = item.href === "/" ? "/" : item.href.replace(/\/+$/, "");
           const isActive = currentPath === itemPath;
           return (
-            <a class={`nav-link ${isActive ? "is-active" : ""}`} href={withBase(item.href)}>
+            <a class={`nav-link ${isActive ? "is-active" : ""}`} href={withBase(item.href)} aria-current={isActive ? "page" : undefined}>
               {item.label}
             </a>
           );
         })
       }
       <a class="nav-link" href="https://github.com/carlosurteaga/agent-contracts-benchmark" target="_blank" rel="noreferrer">
-        Repository
+        GitHub ↗
       </a>
     </nav>
   </header>
-  <main>
+  <main id="main-content" tabindex="-1">
     <slot />
   </main>
   <footer class="site-footer">
     <p>Benchmark protocol <code>{siteData.benchmark_version}</code>; artifact provenance is documented in the identity audit.</p>
-    <p>Canonical cut date: {siteData.canonical_cut_date}</p>
+    <div class="footer-links"><a href={withBase("/artifacts")}>Evidence library ↗</a><a href="https://github.com/carlosurteaga/agent-contracts-benchmark">Source on GitHub ↗</a><span>Canonical cut · {siteData.canonical_cut_date}</span></div>
   </footer>
 </div>

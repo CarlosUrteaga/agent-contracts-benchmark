@@ -18,7 +18,7 @@ const artifactCards = siteData.artifacts.map((artifact) => ({
   <SiteChrome>
     <section class="page-intro">
       <p class="eyebrow">Artifacts</p>
-      <h1>Curated public artifacts for benchmark identity, results, and reproducibility.</h1>
+      <h1>Every claim has a paper trail.</h1>
       <p>
         The goal is to connect the public narrative to the frozen benchmark definition and the canonical statistics artifact
         while keeping the public surface narrow and auditable.
@@ -30,7 +30,12 @@ const artifactCards = siteData.artifacts.map((artifact) => ({
       eyebrow="Public artifact set"
       title="Public materials required to verify benchmark identity and canonical results."
     >
-      <ArtifactGrid items={artifactCards} />
+      <div class="artifact-toolbar">
+        <div class="artifact-search"><label for="artifact-query">Find an artifact</label><input id="artifact-query" type="search" placeholder="Search by name, path, or document type…" aria-controls="artifact-list" /></div>
+        <span class="artifact-count" role="status" aria-live="polite" data-artifact-count>{artifactCards.length} artifacts</span>
+      </div>
+      <div id="artifact-list"><ArtifactGrid items={artifactCards} /></div>
+      <p class="artifact-empty" data-artifact-empty hidden>No matching artifacts. Try “oracle”, “results”, or “json”.</p>
     </SectionBlock>
 
     <SectionBlock
@@ -65,5 +70,22 @@ npm run build --prefix site</code></pre>
         </article>
       </div>
     </SectionBlock>
+    <script>
+      const query = document.querySelector<HTMLInputElement>("#artifact-query");
+      const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-artifact-card]"));
+      const count = document.querySelector("[data-artifact-count]");
+      const empty = document.querySelector("[data-artifact-empty]");
+      query?.addEventListener("input", () => {
+        const terms = query.value.trim().toLowerCase().split(/\s+/);
+        let visible = 0;
+        cards.forEach((card) => {
+          const matches = terms.every((term) => card.dataset.search?.includes(term));
+          card.hidden = !matches;
+          if (matches) visible++;
+        });
+        if (count) count.textContent = `${visible} of ${cards.length} artifacts`;
+        empty?.toggleAttribute("hidden", visible > 0);
+      });
+    </script>
   </SiteChrome>
 </BaseLayout>

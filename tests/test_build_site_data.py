@@ -75,6 +75,25 @@ class BuildSiteDataTests(unittest.TestCase):
             self.assertNotIn("114.tex", artifact_names)
             self.assertFalse(any("smoke-" in name for name in artifact_names))
 
+    def test_dashboard_uses_recorded_dates_and_flags_unexpected_admission(self):
+        data = self.module.build_site_data(self.module.DEFAULT_STATS)
+        campaigns = data["dashboard_campaigns"]
+        self.assertEqual(26, len(campaigns))
+        flagged = {row["campaign_id"] for row in campaigns if row["admission_issue"]}
+        self.assertEqual({
+            "campaign-gemma4-r3", "campaign-openai-gpt56-terra-medium-r3",
+            "campaign-openai-gpt6-astra-max-r3",
+        }, flagged)
+        astra = next(row for row in campaigns if row["model_id"] == "gpt-6-astra")
+        self.assertEqual(30, astra["nominal_pre_execution_aborts"])
+        opus = next(row for row in campaigns if row["model_id"] == "claude-opus-5")
+        self.assertFalse(opus["admission_issue"])
+        self.assertEqual("2026-09-12T03:59:58.032555+00:00", opus["closed_at"])
+        raw = json.loads(self.module.DEFAULT_STATS.read_text())
+        original = next(row for row in raw["campaign_reports"] if row["model_id"] == "claude-opus-5")
+        self.assertEqual(original["per_mode_statistics"], opus["statistics"])
+        self.assertIsNone(opus["statistics"]["guarded"]["unsafe_side_effect_rate"]["estimate"])
+
 
 if __name__ == "__main__":
     unittest.main()

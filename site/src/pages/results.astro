@@ -7,6 +7,7 @@ import RankedBarPlot from "../components/RankedBarPlot.astro";
 import { metric, siteData, withBase } from "../utils/site-data";
 
 const percent = (value) => `${(Number(value) * 100).toFixed(1).replace(/\.0$/, "")}%`;
+const admissionIssues = new Set(siteData.dashboard_campaigns.filter((campaign) => campaign.admission_issue).map((campaign) => campaign.campaign_id));
 const shortCampaignName = (campaignId) => {
   const names = {
     "campaign-base-r5": "Base model (r5)",
@@ -81,7 +82,7 @@ const backendHeaders = [
   "Recall",
   "F1",
 ];
-const rankedBackendRows = [...siteData.guarded_backend_rows].sort((a, b) =>
+const rankedBackendRows = siteData.guarded_backend_rows.filter((row) => !admissionIssues.has(row.campaign_id)).sort((a, b) =>
   b.successful_safe_completion_rate.estimate - a.successful_safe_completion_rate.estimate
   || (b.f1.estimate ?? -1) - (a.f1.estimate ?? -1)
   || a.campaign_id.localeCompare(b.campaign_id)
@@ -119,7 +120,7 @@ const overheadHeaders = [
   "Strict iterations",
   "Safe-completion lift",
 ];
-const rankedOverheadRows = [...siteData.overhead_rows].sort((a, b) =>
+const rankedOverheadRows = siteData.overhead_rows.filter((row) => !admissionIssues.has(row.campaign_id)).sort((a, b) =>
   b.successful_safe_completion_rate_delta - a.successful_safe_completion_rate_delta
   || a.campaign_id.localeCompare(b.campaign_id)
 );
@@ -150,17 +151,18 @@ const overheadPlotRows = rankedOverheadRows.slice(0, 8).map((row) => {
   <SiteChrome>
     <section class="page-intro page-intro-results">
       <p class="eyebrow">Canonical results</p>
-      <h1>Canonical H1-H4 results for the frozen post-freeze benchmark cut.</h1>
+      <h1>The evidence behind the boundaries.</h1>
       <p>
         The claims on this page are restricted to the canonical {siteData.campaign_count}-campaign cut in
         <code>final-twenty-six-campaigns.json</code>. The 26 campaigns use the historical runner and share a 21-scenario protocol across model conditions. The <a href={withBase("/assets/artifacts/benchmark_identity_audit.md")}>identity audit</a> explains the limits of the stored freeze hashes and the later oracle documentation.
       </p>
+      <p class="example-note">Campaigns with unexpected admission violations are excluded from the comparisons below. <a class="text-link" href={withBase("/?scope=all&status=issues#models")}>Inspect flagged campaigns →</a></p>
       <div class="results-navigator" data-results-nav>
-        <button class="nav-chip is-selected" data-target="all" type="button">All evidence</button>
-        <button class="nav-chip" data-target="h1" type="button">H1 Safety</button>
-        <button class="nav-chip" data-target="h2" type="button">H2 Runtime</button>
-        <button class="nav-chip" data-target="h3" type="button">H3 Utility</button>
-        <button class="nav-chip" data-target="h4" type="button">H4 Overhead</button>
+        <button class="nav-chip is-selected" data-target="all" aria-pressed="true" type="button">All evidence</button>
+        <button class="nav-chip" data-target="h1" aria-pressed="false" type="button">H1 Safety</button>
+        <button class="nav-chip" data-target="h2" aria-pressed="false" type="button">H2 Runtime</button>
+        <button class="nav-chip" data-target="h3" aria-pressed="false" type="button">H3 Utility</button>
+        <button class="nav-chip" data-target="h4" aria-pressed="false" type="button">H4 Overhead</button>
       </div>
     </section>
 
@@ -242,17 +244,25 @@ const overheadPlotRows = rankedOverheadRows.slice(0, 8).map((row) => {
         const buttons = Array.from(nav.querySelectorAll("[data-target]"));
         const sections = Array.from(document.querySelectorAll(".section-block[id^='h']"));
         const selectTarget = (target) => {
+          const selected = ["h1", "h2", "h3", "h4"].includes(target) ? target : "all";
           buttons.forEach((button) => {
-            button.classList.toggle("is-selected", button.dataset.target === target);
+            button.classList.toggle("is-selected", button.dataset.target === selected);
+            button.setAttribute("aria-pressed", String(button.dataset.target === selected));
           });
           sections.forEach((section) => {
-            const show = target === "all" || section.id === target;
+            const show = selected === "all" || section.id === selected;
             section.toggleAttribute("hidden", !show);
           });
         };
         buttons.forEach((button) => {
-          button.addEventListener("click", () => selectTarget(button.dataset.target));
+          button.addEventListener("click", () => {
+            const target = button.dataset.target || "all";
+            history.replaceState(null, "", target === "all" ? location.pathname + location.search : `#${target}`);
+            selectTarget(target);
+          });
         });
+        if (location.hash) selectTarget(location.hash.slice(1));
+        window.addEventListener("hashchange", () => selectTarget(location.hash.slice(1)));
       }
     </script>
   </SiteChrome>

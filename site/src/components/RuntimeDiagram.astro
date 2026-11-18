@@ -1,0 +1,9 @@
+<figure class="runtime-diagram" aria-labelledby="runtime-caption">
+  <div class="diagram-topline"><span><i></i> EXECUTION BOUNDARY</span><span>01 — 03</span></div>
+  <div class="runtime-node"><span class="node-index">01</span><div><strong>Agent proposes</strong><span>A tool call, with arguments</span></div><span class="node-symbol" aria-hidden="true">↗</span></div>
+  <div class="runtime-connector"><span>proposed action</span></div>
+  <div class="runtime-node governor-node"><span class="node-index">02</span><div><strong>Contract checks</strong><span>Authority · evidence · scope</span></div><span class="node-symbol" aria-hidden="true">◇</span></div>
+  <div class="diagram-branches"><span>↓ valid</span><span>invalid ↴</span></div>
+  <div class="diagram-endpoints"><div class="runtime-node"><span class="node-index">03</span><div><strong>Tool executes</strong><span>Commit side effect</span></div></div><div class="denial-node"><strong>Block + feedback</strong><span>Replan in guarded mode ↶</span></div></div>
+  <figcaption id="runtime-caption">The guarded path <span>Check before the side effect.</span></figcaption>
+</figure>

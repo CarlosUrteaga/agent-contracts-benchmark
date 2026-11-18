@@ -4,7 +4,7 @@ const { items } = Astro.props;
 
 <div class="artifact-grid">
   {items.map((item) => (
-    <article class="artifact-card">
+    <article class="artifact-card" data-artifact-card data-search={`${item.title} ${item.source || ""} ${item.kicker}`.toLowerCase()}>
       <p class="artifact-kicker">{item.kicker}</p>
       <h3>{item.title}</h3>
       <p>{item.body}</p>

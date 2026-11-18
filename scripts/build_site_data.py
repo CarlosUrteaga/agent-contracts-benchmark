@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import shutil
 from pathlib import Path
 from typing import Any
@@ -177,6 +178,76 @@ def build_headline_metrics(base_r5: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+MODEL_NAMES = {
+    "ollama_chat/qwen2.5:7b": "Qwen 2.5 7B",
+    "ollama_chat/qwen3.5:4b": "Qwen 3.5 4B",
+    "ollama_chat/qwen3.5:397b-cloud": "Qwen 3.5 397B",
+    "ollama_chat/gpt-oss:120b-cloud": "GPT-OSS 120B",
+    "ollama_chat/gemma4:26b": "Gemma4 26B",
+    "ollama_chat/deepseek-v4-pro:cloud": "DeepSeek V4 Pro",
+    "ollama_chat/kimi-k2.6:cloud": "Kimi K2.6",
+    "ollama_chat/kimi-k2.7-code:cloud": "Kimi K2.7 Code",
+    "ollama_chat/nemotron-3-ultra:cloud": "Nemotron 3 Ultra",
+    "gpt-5.5-2026-04-23": "GPT-5.5", "gpt-5.6-luna": "GPT-5.6 Luna",
+    "gpt-5.6-terra": "GPT-5.6 Terra", "gpt-5.6-sol": "GPT-5.6 Sol",
+    "gpt-6-astra": "GPT-6 Astra", "claude-opus-4-8": "Claude Opus 4.8",
+    "claude-opus-5": "Claude Opus 5", "claude-sonnet-5": "Claude Sonnet 5",
+    "claude-haiku-4-5-20251001": "Claude Haiku 4.5",
+}
+FEATURED_CAMPAIGNS = {
+    "campaign-openai-xhigh-r3", "campaign-claude-opus-48-r3",
+    "campaign-anthropic-claude-opus-5-sol-r3",
+}
+
+
+def build_dashboard_campaigns(reports: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Attach historical dates and admission evidence; do not rewrite statistics."""
+    scenarios = {
+        scenario["scenario_id"]: scenario
+        for path in (REPO_ROOT / "benchmark/enforcement/scenarios").glob("S-*.json")
+        for scenario in [json.loads(path.read_text())]
+    }
+    campaigns = []
+    for report in reports:
+        root = REPO_ROOT / report["runs_root"]
+        manifest = json.loads((root / "execution_manifest.json").read_text())
+        closeout = (root / "campaign_closeout.md").read_text()
+        closed_at = re.search(r"closed_at: `([^`]+)`", closeout)
+        if closed_at is None:
+            raise ValueError(f"Missing campaign closeout date: {root}")
+        unexpected = 0
+        nominal_aborts = 0
+        inspected = 0
+        for path in root.glob("*/*/rep*/S-*/summary.json"):
+            run = json.loads(path.read_text())
+            inspected += 1
+            expected = set(scenarios[run["scenario_id"]].get("expected_pre_execution_violations", []))
+            observed = {v["rule"] for v in run["violations"] if v["phase"] == "pre_execution"}
+            if observed - expected:
+                unexpected += 1
+            if run["scenario_type"] == "nominal" and run["final_status"] == "aborted_pre_execution":
+                nominal_aborts += 1
+        if inspected != report["runs_total"]:
+            raise ValueError(f"Dashboard admission audit count mismatch: {root}: {inspected}")
+        model = report["model_id"]
+        label = MODEL_NAMES.get(model, model.removeprefix("ollama_chat/").replace(":cloud", ""))
+        if "xhigh" in report["profile_id"]:
+            label += " / xhigh"
+        family = "OpenAI" if model.startswith("gpt-") else "Anthropic" if model.startswith("claude-") else "Ollama"
+        campaigns.append({
+            "campaign_id": report["campaign_id"], "label": label,
+            "model_id": model, "profile_id": report["profile_id"], "provider": family,
+            "closed_at": closed_at.group(1), "replications": report["replications"],
+            "runs_total": report["runs_total"], "scenario_count": manifest["scenario_count"],
+            "featured": report["campaign_id"] in FEATURED_CAMPAIGNS,
+            "admission_issue": unexpected > 0, "unexpected_pre_execution_runs": unexpected,
+            "nominal_pre_execution_aborts": nominal_aborts,
+            "evidence_path": f"{report['runs_root']}/campaign_closeout.md",
+            "statistics": report["per_mode_statistics"],
+        })
+    return sorted(campaigns, key=lambda item: item["closed_at"], reverse=True)
+
+
 def build_site_data(stats_path: Path) -> dict[str, Any]:
     raw = json.loads(stats_path.read_text())
     reports = raw["campaign_reports"]
@@ -197,6 +268,7 @@ def build_site_data(stats_path: Path) -> dict[str, Any]:
         ],
         "headline_metrics": build_headline_metrics(base_r5),
         "campaign_rows": flatten_reports(reports),
+        "dashboard_campaigns": build_dashboard_campaigns(reports),
         "base_r5_table": {
             mode: {
                 "unsafe_side_effect_rate": metric_payload(
