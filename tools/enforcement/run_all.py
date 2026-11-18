@@ -9,6 +9,7 @@ import shutil
 from typing import Any
 
 from .common import MODES, load_model_profile, scenario_paths
+from .preflight import require_admission
 from .runtime import run_scenario
 from .validate_campaign import validate_run_dir
 
@@ -54,6 +55,7 @@ def run_matrix(
     force_rerun: bool = False,
     fail_fast: bool = False,
 ) -> dict[str, Any]:
+    require_admission(contracts_root, model_profile_path)
     model_profile = load_model_profile(model_profile_path)
     scenarios = scenario_paths(scenarios_root)
     total_runs = len(scenarios) * len(MODES) * replications

@@ -89,6 +89,23 @@ uv run python -m tools.enforcement.run_all \
 
 3. Run the benchmark:
 
+`run_all` checks model admission and contract content fingerprints before
+starting the matrix, including `--dry-run` and `--force-rerun`. This checks the
+base configuration; the intentional tampering in S-018 and S-019 remains active.
+You can run that check separately without model calls:
+
+```bash
+uv run python -m tools.enforcement.preflight check \
+  --contracts contracts/enforcement \
+  --model-profile benchmark/enforcement/config/model_profiles/anthropic_claude_opus_5_sol.yaml
+```
+
+If a reviewed profile requires admission, `preflight prepare` accepts the same
+arguments plus `--out <new-directory>` and writes separate compatibility copies
+with unchanged contract semantics. Use that directory as `--contracts` for the
+new campaign and retain its provenance file. This does not repair historical
+runs, verify API availability, or establish frozen-artifact identity.
+
 ```bash
 uv sync --group litellm
 ollama serve
