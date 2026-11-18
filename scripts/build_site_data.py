@@ -7,12 +7,16 @@ import json
 import math
 import re
 import shutil
+import sys
 from pathlib import Path
 from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_STATS = REPO_ROOT / "results/enforcement/statistics/final-twenty-six-campaigns.json"
+sys.path.insert(0, str(REPO_ROOT))
+from tools.enforcement.admission_review import OUTPUT, load_verified_review
+
+DEFAULT_STATS = REPO_ROOT / OUTPUT
 DEFAULT_OUT = REPO_ROOT / "site"
 FREEZE_DATE = "2026-06-14"
 CANONICAL_CUT_DATE = "2026-09-12"
@@ -40,6 +44,8 @@ ARTIFACTS = [
     ("docs/pre_freeze_audit.md", "pre_freeze_audit.md"),
     ("docs/resultados_experimento.md", "results.md"),
     ("docs/scenario_audit_matrix.md", "scenario_audit_matrix.md"),
+    ("docs/campaign_admission_review.md", "campaign_admission_review.md"),
+    ("results/enforcement/statistics/admission-reviewed-twenty-three-campaigns.json", "admission-reviewed-twenty-three-campaigns.json"),
     ("results/enforcement/statistics/final-twenty-six-campaigns.json", "final-twenty-six-campaigns.json"),
     ("results/enforcement/statistics/final-nineteen-campaigns.json", "final-nineteen-campaigns.json"),
 ]
@@ -200,13 +206,9 @@ FEATURED_CAMPAIGNS = {
 }
 
 
-def build_dashboard_campaigns(reports: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Attach historical dates and admission evidence; do not rewrite statistics."""
-    scenarios = {
-        scenario["scenario_id"]: scenario
-        for path in (REPO_ROOT / "benchmark/enforcement/scenarios").glob("S-*.json")
-        for scenario in [json.loads(path.read_text())]
-    }
+def build_dashboard_campaigns(reports: list[dict[str, Any]], decisions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep the complete inventory visible using the verified admission decisions."""
+    decision_by_id = {decision["campaign_id"]: decision for decision in decisions}
     campaigns = []
     for report in reports:
         root = REPO_ROOT / report["runs_root"]
@@ -215,20 +217,9 @@ def build_dashboard_campaigns(reports: list[dict[str, Any]]) -> list[dict[str, A
         closed_at = re.search(r"closed_at: `([^`]+)`", closeout)
         if closed_at is None:
             raise ValueError(f"Missing campaign closeout date: {root}")
-        unexpected = 0
-        nominal_aborts = 0
-        inspected = 0
-        for path in root.glob("*/*/rep*/S-*/summary.json"):
-            run = json.loads(path.read_text())
-            inspected += 1
-            expected = set(scenarios[run["scenario_id"]].get("expected_pre_execution_violations", []))
-            observed = {v["rule"] for v in run["violations"] if v["phase"] == "pre_execution"}
-            if observed - expected:
-                unexpected += 1
-            if run["scenario_type"] == "nominal" and run["final_status"] == "aborted_pre_execution":
-                nominal_aborts += 1
-        if inspected != report["runs_total"]:
-            raise ValueError(f"Dashboard admission audit count mismatch: {root}: {inspected}")
+        decision = decision_by_id[report["campaign_id"]]
+        unexpected = decision["unexpected_pre_execution_runs"]
+        nominal_aborts = decision["nominal_pre_execution_aborts"]
         model = report["model_id"]
         label = MODEL_NAMES.get(model, model.removeprefix("ollama_chat/").replace(":cloud", ""))
         if "xhigh" in report["profile_id"]:
@@ -249,7 +240,9 @@ def build_dashboard_campaigns(reports: list[dict[str, Any]]) -> list[dict[str, A
 
 
 def build_site_data(stats_path: Path) -> dict[str, Any]:
-    raw = json.loads(stats_path.read_text())
+    raw = load_verified_review(stats_path, REPO_ROOT)
+    review = raw["admission_review"]
+    inventory = load_reports(REPO_ROOT / review["source_artifact"])
     reports = raw["campaign_reports"]
     report_by_id = report_index(reports)
     base_r5 = report_by_id["campaign-base-r5"]
@@ -261,14 +254,19 @@ def build_site_data(stats_path: Path) -> dict[str, Any]:
         "analysis_stage": raw["analysis_stage"],
         "bootstrap_schema_version": raw["bootstrap_schema_version"],
         "bootstrap_samples": raw["bootstrap_samples"],
-        "campaign_count": len(reports),
+        "campaign_count": len(inventory),
+        "comparison_campaign_count": len(reports),
+        "inventory_run_count": review["inventory_run_count"],
+        "comparison_run_count": review["included_run_count"],
+        "admission_reviewed_at": review["reviewed_at"],
+        "comparison_statistics_artifact": stats_path.name,
         "modes": [
             {"id": mode, "description": MODE_DESCRIPTIONS[mode]}
             for mode in MODES
         ],
         "headline_metrics": build_headline_metrics(base_r5),
         "campaign_rows": flatten_reports(reports),
-        "dashboard_campaigns": build_dashboard_campaigns(reports),
+        "dashboard_campaigns": build_dashboard_campaigns(inventory, review["campaign_decisions"]),
         "base_r5_table": {
             mode: {
                 "unsafe_side_effect_rate": metric_payload(
@@ -291,6 +289,8 @@ def build_site_data(stats_path: Path) -> dict[str, Any]:
         "artifacts": [],
     }
     for campaign_id in GUARDED_BACKEND_CAMPAIGNS:
+        if campaign_id not in report_by_id:
+            continue
         report = report_by_id[campaign_id]
         guarded = report["per_mode_statistics"]["guarded"]
         summary = load_campaign_summary(report)
@@ -316,6 +316,8 @@ def build_site_data(stats_path: Path) -> dict[str, Any]:
             }
         )
     for campaign_id in OVERHEAD_CAMPAIGNS:
+        if campaign_id not in report_by_id:
+            continue
         report = report_by_id[campaign_id]
         guarded = report["per_mode_statistics"]["guarded"]
         strict = report["per_mode_statistics"]["strict"]
@@ -382,7 +384,7 @@ def write_markdown_fragments(data: dict[str, Any], out_dir: Path) -> None:
     safe_delta = headline["successful_safe_completion_rate"]["delta_guarded_minus_strict"]
     latency_delta = headline["operational_overhead"]["mean_latency_ms_delta_guarded_minus_strict"]
     token_delta = headline["operational_overhead"]["mean_token_usage_delta_guarded_minus_strict"]
-    campaign_count = data["campaign_count"]
+    campaign_count = data["comparison_campaign_count"]
     overview = f"""
 <div class="metric-grid">
   <div class="metric-card">
@@ -391,9 +393,9 @@ def write_markdown_fragments(data: dict[str, Any], out_dir: Path) -> None:
     <span class="metric-subtle">Frozen on {data["freeze_date"]}</span>
   </div>
   <div class="metric-card">
-    <span class="metric-label">Canonical cut</span>
+    <span class="metric-label">Admission-screened comparison</span>
     <strong>{campaign_count} campaigns</strong>
-    <span class="metric-subtle">Closed on {data["canonical_cut_date"]}</span>
+    <span class="metric-subtle">From {data["campaign_count"]} closed campaigns; reviewed {data["admission_reviewed_at"]}</span>
   </div>
   <div class="metric-card">
     <span class="metric-label">Safety-utility lead</span>
@@ -525,6 +527,8 @@ On the base five-replication campaign, `guarded` reaches `successful_safe_comple
             "oracle_spec.md",
         ],
         "Results and validation": [
+            "admission-reviewed-twenty-three-campaigns.json",
+            "campaign_admission_review.md",
             "executive_summary.md",
             "results.md",
             "pre_freeze_audit.md",

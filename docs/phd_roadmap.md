@@ -68,10 +68,12 @@ Objetivo:
 - transformar resultados descriptivos en evidencia comparativa formal
 
 Estado:
-- completada para el corte canónico de 26 campañas cerradas
+- inventario de 26 campañas cerrado; comparación vigente restringida a 23 tras revisión de admisión
 
 Artefacto vigente:
-- [results/enforcement/statistics/final-twenty-six-campaigns.json](../results/enforcement/statistics/final-twenty-six-campaigns.json)
+- [admission-reviewed-twenty-three-campaigns.json](../results/enforcement/statistics/admission-reviewed-twenty-three-campaigns.json)
+- [Revisión de admisión y exclusiones](campaign_admission_review.md)
+- [Archivo histórico de 26 campañas](../results/enforcement/statistics/final-twenty-six-campaigns.json)
 
 Incluye:
 - bootstrap al `95%`

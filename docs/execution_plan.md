@@ -660,7 +660,7 @@ La tesis ya tiene una corrida final separada de la fase de calibración.
 ## Fase 6. Paquete de análisis
 
 Estado:
-- completada para el corte canónico de 26 campañas cerradas
+- inventario de 26 campañas cerrado; comparación vigente restringida a 23 tras revisión de admisión
 
 ### Objetivo
 
@@ -685,7 +685,9 @@ Preparar la evidencia que alimentará el capítulo final.
 
 ### Artefactos vigentes
 
-- [results/enforcement/statistics/final-twenty-six-campaigns.json](../results/enforcement/statistics/final-twenty-six-campaigns.json)
+- [admission-reviewed-twenty-three-campaigns.json](../results/enforcement/statistics/admission-reviewed-twenty-three-campaigns.json)
+- [Revisión de admisión y exclusiones](campaign_admission_review.md)
+- [Archivo histórico de 26 campañas](../results/enforcement/statistics/final-twenty-six-campaigns.json)
 - [docs/resultados_experimento.md](/Users/carlos.urteaga/git/agent-contracts-benchmark/docs/resultados_experimento.md:1)
 - [docs/EXECUTIVE_SUMMARY.md](/Users/carlos.urteaga/git/agent-contracts-benchmark/docs/EXECUTIVE_SUMMARY.md:1)
 
@@ -695,10 +697,10 @@ Preparar la evidencia que alimentará el capítulo final.
 - `H1–H4` ya quedaron redactadas directamente sobre campañas cerradas
 - `campaign-kimi-k26-r3` ya está incorporada al corte canónico actual
 - `campaign-kimi-k26-r5`, `campaign-kimi-k27-code-r3`, `campaign-kimi-k27-code-r5`, `campaign-nemotron-3-ultra-r3`, `campaign-nemotron-3-ultra-r5`, `campaign-openai-direct-r3`, `campaign-openai-xhigh-r3`, `campaign-claude-opus-48-r3` y `campaign-qwen35-4b` `r3/r5` ya quedaron incorporadas al corte canónico actual
-- las siete campañas de GPT-5.6, GPT-6 y Claude añadidas en septiembre completan el corte de 26 campañas y 7,728 corridas
+- las siete campañas de GPT-5.6, GPT-6 y Claude añadidas en septiembre completan el inventario histórico de 26 campañas y 7,728 corridas; el corte de comparación retiene 23 campañas y 6,972 corridas al excluir Gemma4, GPT-5.6 Terra y GPT-6 Astra por incidencias de admisión
 - la [auditoría de identidad](benchmark_identity_audit.md) distingue compatibilidad de modelos de procedencia de artefactos; estas campañas preceden la integración de `vogtcon`
 - los reruns exploratorios y smoke-only artifacts no se incorporan al paquete canónico
-- el siguiente trabajo ya no es recalcular este bloque, sino decidir expansión selectiva, ablations o redacción
+- la revisión post hoc de admisión actualiza el corte comparativo sin alterar las corridas originales; cualquier reemplazo de una campaña excluida requiere una nueva identidad y nueva evidencia
 
 ### Criterio de salida
 

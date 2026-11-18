@@ -8,7 +8,7 @@ import { siteData, withBase } from "../utils/site-data";
 const artifactCards = siteData.artifacts.map((artifact) => ({
   kicker: artifact.label.endsWith(".json") ? "Data artifact" : "Public document",
   title: artifact.label,
-  body: `Public copy of ${artifact.source}.`,
+  body: artifact.label === "final-twenty-six-campaigns.json" ? "Historical inventory: 26 closed campaigns, including three admission incidents. Current comparisons use the separate 23-campaign reviewed artifact." : artifact.label === "admission-reviewed-twenty-three-campaigns.json" ? "Current comparison subset: 23 campaigns and 6,972 runs after the post hoc admission screen." : `Public copy of ${artifact.source}.`,
   href: withBase(`/${artifact.site_path}`),
   source: artifact.source,
 }));
@@ -20,7 +20,7 @@ const artifactCards = siteData.artifacts.map((artifact) => ({
       <p class="eyebrow">Artifacts</p>
       <h1>Every claim has a paper trail.</h1>
       <p>
-        The goal is to connect the public narrative to the frozen benchmark definition and the canonical statistics artifact
+        The goal is to connect the public narrative to the frozen benchmark definition and the admission-reviewed statistics and the archived inventory
         while keeping the public surface narrow and auditable.
       </p>
     </section>

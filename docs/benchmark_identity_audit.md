@@ -95,3 +95,7 @@ for revision in ('ebaa836c', '49770f82', '9ec0b1ff', 'HEAD'):
     print(revision, 'semantic', semantic.hexdigest(), 'compatibility', compatibility.hexdigest())
 PY
 ```
+
+## Subsequent admission review
+
+The provenance disposition above does not establish admission validity for every campaign. The [admission review](campaign_admission_review.md), recorded at 2026-11-18T01:59:51Z, found unexpected pre-execution violations in the Gemma4, GPT-5.6 Terra, and GPT-6 Astra campaigns. The 26 closed campaigns remain the historical inventory; current comparisons use 23 campaigns and 6,972 runs. The original statistics remain archived, and the derived admission-screened artifact retains each included campaign report unchanged. This separate quality screen supersedes any implication that all 26 closed campaigns are eligible for model comparisons; the other provenance limitations in this audit still apply.

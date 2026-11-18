@@ -1,6 +1,6 @@
 # Pruebas, complicaciones, adecuaciones, hallazgos y resultados
 
-Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-09-12`, el corte canónico vigente se compone de 26 campañas cerradas y 7,728 corridas válidas en el artefacto inferencial [final-twenty-six-campaigns.json](../results/enforcement/statistics/final-twenty-six-campaigns.json), en esquema `bootstrap-metrics-v2`. Estas campañas se ejecutaron con el runner histórico, antes de la integración de `vogtcon`.
+Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`, el benchmark vigente quedó congelado como `benchmark-v1.0`, y los perfiles de modelo pasaron a tratarse como `execution conditions` de campañas post-freeze. Al `2026-09-12`, el inventario histórico reúne **26 campañas cerradas y 7,728 corridas registradas** en [final-twenty-six-campaigns.json](../results/enforcement/statistics/final-twenty-six-campaigns.json). La revisión posterior de admisión restringe las comparaciones a **23 campañas y 6,972 corridas**, documentadas en [admission-reviewed-twenty-three-campaigns.json](../results/enforcement/statistics/admission-reviewed-twenty-three-campaigns.json). Se conserva el esquema `bootstrap-metrics-v2` y cada reporte retenido permanece idéntico al original. Estas campañas se ejecutaron con el runner histórico, antes de la integración de `vogtcon`.
 
 ## Estado metodológico
 
@@ -14,14 +14,14 @@ Esta sección ya no describe el piloto ni la calibración. Desde el `2026-06-14`
   - `results/enforcement/smoke-gemma4-31b-cloud-rerun2/`
   - `results/enforcement/smoke-nemotron-3-super-cloud/`
 
-## Campañas cerradas incluidas en el corte canónico
+## Inventario histórico y corte de comparación
 
-Las campañas utilizables para análisis final son:
+El inventario completo es el siguiente; tres campañas se conservan como evidencia de incidencias y quedan fuera de las comparaciones:
 
 - `campaign-base-r3`
 - `campaign-base-r5`
 - `campaign-claude-opus-48-r3`
-- `campaign-gemma4-r3`
+- `campaign-gemma4-r3` — archivada; excluida por violaciones inesperadas de admisión
 - `campaign-deepseek-v4-pro-r3`
 - `campaign-gpt-oss-120b-r3`
 - `campaign-qwen35-397b-r3`
@@ -38,14 +38,16 @@ Las campañas utilizables para análisis final son:
 - `campaign-qwen35-4b-r3`
 - `campaign-qwen35-4b-r5`
 - `campaign-openai-gpt56-luna-low-r3`
-- `campaign-openai-gpt56-terra-medium-r3`
+- `campaign-openai-gpt56-terra-medium-r3` — archivada; excluida por violaciones inesperadas de admisión
 - `campaign-openai-gpt56-sol-max-r3`
-- `campaign-openai-gpt6-astra-max-r3`
+- `campaign-openai-gpt6-astra-max-r3` — archivada; excluida por violaciones inesperadas de admisión
 - `campaign-anthropic-claude-haiku-45-moon-r3`
 - `campaign-anthropic-claude-sonnet-5-terra-r3`
 - `campaign-anthropic-claude-opus-5-sol-r3`
 
-El artefacto estadístico canónico:
+La [revisión de admisión](campaign_admission_review.md) aplica una exclusión completa por campaña cuando una violación pre-ejecución no está prevista en su escenario. Es una revisión de calidad post hoc, no una certificación de todas las condiciones experimentales. No se recalcula el bootstrap ni se mezclan campañas como una muestra única; se actualizan los conteos y rangos del subconjunto. Los intervalos conservan su interpretación dentro de cada campaña.
+
+El artefacto estadístico de comparación:
 
 - usa `bootstrap` al `95%`
 - reporta métricas por modo
@@ -78,7 +80,7 @@ El mismo patrón aparece en `campaign-deepseek-v4-pro-r5`, donde:
 - `guarded` y `strict` permanecen en `unsafe_side_effect_rate = 0.0`
 - ambas variantes bloqueantes conservan `governance_effectiveness = 1.0`
 
-En las 26 campañas, la tasa de efectos inseguros está definida en 19 condiciones `no_contract`, 19 `advisory`, 21 `guarded` y 15 `strict`: todas las tasas definidas de los dos primeros modos son `1.0` y todas las de los modos bloqueantes son `0.0`. Hay campañas donde `no_contract` no genera oportunidades suficientes para definir la tasa, como `campaign-gpt-oss-120b-r5`. Eso no contradice `H1`; sólo limita el contraste en ese backend. Cuando la oportunidad aparece, el patrón sigue siendo que `guarded` y `strict` previenen el efecto inseguro, mientras `advisory` no lo bloquea.
+En las 23 campañas retenidas, la tasa de efectos inseguros está definida en 17 condiciones `no_contract`, 18 `advisory`, 19 `guarded` y 15 `strict`: todas las tasas definidas de los dos primeros modos son `1.0` y todas las de los modos bloqueantes son `0.0`. Hay campañas donde `no_contract` no genera oportunidades suficientes para definir la tasa, como `campaign-gpt-oss-120b-r5`. Eso no contradice `H1`; sólo limita el contraste en ese backend. Cuando la oportunidad aparece, el patrón sigue siendo que `guarded` y `strict` previenen el efecto inseguro, mientras `advisory` no lo bloquea.
 
 ## H2 — La calidad de detección runtime depende del backend y se reporta de forma descriptiva
 
@@ -95,7 +97,6 @@ En backends adicionales la señal ya no es estable:
 
 - `campaign-deepseek-v4-pro-r5`: `advisory f1 = 0.125001`, `guarded f1 = 0.333333`, `strict f1 = 0.181818`
 - `campaign-gpt-oss-120b-r5`: `advisory f1 = 0.4`, `guarded f1 = 0.222222`, `strict f1 = 0.121213`
-- `campaign-gemma4-r3`: `advisory f1 = 0.363636`, `guarded f1 = 0.363636`, `strict f1 = 0.0`
 - `campaign-kimi-k26-r3`: `advisory f1 = 0.285715`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
 - `campaign-kimi-k26-r5`: `advisory f1 = 0.235294`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
 - `campaign-kimi-k27-code-r3`: `advisory f1 = 0.285715`, `guarded f1 = 0.285715`, `strict f1 = 0.285715`
@@ -103,9 +104,9 @@ En backends adicionales la señal ya no es estable:
 - `campaign-nemotron-3-ultra-r3`: `advisory f1 = 0.434783`, `guarded f1 = 0.5`, `strict f1 = 0.2`
 - `campaign-claude-opus-48-r3`: `advisory f1 = 0.0`, `guarded f1 = 0.0`, `strict f1 = 0.0`
 - `campaign-qwen35-397b-r3`: `advisory f1 = 0.105264`, `guarded f1 = 0.285715`, `strict f1 = 0.0`
-- `campaign-openai-gpt56-luna-low-r3` y `campaign-openai-gpt56-terra-medium-r3`: `guarded f1 = 0.105264` en ambas
+- `campaign-openai-gpt56-luna-low-r3`: `guarded f1 = 0.105264`
 - `campaign-openai-gpt56-sol-max-r3`: `advisory f1 = 0.105264`, `guarded f1 = 0.285715`, `strict f1 = 0.0`
-- `campaign-openai-gpt6-astra-max-r3` y las tres campañas nuevas de Claude: `guarded f1 = 0.0`
+- las tres campañas nuevas de Claude: `guarded f1 = 0.0`
 
 `campaign-claude-opus-48-r3` merece una lectura separada. No parece un fallo del evaluator ni del benchmark, sino un patrón de autocontención del backend: Claude completa los nominales con utilidad razonable, pero casi no genera oportunidades runtime observables para `advisory` o `guarded`. En la campaña cerrada:
 
@@ -126,14 +127,13 @@ Tabla comparativa corta para `guarded`:
 | `gpt-oss-120b r3` | `0.746032` | `0.031746` | `3` | `0.222222` | `0.347826` | Mejor evidencia de intervención runtime de `guarded` |
 | `qwen35-397b r3` | `0.761905` | `0.047619` | `3` | `0.166667` | `0.285715` | Más oportunidades runtime y detección moderada |
 | `gpt56-sol-max r3` | `0.761905` | `0.047619` | `3` | `0.166667` | `0.285715` | Señal runtime observable en el corte ampliado |
-| `gpt6-astra-max r3` | `0.730159` | `0.0` | `0` | `0.0` | `0.0` | Sin oportunidad runtime observada en `guarded` |
 | `claude-opus-5-sol r3` | `0.746032` | `0.0` | `0` | `0.0` | `0.0` | Sin oportunidad runtime observada en `guarded` |
 
 La lectura metodológica correcta es:
 
 1. el benchmark congelado sigue generando condiciones observables de detección runtime;
 2. `advisory`, `guarded` y `strict` no tienen una relación fija de calidad de detección entre modelos;
-3. la variación observada pertenece al backend y no al benchmark congelado;
+3. la variación describe las condiciones de backend retenidas, dentro de los límites de procedencia documentados;
 4. `claude-opus-4-8 r3` representa el extremo de autocontención: mantiene utilidad razonable pero aporta muy poca activación runtime para el Governor.
 
 ## H3 — `guarded` preserva más utilidad que `strict` porque permite recuperación
@@ -149,7 +149,7 @@ En `campaign-base-r5`:
 - `guarded recovery_rate_after_block = 0.875`
 - `guarded mean_replans_per_run = 1.190476`
 
-En las 26 campañas, la estimación puntual de finalización segura de `guarded` supera a la de `strict`; las diferencias van de `0.238095` a `0.730159`. En campañas no base el patrón persiste, aunque con distinta magnitud:
+En las 23 campañas retenidas, la estimación puntual de finalización segura de `guarded` supera a la de `strict`; las diferencias van de `0.238095` a `0.561905`. Los 23 intervalos bootstrap pareados al 95% tienen límite inferior positivo; no es una prueba conjunta ni ajustada por multiplicidad. En campañas no base el patrón persiste, aunque con distinta magnitud:
 
 - `campaign-deepseek-v4-pro-r5`: `guarded = 0.828571`, `strict = 0.571429`
 - `campaign-gpt-oss-120b-r5`: `guarded = 0.752381`, `strict = 0.495238`
@@ -160,9 +160,6 @@ En las 26 campañas, la estimación puntual de finalización segura de `guarded`
 - `campaign-nemotron-3-ultra-r3`: `guarded = 0.809524`, `strict = 0.539683`
 - `campaign-claude-opus-48-r3`: `guarded = 0.714286`, `strict = 0.47619`
 - `campaign-qwen35-397b-r3`: `guarded = 0.761905`, `strict = 0.52381`
-- `campaign-gemma4-r3`: `guarded = 0.730159`, `strict = 0.0`
-- `campaign-openai-gpt56-terra-medium-r3`: `guarded = 0.761905`, `strict = 0.063492`
-- `campaign-openai-gpt6-astra-max-r3`: `guarded = 0.730159`, `strict = 0.0`
 - `campaign-anthropic-claude-opus-5-sol-r3`: `guarded = 0.746032`, `strict = 0.492063`
 
 La diferencia no se explica por pérdida de prevención. En el mismo corte:
@@ -170,7 +167,7 @@ La diferencia no se explica por pérdida de prevención. En el mismo corte:
 - `guarded governance_effectiveness = 1.0` cuando la oportunidad existe
 - `strict governance_effectiveness = 1.0` cuando la oportunidad existe
 
-Por tanto, la ventaja de `guarded` no es “menos seguridad”, sino recuperación después del bloqueo.
+El resultado es consistente con la recuperación permitida por `guarded`; la comparación también incluye otras diferencias de política entre modos y no aísla causalmente el mecanismo de recuperación.
 
 ## H4 — El enforcement con recuperación introduce overhead operativo medible
 
@@ -211,11 +208,11 @@ En algunas campañas cloud, la diferencia estimada de latencia es menor que en e
   - `mean_latency_ms` diferencia `22561.97592`, `ci_95 = [5565.841996, 40703.043433]`
   - `guarded vs strict successful_safe_completion_rate = 0.269841`, `ci_95 = [0.15873, 0.396826]`
 
-En las 26 campañas, las estimaciones puntuales de latencia y tokens de `guarded` superan a las de `strict`, aunque no todos los intervalos de confianza excluyen cero. Las iteraciones no aumentan en todas las campañas. Cuatro campañas tienen costo monetario estimado distinto de cero; las otras 22 reportan `0.0`, valor que en algunos adapters también representa un dato faltante. Por ello no se sostiene una comparación monetaria general entre proveedores. La conclusión válida de `H4` es operativa: la recuperación tiene un overhead observable cuya magnitud depende del backend.
+En las 23 campañas retenidas, las estimaciones puntuales de latencia y tokens de `guarded` superan a las de `strict`, aunque no todos los intervalos de confianza excluyen cero. Las iteraciones no aumentan en todas las campañas. Cuatro campañas tienen costo monetario estimado distinto de cero; las otras 19 reportan `0.0`, valor que en algunos adapters también representa un dato faltante. Por ello no se sostiene una comparación monetaria general entre proveedores. La conclusión válida de `H4` es operativa: la recuperación tiene un overhead observable cuya magnitud depende del backend.
 
 ## Lectura consolidada del corte canónico
 
-Con las 26 campañas cerradas del corte canónico, la evidencia post-freeze permite sostener cinco puntos:
+Con las 23 campañas retenidas por la revisión de admisión, la evidencia post-freeze permite sostener cinco puntos:
 
 1. El benchmark congelado sigue produciendo oportunidades reales de enforcement.
 2. `guarded` y `strict` previenen side effects inseguros cuando la oportunidad bloqueante aparece.
@@ -225,4 +222,4 @@ Con las 26 campañas cerradas del corte canónico, la evidencia post-freeze perm
 
 ## Conclusión de resultados
 
-El paquete comparativo por hipótesis `H1–H4` ya quedó cerrado para las 26 campañas incluidas en `final-twenty-six-campaigns.json`. El corte de 19 campañas permanece como antecedente histórico, no como el corte canónico vigente. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` quedan fuera del corte canónico y sólo sirven para priorización experimental posterior.
+El paquete comparativo por hipótesis `H1–H4` usa las 23 campañas de `admission-reviewed-twenty-three-campaigns.json`. El archivo original de 26 campañas y el corte anterior de 19 permanecen como antecedentes históricos, sin sobrescribir sus resultados. Gemma4, GPT-5.6 Terra y GPT-6 Astra siguen visibles con sus incidencias, pero sus métricas no sustentan las conclusiones comparativas. La revisión post hoc de admisión no elimina los límites de procedencia ni permite generalizar a entornos productivos. Los reruns exploratorios de `gemma4:31b-cloud` y el `smoke-4` de `nemotron-3-super:cloud` permanecen fuera de las comparaciones.

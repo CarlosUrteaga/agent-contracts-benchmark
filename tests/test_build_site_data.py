@@ -27,12 +27,18 @@ class BuildSiteDataTests(unittest.TestCase):
     def test_build_site_data_uses_canonical_artifact(self):
         data = self.module.build_site_data(self.module.DEFAULT_STATS)
         self.assertEqual(data["campaign_count"], 26)
+        self.assertEqual(data["comparison_campaign_count"], 23)
+        self.assertEqual(data["comparison_run_count"], 6972)
+        self.assertEqual(data["inventory_run_count"], 7728)
         self.assertEqual(data["canonical_cut_date"], "2026-09-12")
         self.assertEqual(len(data["modes"]), 4)
         self.assertEqual(data["benchmark_version"], "benchmark-v1.0")
 
         rows = data["campaign_rows"]
-        self.assertEqual(len(rows), 26 * 4)
+        self.assertEqual(len(rows), 23 * 4)
+        excluded = {row["campaign_id"] for row in data["dashboard_campaigns"] if row["admission_issue"]}
+        for key in ("campaign_rows", "guarded_backend_rows", "overhead_rows"):
+            self.assertFalse(excluded & {row["campaign_id"] for row in data[key]})
 
         base_guarded = next(
             row for row in rows if row["campaign_id"] == "campaign-base-r5" and row["mode"] == "guarded"
@@ -55,7 +61,7 @@ class BuildSiteDataTests(unittest.TestCase):
             json_path = out_dir / "src/data/canonical_results.json"
             payload = json.loads(json_path.read_text())
             self.assertEqual(payload["campaign_count"], 26)
-            self.assertEqual(len(payload["artifacts"]), 18)
+            self.assertEqual(len(payload["artifacts"]), 20)
             self.assertTrue(any(x["label"] == "benchmark_identity_audit.md" for x in payload["artifacts"]))
 
             for rel_path in [
